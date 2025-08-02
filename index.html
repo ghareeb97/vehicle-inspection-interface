@@ -248,6 +248,9 @@
 
         .checklist-grid {
             animation: fadeInUp 0.6s ease;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
         }
 
         @keyframes fadeInUp {
@@ -458,6 +461,215 @@
                 gap: 10px;
             }
 
+            /* Stack form rows vertically on mobile */
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            /* Improve touch targets */
+            input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 12px;
+            }
+
+            input[type="radio"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 12px;
+            }
+
+            /* Larger touch targets for buttons */
+            .submit-btn, .cancel-btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+                min-height: 48px;
+            }
+
+            /* Single column grid for walk around check */
+            .checklist-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
+            }
+
+            /* Improve typography for mobile */
+            .form-group label {
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
+
+            .form-group input,
+            .form-group select,
+            input[type="text"],
+            input[type="email"], 
+            input[type="tel"],
+            textarea,
+            select {
+                padding: 12px 15px;
+                font-size: 1rem;
+                min-height: 48px;
+                border-radius: 8px;
+            }
+
+            /* Container padding adjustments */
+            .inspection-container {
+                padding: 15px;
+            }
+
+            .form-info-section {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+
+            /* Photo upload sections */
+            .photo-upload {
+                margin: 15px 0;
+            }
+
+            .photo-upload input[type="file"] {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            /* Fix file input overflow on mobile */
+            input[type="file"] {
+                max-width: 120px !important;
+                padding: 8px !important;
+                font-size: 0.8rem !important;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                background: #f9fafb;
+            }
+
+            /* Stack flex containers vertically on mobile for file inputs */
+            div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+
+            div[style*="display: flex"] input[type="text"],
+            div[style*="display: flex"] input[type="number"] {
+                flex: none !important;
+                width: 100% !important;
+            }
+
+            /* Fix SVG container on mobile */
+            #vehicle-svg-container {
+                height: 300px !important;
+                min-height: 250px;
+                overflow: visible !important;
+                border: 2px solid #d1d5db;
+                background: white;
+            }
+
+            #vehicle-svg-container svg {
+                width: 100% !important;
+                height: 100% !important;
+                display: block;
+            }
+
+        }
+
+        /* Extra small devices (phones in portrait) */
+        @media (max-width: 480px) {
+            .inspection-container {
+                padding: 10px;
+            }
+
+            .form-info-section {
+                padding: 15px;
+            }
+
+            .form-header {
+                padding: 20px 15px;
+                text-align: left;
+            }
+
+            .form-header h1 {
+                font-size: 1.3rem;
+                text-align: left;
+                margin-top: 0;
+                margin-bottom: 10px;
+            }
+
+            .jameel-logo {
+                position: static !important;
+                margin-bottom: 15px;
+                font-size: 0.9rem !important;
+            }
+
+            /* Even larger touch targets for very small screens */
+            input[type="checkbox"],
+            input[type="radio"] {
+                width: 24px;
+                height: 24px;
+                margin-right: 15px;
+            }
+
+            .submit-btn, .cancel-btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            /* Improve spacing for checklist items */
+            .checklist-item {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            /* Better mobile styling for checklist labels */
+            .checklist-item label {
+                font-size: 1rem;
+                line-height: 1.5;
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+                cursor: pointer;
+                padding: 8px 0;
+            }
+
+            .checklist-item input[type="checkbox"],
+            .checklist-item input[type="radio"] {
+                margin-right: 12px;
+                flex-shrink: 0;
+            }
+
+            /* Enhanced damage buttons for mobile */
+            .damage-btn {
+                padding: 15px 20px;
+                font-size: 1rem;
+                min-height: 48px;
+                margin: 5px;
+            }
+
+            /* General button enhancements */
+            button,
+            .btn {
+                min-height: 48px;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .modal-actions button {
+                padding: 15px 25px;
+                font-size: 1rem;
+                min-height: 48px;
+                margin: 5px;
+            }
+
+            /* Typography improvements for mobile */
+            .inspection-checklist h2,
+            .remarks-section h2 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .damage-form h3 {
+                font-size: 1.2rem;
+            }
+
         }
     </style>
 </head>
@@ -470,6 +682,9 @@
                 <span style="font-size: 0.8rem;">MOBILITY SOLUTIONS</span>
             </div>
             <h1>Vehicle Reception/Delivery Form</h1>
+            <div style="font-size: 0.9rem; color: #e8f2f8; margin-top: 5px; font-weight: normal;">
+                HNDL Fleet Management Test Module - First Look
+            </div>
         </header>
 
         <!-- Basic Information Section -->
@@ -573,6 +788,9 @@
                 <!-- Embedded SVG with all vehicle parts -->
                 <div id="vehicle-svg-container">
                     <!-- The complete SVG content will be loaded here -->
+                    <div style="padding: 40px; text-align: center; color: #666; font-style: italic;">
+                        Loading vehicle diagram...
+                    </div>
                 </div>
 
                 <!-- Tooltip element -->
@@ -632,8 +850,7 @@
                 <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">WALK AROUND CHECK
                 </h2>
                 <div class="checklist-items">
-                    <div class="checklist-grid"
-                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="checklist-grid">
 
                         <!-- Row 1 -->
                         <div class="checklist-item">
@@ -922,6 +1139,13 @@
         // Load the complete SVG content
         function loadVehicleSVG() {
             const svgContainer = document.getElementById('vehicle-svg-container');
+            
+            if (!svgContainer) {
+                console.error('SVG container not found!');
+                return;
+            }
+            
+            console.log('Loading SVG content...');
 
             // PASTE YOUR COMPLETE SVG CONTENT HERE
             // Replace this placeholder with your complete vehicle.svg content
@@ -1731,6 +1955,7 @@
             );
 
             svgContainer.innerHTML = modifiedSvg;
+            console.log('SVG loaded successfully!');
         }
 
 
