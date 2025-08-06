@@ -2029,6 +2029,9 @@
             // Show inline damage form
             document.getElementById('damage-form').style.display = 'block';
 
+            // Re-setup damage buttons to ensure they're clickable
+            setupDamageButtons();
+
             // Scroll to the damage form
             document.getElementById('damage-form').scrollIntoView({
                 behavior: 'smooth',
@@ -2574,6 +2577,35 @@
                     outputlist2.push(item.status || "Not checked");
                     
                     console.log(`🔍 ${taskName}: ${item.status || "Not checked"}`);
+                });
+            }
+            
+            // Add vehicle parts with damage data
+            if (formData.vehicleParts) {
+                console.log('🔍 DEBUG: formData.vehicleParts:', formData.vehicleParts);
+                
+                Object.keys(formData.vehicleParts).forEach(partName => {
+                    const partData = formData.vehicleParts[partName];
+                    if (partData.inspected) {
+                        outputlist1.push(partName);
+                        
+                        // Format damage information
+                        if (partData.damages && partData.damages.length > 0) {
+                            const damageNames = {
+                                'D': 'Dent',
+                                'S': 'Scratches', 
+                                'R': 'Rust',
+                                'K': 'Broken',
+                                'C': 'Chips'
+                            };
+                            const damageList = partData.damages.map(d => damageNames[d] || d).join(', ');
+                            outputlist2.push(damageList);
+                        } else {
+                            outputlist2.push("No damage");
+                        }
+                        
+                        console.log(`🔍 ${partName}: ${partData.damages && partData.damages.length > 0 ? 'Damaged: ' + partData.damages.join(', ') : 'No damage'}`);
+                    }
                 });
             }
             
