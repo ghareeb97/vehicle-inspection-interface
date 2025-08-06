@@ -685,10 +685,16 @@
             <div style="font-size: 0.9rem; color: #e8f2f8; margin-top: 5px; font-weight: normal;">
                 HNDL Fleet Management Test Module - First Look
             </div>
+            
+            <!-- Test Button for Inspection Mode -->
+            <button id="test-inspection-btn" onclick="testInspectionMode()" 
+                style="position: absolute; top: 10px; left: 10px; background: #ff6b35; color: white; padding: 8px 12px; border: none; border-radius: 4px; font-size: 0.8rem; cursor: pointer; z-index: 1000;">
+                🧪 Test Inspection Mode
+            </button>
         </header>
 
         <!-- Basic Information Section -->
-        <section class="form-info-section">
+        <section class="form-info-section" id="basic-info-section">
             <div class="form-row">
                 <div class="form-group">
                     <label for="date-time">Date/Time</label>
@@ -712,7 +718,7 @@
         </section>
 
         <!-- Driver Information Section -->
-        <section class="form-info-section">
+        <section class="form-info-section" id="driver-info-section">
             <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">DRIVERS
                 INFORMATION</h3>
             <div class="form-row">
@@ -743,10 +749,10 @@
         </section>
 
         <!-- Vehicle Information Section -->
-        <section class="form-info-section">
+        <section class="form-info-section" id="vehicle-info-section">
             <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">VEHICLE
                 INFORMATION</h3>
-            <div class="form-row">
+            <div class="form-row" id="license-plate-row">
                 <div class="form-group">
                     <label for="license-plate">License Plate (Attach Photo)</label>
                     <div style="display: flex; gap: 10px;">
@@ -757,14 +763,14 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="mileage-start">Mileage at Start (Attach Photo)</label>
+                    <label for="mileage-start" id="mileage-start-label">Mileage at Start (Attach Photo)</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="number" id="mileage-start" placeholder="Enter starting mileage" style="flex: 1;">
                         <input type="file" id="mileage-start-photo" accept="image/*" style="width: auto;">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mileage-end">Mileage at End (Attach Photo)</label>
+                    <label for="mileage-end" id="mileage-end-label">Mileage at End (Attach Photo)</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="number" id="mileage-end" placeholder="Enter ending mileage" style="flex: 1;">
                         <input type="file" id="mileage-end-photo" accept="image/*" style="width: auto;">
@@ -849,6 +855,15 @@
             <section class="inspection-checklist">
                 <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">WALK AROUND CHECK
                 </h2>
+                
+                <!-- Select All Available Button -->
+                <div style="margin-bottom: 15px; text-align: right;">
+                    <button id="select-all-available" onclick="selectAllAvailable()" 
+                        style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; font-weight: bold;">
+                        ✓ Select All Available
+                    </button>
+                </div>
+                
                 <div class="checklist-items">
                     <div class="checklist-grid">
 
@@ -1039,15 +1054,14 @@
             </section>
 
             <section class="remarks-section">
-                <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">REMARKS (Attach
-                    Photo)</h2>
+                <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">REMARKS</h2>
                 <textarea id="remarks" placeholder="Enter general inspection remarks..."
                     style="width: 100%; min-height: 100px; margin-bottom: 10px;"></textarea>
                 <input type="file" id="remarks-photo" accept="image/*" multiple style="margin-bottom: 20px;">
             </section>
 
             <!-- Signature Section -->
-            <section class="form-info-section">
+            <section class="form-info-section" id="signature-internal-section">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="signature">SIGNATURE</label>
@@ -1065,7 +1079,10 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
+            </section>
+
+            <!-- Submit Button Section (outside signature section for inspection mode) -->
+            <section class="form-info-section" id="submit-section">
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="submit-form"
                         style="background: #006ab4; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer;">
@@ -1079,6 +1096,16 @@
 
     <script>
         // Global variables
+        let bubbleConfig = {
+            isInitializedFromBubble: false,
+            mode: 'standalone', // 'inspection' when from Bubble
+            vehicleName: null,
+            startingMileage: null,
+            userId: null,
+            inspectionId: null,
+            submitCallback: null
+        };
+
         let inspectionData = {
             // Basic Information
             formInfo: {
@@ -2188,7 +2215,8 @@
                 const remarkField = document.querySelector(`input[placeholder="Remarks"][name="${item}"], input[placeholder="Remarks"]`);
                 const remarks = remarkField ? remarkField.value : '';
 
-                const itemKey = item.replace('-', '').replace('-', ''); // Convert to camelCase key
+                // Convert hyphenated names to camelCase (e.g., 'floor-mat' -> 'floorMat')
+                const itemKey = item.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase()).replace('-', '');
                 if (inspectionData.checklist[itemKey]) {
                     inspectionData.checklist[itemKey].status = status;
                     inspectionData.checklist[itemKey].remarks = remarks;
@@ -2235,6 +2263,28 @@
         }
 
         function handleFormSubmit() {
+            // Check mileage confirmation in inspection mode
+            if (bubbleConfig.mode === 'inspection') {
+                const mileageConfirmation = document.getElementById('mileage-confirmation');
+                if (mileageConfirmation && !mileageConfirmation.checked) {
+                    alert('⚠️ Please confirm the mileage readings are correct before submitting the inspection.');
+                    // Scroll to the mileage section
+                    const vehicleInfoSection = document.getElementById('vehicle-info-section');
+                    if (vehicleInfoSection) {
+                        vehicleInfoSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Briefly highlight the checkbox
+                        const checkboxDiv = mileageConfirmation.closest('div');
+                        if (checkboxDiv) {
+                            checkboxDiv.style.background = '#ffcccb';
+                            setTimeout(() => {
+                                checkboxDiv.style.background = '#fff3cd';
+                            }, 1500);
+                        }
+                    }
+                    return;
+                }
+            }
+
             const data = collectFormData();
             console.log('Form Data:', data);
             alert('Form submitted successfully! Check console for data.');
@@ -2290,6 +2340,383 @@
             const dateTimeInput = document.getElementById('date-time');
             if (dateTimeInput) {
                 dateTimeInput.value = now.toISOString().slice(0, 16);
+            }
+
+            // Handle Bubble.io data pre-population
+            if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
+                populateFormFromBubbleData();
+            }
+        }
+
+        function populateFormFromBubbleData() {
+            const vehicleName = bubbleConfig.vehicleName;
+            const startingMileage = bubbleConfig.startingMileage;
+
+            // Hide sections when in inspection mode
+            if (bubbleConfig.mode === 'inspection') {
+                // Hide basic info section (date, location, coordinator)
+                const basicInfoSection = document.getElementById('basic-info-section');
+                if (basicInfoSection) {
+                    basicInfoSection.style.display = 'none';
+                }
+
+                // Hide driver info section
+                const driverInfoSection = document.getElementById('driver-info-section');
+                if (driverInfoSection) {
+                    driverInfoSection.style.display = 'none';
+                }
+
+                // Modify vehicle information section
+                // Hide license plate row
+                const licensePlateRow = document.getElementById('license-plate-row');
+                if (licensePlateRow) {
+                    licensePlateRow.style.display = 'none';
+                }
+
+                // Remove file uploaders from mileage inputs and update labels
+                const mileageStartPhoto = document.getElementById('mileage-start-photo');
+                if (mileageStartPhoto) {
+                    mileageStartPhoto.style.display = 'none';
+                }
+
+                const mileageEndPhoto = document.getElementById('mileage-end-photo');
+                if (mileageEndPhoto) {
+                    mileageEndPhoto.style.display = 'none';
+                }
+
+                const mileageStartLabel = document.getElementById('mileage-start-label');
+                if (mileageStartLabel) {
+                    mileageStartLabel.textContent = 'Mileage at Start';
+                }
+
+                const mileageEndLabel = document.getElementById('mileage-end-label');
+                if (mileageEndLabel) {
+                    mileageEndLabel.textContent = 'Mileage at End';
+                }
+
+                // Hide signature and internal sections
+                const signatureInternalSection = document.getElementById('signature-internal-section');
+                if (signatureInternalSection) {
+                    signatureInternalSection.style.display = 'none';
+                }
+
+                // Hide remarks file uploader
+                const remarksPhoto = document.getElementById('remarks-photo');
+                if (remarksPhoto) {
+                    remarksPhoto.style.display = 'none';
+                }
+
+                // Add test submit button for inspection mode
+                const submitForm = document.getElementById('submit-form');
+                if (submitForm) {
+                    // Create test submit button
+                    const testSubmitBtn = document.createElement('button');
+                    testSubmitBtn.innerHTML = '🧪 Test Submit to Bubble';
+                    testSubmitBtn.onclick = testSubmitInspection;
+                    testSubmitBtn.style.cssText = 'background: #ff6b35; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; margin-left: 10px;';
+                    
+                    // Add it next to the regular submit button
+                    submitForm.parentNode.appendChild(testSubmitBtn);
+                }
+            }
+
+            // Populate starting mileage and ending mileage (same value in inspection mode)
+            if (startingMileage !== null && startingMileage !== undefined) {
+                const mileageStartInput = document.getElementById('mileage-start');
+                if (mileageStartInput) {
+                    mileageStartInput.value = startingMileage;
+                }
+                
+                const mileageEndInput = document.getElementById('mileage-end');
+                if (mileageEndInput) {
+                    mileageEndInput.value = startingMileage;
+                }
+            }
+
+            // Add vehicle name to the vehicle information section
+            if (vehicleName && bubbleConfig.mode === 'inspection') {
+                const vehicleInfoSection = document.getElementById('vehicle-info-section');
+                if (vehicleInfoSection) {
+                    // Create vehicle name display element
+                    const vehicleNameDisplay = document.createElement('div');
+                    vehicleNameDisplay.innerHTML = `
+                        <div style="background: #f0f8ff; border: 2px solid #006ab4; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                            <h4 style="margin: 0; color: #006ab4; font-size: 1.1rem;">
+                                🚗 Vehicle: ${vehicleName}
+                            </h4>
+                        </div>
+                    `;
+                    
+                    // Insert it after the section header but before the mileage rows
+                    const sectionHeader = vehicleInfoSection.querySelector('h3');
+                    if (sectionHeader) {
+                        sectionHeader.insertAdjacentElement('afterend', vehicleNameDisplay);
+                    }
+
+                    // Add mileage confirmation checkbox after mileage fields
+                    const mileageConfirmationDiv = document.createElement('div');
+                    mileageConfirmationDiv.innerHTML = `
+                        <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px;">
+                            <label style="display: flex; align-items: center; gap: 10px; font-weight: bold; color: #856404; cursor: pointer;">
+                                <input type="checkbox" id="mileage-confirmation" required style="transform: scale(1.2);">
+                                ✓ I confirm the mileage readings above are correct
+                            </label>
+                        </div>
+                    `;
+                    
+                    // Add it at the end of the vehicle info section
+                    vehicleInfoSection.appendChild(mileageConfirmationDiv);
+                }
+            }
+
+            console.log('Form populated with Bubble data:', { vehicleName, startingMileage });
+        }
+
+        function validateBubbleData(vehicleName, startingMileage, userId, inspectionId) {
+            const errors = [];
+
+            // Validate vehicle name
+            if (vehicleName !== null && vehicleName !== undefined) {
+                if (typeof vehicleName !== 'string') {
+                    errors.push('Vehicle name must be a string');
+                } else if (vehicleName.trim().length === 0) {
+                    errors.push('Vehicle name cannot be empty');
+                }
+            }
+
+            // Validate starting mileage
+            if (startingMileage !== null && startingMileage !== undefined) {
+                if (typeof startingMileage !== 'number' && !isNaN(Number(startingMileage))) {
+                    // Try to convert to number
+                    startingMileage = Number(startingMileage);
+                }
+                
+                if (typeof startingMileage !== 'number' || isNaN(startingMileage)) {
+                    errors.push('Starting mileage must be a valid number');
+                } else if (startingMileage < 0) {
+                    errors.push('Starting mileage cannot be negative');
+                } else if (startingMileage > 9999999) {
+                    errors.push('Starting mileage seems unusually high (over 9.9M)');
+                }
+            }
+
+            // Validate user ID
+            if (userId !== null && userId !== undefined) {
+                if (typeof userId !== 'string' && typeof userId !== 'number') {
+                    errors.push('User ID must be a string or number');
+                } else if (typeof userId === 'string' && userId.trim().length === 0) {
+                    errors.push('User ID cannot be empty');
+                }
+            }
+
+            // Validate inspection ID
+            if (inspectionId !== null && inspectionId !== undefined) {
+                if (typeof inspectionId !== 'string' && typeof inspectionId !== 'number') {
+                    errors.push('Inspection ID must be a string or number');
+                } else if (typeof inspectionId === 'string' && inspectionId.trim().length === 0) {
+                    errors.push('Inspection ID cannot be empty');
+                }
+            }
+
+            return {
+                isValid: errors.length === 0,
+                errors: errors,
+                sanitizedData: {
+                    vehicleName: vehicleName ? vehicleName.trim() : null,
+                    startingMileage: typeof startingMileage === 'number' ? startingMileage : null,
+                    userId: userId ? (typeof userId === 'string' ? userId.trim() : userId) : null,
+                    inspectionId: inspectionId ? (typeof inspectionId === 'string' ? inspectionId.trim() : inspectionId) : null
+                }
+            };
+        }
+
+        // Global function for Bubble.io integration - Inspection Module
+        window.initializeInspectionModule = function(vehicleName, startingMileage, userId, inspectionId, submitCallback) {
+            // Validate incoming data
+            const validation = validateBubbleData(vehicleName, startingMileage, userId, inspectionId);
+            
+            if (!validation.isValid) {
+                console.error('Invalid Bubble data:', validation.errors);
+                throw new Error('Invalid data provided: ' + validation.errors.join(', '));
+            }
+
+            // Store Bubble configuration with sanitized data
+            bubbleConfig.isInitializedFromBubble = true;
+            bubbleConfig.mode = 'inspection';
+            bubbleConfig.vehicleName = validation.sanitizedData.vehicleName;
+            bubbleConfig.startingMileage = validation.sanitizedData.startingMileage;
+            bubbleConfig.userId = validation.sanitizedData.userId;
+            bubbleConfig.inspectionId = validation.sanitizedData.inspectionId;
+            bubbleConfig.submitCallback = submitCallback;
+
+            // If DOM is already loaded, initialize immediately
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        };
+
+        // Function to format inspection data for Bubble function call
+        function formatInspectionDataForBubble(formData) {
+            const outputlist1 = [];  // Task/Item names from walk-around checklist
+            const outputlist2 = [];  // Status/Results from walk-around checklist
+            
+            // Add walk-around checklist items only
+            if (formData.checklist) {
+                console.log('🔍 DEBUG: formData.checklist:', formData.checklist);
+                
+                Object.keys(formData.checklist).forEach(itemKey => {
+                    const item = formData.checklist[itemKey];
+                    // Always add the item, even if no status is selected (will show as empty/null)
+                    const taskName = itemKey.charAt(0).toUpperCase() + itemKey.slice(1).replace(/([A-Z])/g, ' $1');
+                    outputlist1.push(taskName);
+                    outputlist2.push(item.status || "Not checked");
+                    
+                    console.log(`🔍 ${taskName}: ${item.status || "Not checked"}`);
+                });
+            }
+            
+            return { outputlist1, outputlist2 };
+        }
+
+        // Global function to submit inspection data back to Bubble
+        window.submitInspectionToBubble = function() {
+            // Check mileage confirmation in inspection mode
+            if (bubbleConfig.mode === 'inspection') {
+                const mileageConfirmation = document.getElementById('mileage-confirmation');
+                if (mileageConfirmation && !mileageConfirmation.checked) {
+                    return { 
+                        success: false, 
+                        error: 'Mileage confirmation required. Please check the confirmation box before submitting.' 
+                    };
+                }
+            }
+
+            const formData = collectFormData();
+            const bubbleData = formatInspectionDataForBubble(formData);
+            
+            // Console log for testing
+            console.log('🔧 BUBBLE FUNCTION DATA:');
+            console.log('outputlist1 (Tasks/Items):', bubbleData.outputlist1);
+            console.log('outputlist2 (Status/Results):', bubbleData.outputlist2);
+            
+            // Call Bubble function
+            try {
+                if (typeof bubble_fn_SaveInspectionResults === 'function') {
+                    bubble_fn_SaveInspectionResults(bubbleData);
+                    console.log('✅ bubble_fn_SaveInspectionResults called successfully');
+                    return { success: true, data: bubbleData };
+                } else {
+                    console.warn('⚠️ bubble_fn_SaveInspectionResults function not found - using callback instead');
+                    
+                    // Fallback to callback method
+                    if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                        bubbleConfig.submitCallback(bubbleData);
+                        return { success: true, data: bubbleData };
+                    } else {
+                        console.warn('No submit callback defined for Bubble integration');
+                        return { success: false, error: 'No Bubble function or callback defined' };
+                    }
+                }
+            } catch (error) {
+                console.error('Error calling Bubble function:', error);
+                return { success: false, error: error.message };
+            }
+        };
+
+        // Test function for Inspection Mode
+        function testInspectionMode() {
+            // Test data - includes all required parameters
+            const testVehicleName = "Toyota Camry 2023";
+            const testStartingMileage = 45000;
+            const testUserId = "user_12345";
+            const testInspectionId = "insp_67890";
+            
+            const testCallback = function(inspectionData) {
+                console.log('🧪 TEST: Inspection completed successfully!');
+                console.log('Inspection Data:', inspectionData);
+                alert('🧪 TEST: Inspection submitted!\n\nCheck the browser console (F12) to see the complete inspection data.\n\nNotice how the form is now in inspection mode with simplified interface.');
+            };
+            
+            // Initialize inspection mode
+            try {
+                window.initializeInspectionModule(testVehicleName, testStartingMileage, testUserId, testInspectionId, testCallback);
+                console.log('🧪 TEST: Inspection mode activated!');
+                console.log('- Basic info section: HIDDEN');
+                console.log('- Driver info section: HIDDEN'); 
+                console.log('- License plate field: HIDDEN');
+                console.log('- File uploaders: HIDDEN');
+                console.log('- Signature section: HIDDEN');
+                console.log('- Starting mileage set to:', testStartingMileage);
+                console.log('- Vehicle name:', testVehicleName);
+                console.log('- User ID:', testUserId);
+                console.log('- Inspection ID:', testInspectionId);
+                
+                // Hide the test button after activation
+                const testBtn = document.getElementById('test-inspection-btn');
+                if (testBtn) {
+                    testBtn.style.display = 'none';
+                }
+                
+            } catch (error) {
+                console.error('🧪 TEST ERROR:', error);
+                alert('Test failed: ' + error.message);
+            }
+        }
+
+        // Test function for submitting inspection data
+        function testSubmitInspection() {
+            try {
+                const result = window.submitInspectionToBubble();
+                console.log('🧪 TEST: Submit result:', result);
+                if (result.success) {
+                    alert('🧪 TEST: Submit successful!\nCheck console for data.');
+                } else {
+                    alert('🧪 TEST: Submit failed!\n' + result.error);
+                }
+            } catch (error) {
+                console.error('🧪 TEST ERROR:', error);
+                alert('Submit test failed: ' + error.message);
+            }
+        }
+
+        // Function to select all checklist items as "Available"
+        function selectAllAvailable() {
+            // List of all checklist item names
+            const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
+                'tool-box', 'wheel-jack', 'wire-aid', 'air-compressor', 'alloy-wheel',
+                'fire-extinguisher', 'memory-card', 'usb-device', 'smart-key'];
+            
+            checklistItems.forEach(item => {
+                // Find all checkboxes for this item
+                const checkboxes = document.querySelectorAll(`input[name="${item}"]`);
+                
+                // Uncheck all first
+                checkboxes.forEach(cb => cb.checked = false);
+                
+                // Check only the "available" option
+                const availableCheckbox = document.querySelector(`input[name="${item}"][value="available"]`);
+                if (availableCheckbox) {
+                    availableCheckbox.checked = true;
+                    // Trigger change event to update progress
+                    availableCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+            
+            console.log('✅ All checklist items marked as Available');
+            
+            // Update button style temporarily to show action was completed
+            const button = document.getElementById('select-all-available');
+            if (button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ All Selected!';
+                button.style.background = '#20c997';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '#28a745';
+                }, 2000);
             }
         }
 
