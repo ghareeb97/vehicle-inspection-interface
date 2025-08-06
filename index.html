@@ -691,6 +691,12 @@
                 style="position: absolute; top: 10px; left: 10px; background: #ff6b35; color: white; padding: 8px 12px; border: none; border-radius: 4px; font-size: 0.8rem; cursor: pointer; z-index: 1000;">
                 🧪 Test Inspection Mode
             </button>
+            
+            <!-- Test Button for Preview Function -->
+            <button id="test-preview-btn" onclick="testPreviewInspection()" 
+                style="position: absolute; top: 50px; left: 10px; background: #28a745; color: white; padding: 8px 12px; border: none; border-radius: 4px; font-size: 0.8rem; cursor: pointer; z-index: 1000;">
+                👁️ Test Preview Mode
+            </button>
         </header>
 
         <!-- Basic Information Section -->
@@ -1967,12 +1973,12 @@
                     .maplink{fill:#ffffff;cursor:pointer;transition:all 0.2s ease;}
                     .maplink:hover{fill:#7bd6ef;}
                     /* Selected state with high specificity to override st classes */
-                    .st8.maplink.selected, .st2.maplink.selected, .st3.maplink.selected, .st5.maplink.selected, .st3.linea.maplink.selected, .maplink.selected{fill:#daef7b !important;}
-                    .st8.maplink.active, .st2.maplink.active, .st3.maplink.active, .st5.maplink.active, .st3.linea.maplink.active, .maplink.active{fill:#daef7b !important;}
+                    .st8.maplink.selected, .st2.maplink.selected, .st3.maplink.selected, .st5.maplink.selected, .st3.linea.maplink.selected, .maplink.selected{fill:#E3F2FD !important;stroke:#007bff !important;stroke-width:2 !important;}
+                    .st8.maplink.active, .st2.maplink.active, .st3.maplink.active, .st5.maplink.active, .st3.linea.maplink.active, .maplink.active{fill:#E3F2FD !important;stroke:#007bff !important;stroke-width:2 !important;}
                     /* Damaged state with high specificity */
                     .st8.damaged, .st2.damaged, .st3.damaged, .st5.damaged, .st3.linea.damaged, .damaged{fill:#FFCDD2 !important;stroke:#F44336 !important;stroke-width:2 !important;}
                     /* Inspected state with high specificity */
-                    .st8.inspected, .st2.inspected, .st3.inspected, .st5.inspected, .st3.linea.inspected, .inspected{fill:#E3F2FD !important;stroke:#006ab4 !important;stroke-width:2 !important;}
+                    .st8.inspected, .st2.inspected, .st3.inspected, .st5.inspected, .st3.linea.inspected, .inspected{fill:#E8F5E8 !important;stroke:#28a745 !important;stroke-width:2 !important;}
                     
                     /* Text labels */
                     .maptext{font-family:"MyriadPro-Regular";font-size:6;}
@@ -1982,6 +1988,10 @@
             );
 
             svgContainer.innerHTML = modifiedSvg;
+            
+            // Store SVG content globally for preview use
+            window.globalSVGContent = modifiedSvg;
+            
             console.log('SVG loaded successfully!');
         }
 
@@ -2332,6 +2342,9 @@
         }
 
         function init() {
+            // Capture pristine content for preview restoration
+            capturePristineContent();
+            
             loadVehicleSVG();
             setupDamageButtons();
             setupModalActions();
@@ -2348,6 +2361,15 @@
             // Handle Bubble.io data pre-population
             if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
                 populateFormFromBubbleData();
+            }
+        }
+
+        // Function to capture the original clean state of the page
+        function capturePristineContent() {
+            const inspectionContainer = document.querySelector('.inspection-container');
+            if (inspectionContainer && !pristineOriginalContent) {
+                pristineOriginalContent = inspectionContainer.innerHTML;
+                console.log('✅ Captured pristine original content at page load');
             }
         }
 
@@ -2657,6 +2679,344 @@
             }
         };
 
+        // Global function to preview inspection results (read-only mode with SVG)
+        window.previewInspectionResults = function(outputlist1, outputlist2, vehicleInfo = {}) {
+            // Validate input parameters
+            if (!Array.isArray(outputlist1) || !Array.isArray(outputlist2)) {
+                console.error('❌ Preview Error: outputlist1 and outputlist2 must be arrays');
+                return { success: false, error: 'Invalid input parameters - arrays required' };
+            }
+            
+            if (outputlist1.length !== outputlist2.length) {
+                console.error('❌ Preview Error: Task and result lists must have same length');
+                return { success: false, error: 'Task and result lists length mismatch' };
+            }
+
+            try {
+                console.log('🔍 PREVIEW MODE: Displaying inspection results');
+                console.log('Tasks:', outputlist1);
+                console.log('Results:', outputlist2);
+                console.log('Vehicle Info:', vehicleInfo);
+
+                // Hide current content and show preview
+                showPreviewPage(outputlist1, outputlist2, vehicleInfo);
+                
+                return { success: true, message: 'Preview displayed successfully' };
+            } catch (error) {
+                console.error('❌ Preview Error:', error);
+                return { success: false, error: error.message };
+            }
+        };
+
+        // Store the pristine original content - captured at page load
+        let pristineOriginalContent = null;
+
+        // Function to show full-page preview
+        function showPreviewPage(tasks, results, vehicleInfo) {
+            const inspectionContainer = document.querySelector('.inspection-container');
+            
+            // Store reference to restore function
+            window.restoreInspectionView = function() {
+                inspectionContainer.innerHTML = pristineOriginalContent;
+                console.log('✅ Restored to pristine original content');
+                
+                // Restore original tooltip functions
+                window.showTooltip = function(evt, text) {
+                    const tooltip = document.getElementById('tooltip');
+                    if (tooltip) {
+                        tooltip.textContent = text;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = (evt.pageX + 10) + 'px';
+                        tooltip.style.top = (evt.pageY - 10) + 'px';
+                    }
+                };
+
+                window.hideTooltip = function() {
+                    const tooltip = document.getElementById('tooltip');
+                    if (tooltip) {
+                        tooltip.style.display = 'none';
+                    }
+                };
+                
+                // Clean up preview data
+                delete window.currentPreviewDamage;
+                
+                // Re-initialize after restoring
+                setTimeout(() => {
+                    init();
+                }, 100);
+            };
+
+            // Build vehicle parts damage map
+            const vehiclePartsDamage = {};
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
+                const result = results[i];
+                
+                // Check if this is a vehicle part (not a checklist item)
+                if (isVehiclePart(task)) {
+                    vehiclePartsDamage[task] = {
+                        hasDamage: result && 
+                                  result !== 'No damage' && 
+                                  result !== 'Not checked' &&
+                                  result !== 'Available' &&
+                                  result !== 'Not available',
+                        damage: result
+                    };
+                }
+            }
+
+            const vehicleName = vehicleInfo.vehicleName || 'Unknown Vehicle';
+            const startingMileage = vehicleInfo.startingMileage || 'N/A';
+            const inspectionDate = new Date().toLocaleDateString();
+
+            // Create preview page content
+            const previewHTML = `
+                <!-- Preview Header -->
+                <header class="form-header" style="position: relative;">
+                    <h1>📋 Inspection Results Preview</h1>
+                    <div style="font-size: 0.9rem; color: #e8f2f8; margin-top: 5px; font-weight: normal;">
+                        Vehicle: ${vehicleName} | Mileage: ${startingMileage} | Date: ${inspectionDate}
+                    </div>
+                    
+                    <!-- Back Button -->
+                    <button onclick="window.restoreInspectionView()" 
+                        style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; border: none; border-radius: 4px; font-size: 0.9rem; cursor: pointer;">
+                        ← Back to Inspection
+                    </button>
+                    
+                    <div style="position: absolute; bottom: 10px; right: 20px; color: #e8f2f8; font-size: 0.8rem;">
+                        🔒 Read-Only Preview
+                    </div>
+                </header>
+
+                <!-- Vehicle Diagram Section -->
+                <section class="form-info-section" style="margin-bottom: 20px;">
+                    <h2 style="color: #006ab4; margin-bottom: 15px;">🚗 Vehicle Diagram</h2>
+                    <div style="text-align: center; position: relative;">
+                        <div id="vehicle-svg-container-preview" style="max-width: 100%; overflow: hidden;">
+                            Loading vehicle diagram...
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <div style="width: 20px; height: 20px; background: #dc3545; border-radius: 3px;"></div>
+                                <span style="font-size: 0.9rem; color: #666;">Damaged</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <div style="width: 20px; height: 20px; background: #28a745; border-radius: 3px;"></div>
+                                <span style="font-size: 0.9rem; color: #666;">No Damage</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <div style="width: 20px; height: 20px; background: #007bff; border-radius: 3px;"></div>
+                                <span style="font-size: 0.9rem; color: #666;">Selected</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <div style="width: 20px; height: 20px; background: #6c757d; border-radius: 3px;"></div>
+                                <span style="font-size: 0.9rem; color: #666;">Not Inspected</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Table Section -->
+                <section class="form-info-section">
+                    <h2 style="color: #006ab4; margin-bottom: 15px;">📊 Inspection Results</h2>
+                    <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                        <strong>Total Items Inspected: ${tasks.length}</strong>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+                                    <th style="padding: 12px; text-align: left; font-weight: bold; color: #333; border-bottom: 2px solid #006ab4;">Item/Part</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: bold; color: #333; border-bottom: 2px solid #006ab4;">Status/Damage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${generateResultsTableRows(tasks, results)}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            `;
+
+            // Replace container content
+            inspectionContainer.innerHTML = previewHTML;
+
+            // Load SVG and highlight damaged parts
+            loadSVGForPreview(vehiclePartsDamage);
+        }
+
+        // Helper function to check if an item is a vehicle part
+        function isVehiclePart(itemName) {
+            // Vehicle parts typically contain these keywords or are in ALL CAPS
+            const vehicleKeywords = ['FRONT', 'REAR', 'NEAR SIDE', 'OFF SIDE', 'SIDE', 'DOOR', 'WINDOW', 'BUMPER', 'PANEL', 'HEADLAMP', 'LIGHT', 'WHEEL', 'TYRE', 'TYPE', 'MIRROR', 'FUEL', 'TRIM', 'EXHAUST', 'BONNET', 'WINDSCREEN', 'GRILL'];
+            return vehicleKeywords.some(keyword => itemName.toUpperCase().includes(keyword)) || 
+                   (itemName === itemName.toUpperCase() && itemName.includes(' '));
+        }
+
+        // Function to generate table rows
+        function generateResultsTableRows(tasks, results) {
+            let html = '';
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
+                const result = results[i] || 'Not checked';
+                const rowClass = i % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                
+                // Determine status icon and color
+                let statusIcon = '✅';
+                let statusColor = '#28a745';
+                
+                if (result && result !== 'No damage' && result !== 'Not checked' && result !== 'Available') {
+                    statusIcon = '⚠️';
+                    statusColor = '#dc3545';
+                } else if (result === 'No damage' || result === 'Available') {
+                    statusIcon = '✅';
+                    statusColor = '#28a745';
+                } else if (result === 'Not checked' || result === 'Not available') {
+                    statusIcon = '⏸️';
+                    statusColor = '#6c757d';
+                }
+
+                html += `
+                    <tr style="background: ${rowClass};">
+                        <td style="padding: 12px; border-bottom: 1px solid #e9ecef; font-weight: 500; color: #333;">${task}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #e9ecef; color: ${statusColor}; font-weight: 500;">
+                            ${statusIcon} ${result}
+                        </td>
+                    </tr>
+                `;
+            }
+            return html;
+        }
+
+        // Function to load SVG for preview using stored SVG content
+        function loadSVGForPreview(vehiclePartsDamage) {
+            const svgContainer = document.getElementById('vehicle-svg-container-preview');
+            
+            // Use the globally stored SVG content
+            if (window.globalSVGContent) {
+                // Use the stored working SVG content
+                svgContainer.innerHTML = window.globalSVGContent;
+                
+                // Apply damage highlighting to the SVG
+                setupPreviewSVG(vehiclePartsDamage);
+                
+                console.log('✅ SVG loaded from stored content for preview');
+            } else {
+                console.error('❌ No stored SVG content found');
+                svgContainer.innerHTML = '<p style="color: #dc3545; text-align: center; padding: 20px;">Unable to load vehicle diagram - SVG not initialized</p>';
+            }
+        }
+
+        // Function to setup SVG in preview mode  
+        function setupPreviewSVG(vehiclePartsDamage) {
+            // Disable tooltip functions for preview mode (mobile-friendly)
+            window.showTooltip = function(evt, text) {
+                // Disabled in preview mode - using damage panel instead
+            };
+
+            window.hideTooltip = function() {
+                // Disabled in preview mode - using damage panel instead
+            };
+            
+            // Apply inspection classes to parts - let main CSS handle colors
+            applyInspectionClasses(vehiclePartsDamage);
+            
+            // Disable interactions for all parts in preview
+            disablePreviewInteractions();
+            
+            console.log('✅ SVG preview setup completed');
+        }
+
+        // Simple function to apply main inspection classes
+        function applyInspectionClasses(vehiclePartsDamage) {
+            Object.keys(vehiclePartsDamage).forEach(partName => {
+                const partData = vehiclePartsDamage[partName];
+                const partId = partName.replace(/ /g, '_');
+                const partElement = document.getElementById(partId);
+                
+                if (partElement && isVehiclePart(partName)) {
+                    if (partData.hasDamage) {
+                        partElement.classList.add('damaged');
+                    } else {
+                        partElement.classList.add('inspected');
+                    }
+                }
+            });
+            
+            // Create mobile-friendly damage display
+            createMobileDamageDisplay(vehiclePartsDamage);
+        }
+
+        // Disable interactions for preview mode
+        function disablePreviewInteractions() {
+            const allMaplinks = document.querySelectorAll('.maplink');
+            allMaplinks.forEach(element => {
+                element.style.pointerEvents = 'none';
+                element.onclick = null;
+            });
+        }
+
+
+        // Create mobile-friendly damage display instead of tooltips
+        function createMobileDamageDisplay(vehiclePartsDamage) {
+            // Only show parts that actually have damage (not "Available", "No damage", etc.)
+            const damagedParts = Object.keys(vehiclePartsDamage).filter(partName => {
+                const partData = vehiclePartsDamage[partName];
+                return partData.hasDamage && 
+                       partData.damage !== 'Available' && 
+                       partData.damage !== 'No damage' && 
+                       partData.damage !== 'Not checked';
+            });
+            
+            if (damagedParts.length === 0) return;
+            
+            // Find a good place to insert damage info
+            const diagramSection = document.querySelector('#vehicle-svg-container-preview').parentElement;
+            
+            // Create damage summary panel
+            const damagePanel = document.createElement('div');
+            damagePanel.style.cssText = `
+                margin-top: 15px;
+                padding: 15px;
+                background: linear-gradient(135deg, #ffebee, #ffcdd2);
+                border: 2px solid #dc3545;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+            `;
+            
+            damagePanel.innerHTML = `
+                <h3 style="margin: 0 0 10px; color: #d32f2f; display: flex; align-items: center; gap: 8px;">
+                    ⚠️ <span>Damaged Parts Found</span>
+                </h3>
+                <div style="display: grid; gap: 8px;">
+                    ${damagedParts.map(partName => {
+                        const damage = vehiclePartsDamage[partName].damage;
+                        return `
+                            <div style="
+                                background: white; 
+                                padding: 10px; 
+                                border-radius: 6px; 
+                                border-left: 4px solid #dc3545;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                            ">
+                                <span style="font-weight: bold; color: #333;">${partName}</span>
+                                <span style="color: #d32f2f; font-size: 0.9rem;">${damage}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            
+            diagramSection.appendChild(damagePanel);
+        }
+
         // Test function for Inspection Mode
         function testInspectionMode() {
             // Test data - includes all required parameters
@@ -2694,6 +3054,38 @@
             } catch (error) {
                 console.error('🧪 TEST ERROR:', error);
                 alert('Test failed: ' + error.message);
+            }
+        }
+
+        // Test function for preview functionality
+        function testPreviewInspection() {
+            // Sample test data matching the inspection format
+            const sampleTasks = [
+                "Floor Mat", "Lighter", "Ash Tray", "DVD Nav", "Wheel Caps", "Spare Tire",
+                "FRONT BUMPER", "NEAR SIDE DRIVER DOOR", "OFF SIDE REAR PANEL", "REAR NUMBER PLATE"
+            ];
+            
+            const sampleResults = [
+                "Available", "Available", "Not available", "Available", "Available", "Available",
+                "Dent, Scratches", "No damage", "Chips", "No damage"
+            ];
+            
+            const sampleVehicleInfo = {
+                vehicleName: "Toyota Camry 2023",
+                startingMileage: 45000
+            };
+
+            try {
+                const result = window.previewInspectionResults(sampleTasks, sampleResults, sampleVehicleInfo);
+                console.log('🧪 TEST: Preview result:', result);
+                if (result.success) {
+                    console.log('✅ Preview test successful!');
+                } else {
+                    alert('❌ Preview test failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('🧪 TEST ERROR:', error);
+                alert('Preview test failed: ' + error.message);
             }
         }
 
