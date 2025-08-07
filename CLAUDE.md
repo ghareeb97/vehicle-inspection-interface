@@ -14,10 +14,11 @@ This is a **Vehicle Inspection Interface** application built with vanilla HTML, 
 ## File Structure
 
 ### Main Application Files
-- `index.html` - Complete inspection interface with embedded CSS and JavaScript
+- `index.html` - Complete inspection interface with external CSS reference
+- `styles.css` - Shared stylesheet containing all application styling
+- `preview.html` - Preview interface for inspection results
 - `vehicle.svg` - Interactive SVG vehicle diagram
 - `Vehicle_inspection_template.pdf` - Reference template document
-- `inspection_form.png` - Example screenshot/mockup
 
 ## Architecture
 
@@ -25,7 +26,8 @@ This is a **Vehicle Inspection Interface** application built with vanilla HTML, 
 - **Vanilla JavaScript** - No frameworks, pure DOM manipulation
 - **CSS Grid & Flexbox** - Responsive layout system
 - **SVG Graphics** - Interactive vehicle diagrams with clickable regions
-- **Single-file application** - All CSS and JavaScript embedded in index.html
+- **Modular CSS** - Shared stylesheet architecture with external CSS file
+- **Preview System** - Separate preview interface for inspection results
 
 ### Key JavaScript Functionality
 - **Part Selection System**: Click handlers for vehicle diagram components with damage tracking
@@ -86,6 +88,8 @@ inspectionData = {
 - `updateProgress()` - Calculates and updates inspection completion percentage
 - `collectFormData()` - Aggregates all form data for submission
 - `setupFormEventListeners()` - Initializes all form interaction handlers
+- `showTooltip()` / `hideTooltip()` - Manages hover tooltips for vehicle parts
+- `testInspectionMode()` - Development function to test Bubble.io integration
 
 ## Bubble.io Integration
 
