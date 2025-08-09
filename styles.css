@@ -1,33 +1,14 @@
 /* Vehicle Inspection Shared Styles */
 
-/* Basic reset and layout */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #f0f4f8, #e8f2f8, #f5f5f5);
-    background-attachment: fixed;
-    color: #333;
-    min-height: 100vh;
-}
-
 .inspection-container {
     margin: 0 auto;
     padding: 20px;
 }
 
 .form-header {
-    background: linear-gradient(135deg, #006ab4, #0078c4, #006ab4);
-    color: white;
-    padding: 25px;
+    color: #333;
+    padding: 15px 0;
     margin-bottom: 20px;
-    position: relative;
-    box-shadow: 0 4px 12px rgba(0, 106, 180, 0.3);
-    border-radius: 0 0 12px 12px;
 }
 
 .form-header h1 {
@@ -100,10 +81,6 @@ body {
 
 .form-group input,
 .form-group select,
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-textarea,
 select {
     padding: 10px 12px;
     border: 2px solid #e5e7eb;
@@ -112,30 +89,6 @@ select {
     transition: all 0.3s ease;
     background: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="tel"]:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: #006ab4;
-    box-shadow: 0 0 0 3px rgba(0, 106, 180, 0.1), 0 2px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
-
-.form-group input:hover,
-.form-group select:hover,
-input[type="text"]:hover,
-input[type="email"]:hover,
-input[type="tel"]:hover,
-textarea:hover,
-select:hover {
-    border-color: #9ca3af;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Vehicle Diagram Styles */
@@ -458,32 +411,6 @@ input[type="checkbox"]:hover {
 }
 
 /* General button styling */
-button,
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-button:hover,
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-button:active,
-.btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .modal-actions button {
     padding: 10px 20px;
     border: none;

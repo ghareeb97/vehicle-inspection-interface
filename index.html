@@ -6,111 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Reception/Delivery Form</title>
 
-    <link rel="stylesheet" href="styles.css">
-    <!-- Removing embedded styles - now using shared styles.css -->
-    <!-- All styles now moved to shared styles.css -->
+    <link rel="stylesheet" href="gem.css">
+    <!-- Using unified gem.css for all Bubble.io HTML elements -->
+    <!-- All styles including vehicle inspection now in gem.css -->
 </head>
+
 <body>
     <div class="inspection-container" id="inspection-container">
         <header class="form-header">
-            <div class="jameel-logo">
-                JAMEEL<br>
-                <span style="font-size: 0.8rem;">MOBILITY SOLUTIONS</span>
-            </div>
-            <h1>Vehicle Reception/Delivery Form</h1>
-            <div style="font-size: 0.9rem; color: #e8f2f8; margin-top: 5px; font-weight: normal;">
-                HNDL Fleet Management Test Module - First Look
-            </div>
-            
-            <!-- Test Button for Inspection Mode -->
-            <button id="test-inspection-btn" onclick="testInspectionMode()" 
-                style="position: absolute; top: 10px; left: 10px; background: #ff6b35; color: white; padding: 8px 12px; border: none; border-radius: 4px; font-size: 0.8rem; cursor: pointer; z-index: 1000;">
-                🧪 Test Inspection Mode
-            </button>
-            
+            <h1>Vehicle Inspection</h1>
         </header>
-
-        <!-- Basic Information Section -->
-        <section class="form-info-section" id="basic-info-section">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="date-time">Date/Time</label>
-                    <input type="datetime-local" id="date-time">
-                </div>
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location" placeholder="Enter location">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="coordinator-name">Coordinator Name</label>
-                    <input type="text" id="coordinator-name" placeholder="Enter coordinator name">
-                </div>
-                <div class="form-group">
-                    <label for="coordinator-no">Coordinator No.</label>
-                    <input type="text" id="coordinator-no" placeholder="Enter coordinator number">
-                </div>
-            </div>
-        </section>
-
-        <!-- Driver Information Section -->
-        <section class="form-info-section" id="driver-info-section">
-            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">DRIVERS
-                INFORMATION</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="outgoing-driver">Outgoing Driver Name/No</label>
-                    <input type="text" id="outgoing-driver" placeholder="Enter outgoing driver details">
-                </div>
-                <div class="form-group">
-                    <label for="incoming-driver">Incoming Driver Name/No</label>
-                    <input type="text" id="incoming-driver" placeholder="Enter incoming driver details">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Traffic Violations</label>
-                    <div style="display: flex; gap: 20px; margin-top: 5px;">
-                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
-                            <input type="checkbox" id="violations-yes" name="traffic-violations" value="yes">
-                            Yes
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
-                            <input type="checkbox" id="violations-no" name="traffic-violations" value="no">
-                            No
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Vehicle Information Section -->
         <section class="form-info-section" id="vehicle-info-section">
             <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">VEHICLE
                 INFORMATION</h3>
-            <div class="form-row" id="license-plate-row">
-                <div class="form-group">
-                    <label for="license-plate">License Plate (Attach Photo)</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="license-plate" placeholder="Enter license plate number" style="flex: 1;">
-                        <input type="file" id="license-photo" accept="image/*" style="width: auto;">
-                    </div>
-                </div>
-            </div>
+
             <div class="form-row">
                 <div class="form-group">
-                    <label for="mileage-start" id="mileage-start-label">Mileage at Start (Attach Photo)</label>
+                    <label for="mileage-start" id="mileage-start-label">Mileage at Start </label>
                     <div style="display: flex; gap: 10px;">
                         <input type="number" id="mileage-start" placeholder="Enter starting mileage" style="flex: 1;">
-                        <input type="file" id="mileage-start-photo" accept="image/*" style="width: auto;">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mileage-end" id="mileage-end-label">Mileage at End (Attach Photo)</label>
+                    <label for="mileage-end" id="mileage-end-label">Mileage at End </label>
                     <div style="display: flex; gap: 10px;">
                         <input type="number" id="mileage-end" placeholder="Enter ending mileage" style="flex: 1;">
-                        <input type="file" id="mileage-end-photo" accept="image/*" style="width: auto;">
                     </div>
                 </div>
             </div>
@@ -151,24 +73,19 @@
                     <div class="damage-categories" style="margin-bottom: 20px;">
                         <h4 style="margin-bottom: 10px;">Select Damage Type:</h4>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="damage-btn" data-damage="D"
-                                onclick="handleDamageButtonClick('D')"
+                            <button class="damage-btn" data-damage="D" onclick="handleDamageButtonClick('D')"
                                 style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">D
                                 - Dent</button>
-                            <button class="damage-btn" data-damage="S"
-                                onclick="handleDamageButtonClick('S')"
+                            <button class="damage-btn" data-damage="S" onclick="handleDamageButtonClick('S')"
                                 style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">S
                                 - Scratches</button>
-                            <button class="damage-btn" data-damage="R"
-                                onclick="handleDamageButtonClick('R')"
+                            <button class="damage-btn" data-damage="R" onclick="handleDamageButtonClick('R')"
                                 style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">R
                                 - Rust</button>
-                            <button class="damage-btn" data-damage="K"
-                                onclick="handleDamageButtonClick('K')"
+                            <button class="damage-btn" data-damage="K" onclick="handleDamageButtonClick('K')"
                                 style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">K
                                 - Broken</button>
-                            <button class="damage-btn" data-damage="C"
-                                onclick="handleDamageButtonClick('C')"
+                            <button class="damage-btn" data-damage="C" onclick="handleDamageButtonClick('C')"
                                 style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">C
                                 - Chips</button>
                         </div>
@@ -197,15 +114,15 @@
             <section class="inspection-checklist">
                 <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">WALK AROUND CHECK
                 </h2>
-                
+
                 <!-- Select All Available Button -->
                 <div style="margin-bottom: 15px; text-align: right;">
-                    <button id="select-all-available" onclick="selectAllAvailable()" 
+                    <button id="select-all-available" onclick="selectAllAvailable()"
                         style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; font-weight: bold;">
                         ✓ Select All Available
                     </button>
                 </div>
-                
+
                 <div class="checklist-items">
                     <div class="checklist-grid">
 
@@ -399,37 +316,16 @@
                 <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">REMARKS</h2>
                 <textarea id="remarks" placeholder="Enter general inspection remarks..."
                     style="width: 100%; min-height: 100px; margin-bottom: 10px;"></textarea>
-                <input type="file" id="remarks-photo" accept="image/*" multiple style="margin-bottom: 20px;">
             </section>
 
-            <!-- Signature Section -->
-            <section class="form-info-section" id="signature-internal-section">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="signature">SIGNATURE</label>
-                        <div
-                            style="border: 1px solid #ccc; height: 80px; background: #f9f9f9; margin-top: 5px; padding: 10px; text-align: center; color: #666;">
-                            Signature area - Click to sign
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>INTERNAL</label>
-                        <div
-                            style="border: 1px solid #ccc; height: 80px; background: #f9f9f9; margin-top: 5px; padding: 10px; text-align: center; color: #666;">
-                            Internal use only
-                        </div>
-                    </div>
-                </div>
-
-            </section>
 
             <!-- Submit Button Section (outside signature section for inspection mode) -->
             <section class="form-info-section" id="submit-section">
-                <div style="text-align: center; margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                <div
+                    style="text-align: center; margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
                     <button id="cancel-inspection"
                         style="background: #dc3545; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;"
-                        onclick="window.cancelInspection()"
-                        onmouseover="this.style.backgroundColor='#c82333'"
+                        onclick="window.cancelInspection()" onmouseover="this.style.backgroundColor='#c82333'"
                         onmouseout="this.style.backgroundColor='#dc3545'">
                         Cancel Inspection
                     </button>
@@ -449,7 +345,7 @@
         // Global variables
         let bubbleConfig = {
             isInitializedFromBubble: false,
-            mode: 'standalone', // 'inspection' when from Bubble
+            mode: 'inspection', // 'inspection' when from Bubble
             vehicleName: null,
             startingMileage: null,
             userId: null,
@@ -517,13 +413,12 @@
         // Load the complete SVG content
         function loadVehicleSVG() {
             const svgContainer = document.getElementById('vehicle-svg-container');
-            
+
             if (!svgContainer) {
                 console.error('SVG container not found!');
                 return;
             }
-            
-            console.log('Loading SVG content...');
+
 
             // PASTE YOUR COMPLETE SVG CONTENT HERE
             // Replace this placeholder with your complete vehicle.svg content
@@ -878,8 +773,8 @@
             </g>
         <polygon class="st12" points="252.57,224.47 277.58,223.11 252.57,224.47 	"></polygon>
         <path class="st12" d="M203.93,259.64h30.42c2.05-12.14,15.23-30.76,15.73-31.47l1.45-0.03l-1.43-3.54l1.26-0.07l1.21-0.07l0,0
-         l25.01-1.37v-3.75l-5.46-7.93c-1.5-3-6.86-3.86-6.86-3.86l-18.86-1.29h-7.44h-30.7h-11.4c-27.77,4.9-39.73,18.1-42.2,21.2
-         c-0.34,0.42-0.5,0.66-0.5,0.66l-1.61,2.84v28.66H203.93z"></path>
+         l25.01-1.37v-3.75l-5.46-7.93c-1.5-3-6.86-3.86-6.86-3.86l-18.86-1.29h-7.44h-30.7h-11.4c-27.77-4.9-39.73-18.1-42.2-21.2
+         c-0.34-0.42-0.5-0.66-0.5-0.66l-1.61-2.84V37.67H203.93z"></path>
   
         <!---NEAR_SIDE_BODY_TRIM-->
         <a xlink:href="#" onmousemove="showTooltip(evt, 'NEAR SIDE BODY TRIM');" onmouseout="hideTooltip();" onclick="partClick(evt, 'NEAR SIDE BODY TRIM')">
@@ -1333,11 +1228,10 @@
             );
 
             svgContainer.innerHTML = modifiedSvg;
-            
+
             // Store SVG content globally for preview use
             window.globalSVGContent = modifiedSvg;
-            
-            console.log('SVG loaded successfully!');
+
         }
 
 
@@ -1395,88 +1289,81 @@
         let damageButtonsSetup = false;
         let modalActionsSetup = false;
         let formEventListenersSetup = false;
-        
+
         // Track overall initialization state to prevent duplication
         let isInitialized = false;
-        
+
         // Debounce mechanism for damage button clicks
         let lastClickTime = 0;
         const clickDebounceDelay = 300; // 300ms debounce
-        
+
         // Global function to handle damage button clicks (for Bubble.io compatibility)
-        window.handleDamageButtonClick = function(damage) {
+        window.handleDamageButtonClick = function (damage) {
             const now = Date.now();
             if (now - lastClickTime < clickDebounceDelay) {
-                console.log('🔧 Click ignored (debounce)');
                 return;
             }
             lastClickTime = now;
-            
-            console.log('🔧 Damage button clicked:', damage);
-            
+
+
             try {
                 if (selectedDamages.includes(damage)) {
                     selectedDamages = selectedDamages.filter(d => d !== damage);
-                    console.log('🔧 Removed damage:', damage);
                 } else {
                     selectedDamages.push(damage);
-                    console.log('🔧 Added damage:', damage);
                 }
-                
+
                 updateSelectedDamagesList();
-                console.log('🔧 Current selected damages:', selectedDamages);
-                
+
             } catch (error) {
                 console.error('❌ Error handling damage button click:', error);
             }
         };
-        
+
         // Debug function to test checklist data collection
-        window.testChecklistCollection = function() {
-            console.log('🧪 Testing checklist data collection...');
-            
+        window.testChecklistCollection = function () {
+
             const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
                 'tool-box', 'wheel-jack', 'wire-aid', 'air-compressor', 'alloy-wheel',
                 'fire-extinguisher', 'memory-card', 'usb-device', 'smart-key'];
-            
+
             const results = {};
-            
+
             checklistItems.forEach(item => {
                 const checkboxes = document.querySelectorAll(`input[name="${item}"]`);
                 let status = '';
                 let checkedCount = 0;
-                
+
                 checkboxes.forEach(cb => {
                     if (cb.checked) {
                         status = cb.value;
                         checkedCount++;
                     }
                 });
-                
+
                 results[item] = {
                     checkboxesFound: checkboxes.length,
                     checkedCount: checkedCount,
                     status: status
                 };
             });
-            
-            console.log('🧪 Checklist test results:', results);
+
             return results;
         };
 
         // Debug function to test damage buttons in Bubble.io
-        window.testDamageButtons = function() {
-            console.log('🧪 Testing damage buttons...');
-            
+        window.testDamageButtons = function () {
+
             const buttons = document.querySelectorAll('.damage-btn');
-            console.log('🧪 Found', buttons.length, 'damage buttons');
-            
+
             buttons.forEach((button, index) => {
                 const damage = button.dataset.damage;
                 const isVisible = button.offsetParent !== null;
                 const hasOnclick = typeof button.onclick === 'function';
-                
-                console.log(`🧪 Button ${index + 1} (${damage}):`, {
+                // The following block was incorrectly written as an object literal without assignment or usage
+                // It should probably be a console.log or similar for debugging, or removed if not needed
+                // For now, let's log the button state for debugging:
+                console.log({
                     visible: isVisible,
                     hasOnclick: hasOnclick,
                     clickable: !button.disabled,
@@ -1484,78 +1371,68 @@
                     pointerEvents: window.getComputedStyle(button).pointerEvents
                 });
             });
-            
+
             // Test clicking the first button programmatically
             if (buttons.length > 0) {
-                console.log('🧪 Testing programmatic click on first button...');
                 try {
                     window.handleDamageButtonClick('D');
-                    console.log('✅ Programmatic click successful');
                 } catch (error) {
                     console.error('❌ Programmatic click failed:', error);
                 }
             }
-            
+
             return {
                 buttonsFound: buttons.length,
                 damageButtonsSetup: damageButtonsSetup,
                 currentDamages: selectedDamages
             };
         };
-        
+
         // Damage category selection with inline onclick as primary method
         function setupDamageButtons() {
             if (damageButtonsSetup) {
                 return; // Prevent duplicate event listener setup
             }
-            
-            console.log('🔧 Setting up damage buttons...');
-            
+
+
             const damageButtons = document.querySelectorAll('.damage-btn');
-            console.log('🔧 Found damage buttons:', damageButtons.length);
-            
+
             // Check if buttons already have onclick handlers (inline method)
             const hasInlineHandlers = Array.from(damageButtons).some(btn => typeof btn.onclick === 'function');
-            
+
             if (hasInlineHandlers) {
-                console.log('🔧 Using inline onclick handlers (Bubble.io mode)');
                 // Don't add additional event listeners if inline handlers exist
             } else {
-                console.log('🔧 Adding direct event listeners (local development mode)');
-                
+
                 // Method 1: Direct event listeners (for local development only)
                 damageButtons.forEach(button => {
                     button.addEventListener('click', function (e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('🔧 Direct event listener triggered');
-                        
+
                         const damage = this.dataset.damage;
                         window.handleDamageButtonClick(damage);
                     });
                 });
-                
+
                 // Method 2: Event delegation backup
                 const damageForm = document.getElementById('damage-form');
                 if (damageForm) {
-                    damageForm.addEventListener('click', function(e) {
+                    damageForm.addEventListener('click', function (e) {
                         if (e.target.classList.contains('damage-btn') && !e.target.onclick) {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log('🔧 Event delegation triggered');
-                            
+
                             const damage = e.target.dataset.damage;
                             if (damage) {
                                 window.handleDamageButtonClick(damage);
                             }
                         }
                     });
-                    console.log('🔧 Event delegation set up on damage-form');
                 }
             }
-            
+
             damageButtonsSetup = true;
-            console.log('✅ Damage buttons setup complete');
         }
 
         function updateSelectedDamagesList() {
@@ -1591,7 +1468,7 @@
             if (modalActionsSetup) {
                 return; // Prevent duplicate event listener setup
             }
-            
+
             document.getElementById('save-damage-btn').addEventListener('click', function () {
                 if (currentPart) {
                     inspectionData.vehicleParts[currentPart] = {
@@ -1600,9 +1477,6 @@
                         inspected: true
                     };
 
-                    console.log('Saving damage for:', currentPart);
-                    console.log('Selected damages:', selectedDamages);
-                    console.log('Part data:', inspectionData.vehicleParts[currentPart]);
 
                     // Update visual state of the part
                     updatePartVisualState(currentPart);
@@ -1619,7 +1493,7 @@
             document.getElementById('cancel-damage-btn').addEventListener('click', function () {
                 hideDamageForm();
             });
-            
+
             modalActionsSetup = true;
         }
 
@@ -1636,28 +1510,22 @@
             // Convert part name spaces to underscores to match SVG element IDs
             const partId = partName.replace(/ /g, '_');
             const partElement = document.getElementById(partId);
-            console.log('updatePartVisualState - partName:', partName, 'partId:', partId, 'element found:', !!partElement);
 
             if (partElement) {
                 const partData = inspectionData.vehicleParts[partName];
-                console.log('Part data for', partName, ':', partData);
 
                 // Remove inspection state classes but preserve selected state
                 partElement.classList.remove('damaged', 'inspected');
 
                 if (partData && partData.inspected) {
-                    console.log('Part is inspected, damages:', partData.damages);
                     // Remove selected state when part becomes inspected
                     partElement.classList.remove('selected');
 
                     if (partData.damages && partData.damages.length > 0) {
-                        console.log('Adding damaged class to', partId);
                         partElement.classList.add('damaged');
                     } else {
-                        console.log('Adding inspected class to', partId);
                         partElement.classList.add('inspected');
                     }
-                    console.log('Element classes after update:', partElement.className);
                 }
                 // If not inspected, keep selected state if it was previously selected
             }
@@ -1692,9 +1560,7 @@
         // Form data collection functions
         function collectFormData() {
             try {
-                console.log('🔧 Collecting form data...');
-                console.log('🔧 Current inspectionData structure:', Object.keys(inspectionData));
-                
+
                 // Ensure inspectionData structure is complete
                 if (!inspectionData.formInfo) {
                     console.warn('⚠️ formInfo missing, initializing...');
@@ -1708,7 +1574,7 @@
                     console.warn('⚠️ vehicleInfo missing, initializing...');
                     inspectionData.vehicleInfo = {};
                 }
-                
+
                 // Basic Information
                 inspectionData.formInfo.dateTime = document.getElementById('date-time')?.value || '';
                 inspectionData.formInfo.location = document.getElementById('location')?.value || '';
@@ -1729,7 +1595,6 @@
                 inspectionData.vehicleInfo.mileageEnd = document.getElementById('mileage-end')?.value || '';
 
                 // Collect checklist data
-                console.log('🔧 Collecting checklist data...');
                 const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
                     'tool-box', 'wheel-jack', 'wire-aid', 'air-compressor', 'alloy-wheel',
                     'fire-extinguisher', 'memory-card', 'usb-device', 'smart-key'];
@@ -1741,44 +1606,38 @@
 
                 checklistItems.forEach(item => {
                     const checkboxes = document.querySelectorAll(`input[name="${item}"]`);
-                    console.log(`🔧 Found ${checkboxes.length} checkboxes for ${item}`);
-                    
+
                     let status = '';
                     checkboxes.forEach(cb => {
                         if (cb.checked) {
                             status = cb.value;
-                            console.log(`🔧 ${item}: ${status}`);
                         }
                     });
 
                     // Find the remark field for this item (it should be the next input after the checkboxes)
                     const itemContainer = document.querySelector(`input[name="${item}"]`)?.closest('.checklist-item');
-                    const remarkField = itemContainer?.querySelector('input[placeholder="Remarks"]') || 
-                                      document.querySelector(`input[placeholder="Remarks for ${item}"]`);
+                    const remarkField = itemContainer?.querySelector('input[placeholder="Remarks"]') ||
+                        document.querySelector(`input[placeholder="Remarks for ${item}"]`);
                     const remarks = remarkField ? remarkField.value : '';
-                    
-                    if (remarks) console.log(`🔧 ${item} remarks: ${remarks}`);
+
 
                     // Convert hyphenated names to camelCase (e.g., 'floor-mat' -> 'floorMat')
                     const itemKey = item.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase()).replace('-', '');
-                    
+
                     // Always create/update the checklist item, even if it doesn't exist
                     inspectionData.checklist[itemKey] = {
                         status: status,
                         remarks: remarks
                     };
-                    
-                    console.log(`🔧 Set ${itemKey}:`, inspectionData.checklist[itemKey]);
+
                 });
 
-                console.log('🔧 Final checklist data:', inspectionData.checklist);
 
                 // General remarks
                 inspectionData.remarks = document.getElementById('remarks')?.value || '';
 
-                console.log('✅ Form data collected successfully');
                 return inspectionData;
-                
+
             } catch (error) {
                 console.error('❌ Error collecting form data:', error);
                 console.error('❌ inspectionData state:', inspectionData);
@@ -1846,30 +1705,24 @@
             try {
                 const formData = collectFormData();
                 const bubbleData = formatInspectionDataForBubble(formData);
-                
-                console.log('📋 FORM SUBMIT DATA:');
-                console.log('Raw form data:', formData);
-                console.log('Formatted for Bubble:', bubbleData);
-                
+
+
                 // If in Bubble mode, call the Bubble function
                 if (bubbleConfig.mode === 'inspection') {
                     if (typeof bubble_fn_SaveInspectionResults === 'function') {
                         bubble_fn_SaveInspectionResults(bubbleData);
-                        console.log('✅ bubble_fn_SaveInspectionResults called successfully');
                         alert('✅ Inspection submitted successfully to Bubble!');
                     } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
                         bubbleConfig.submitCallback(bubbleData);
                         alert('✅ Inspection submitted successfully to Bubble via callback!');
                     } else {
-                        console.log('No Bubble function available - showing data');
                         alert('Form submitted successfully! Check console for data.');
                     }
                 } else {
                     // Regular form submission
-                    console.log('Regular form submission');
                     alert('Form submitted successfully! Check console for data.');
                 }
-                
+
                 return { success: true, data: bubbleData };
             } catch (error) {
                 console.error('Form submission error:', error);
@@ -1882,7 +1735,7 @@
             if (formEventListenersSetup) {
                 return; // Prevent duplicate event listener setup
             }
-            
+
             // Add change listeners to all checkboxes
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
@@ -1915,23 +1768,21 @@
                     }
                 });
             });
-            
+
             formEventListenersSetup = true;
         }
 
         function init() {
             // Handle re-initialization with new data
             if (isInitialized) {
-                console.log('🔄 Re-initialization detected - updating with new Bubble config');
                 // Always handle Bubble.io data pre-population for re-initialization
                 if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
                     populateFormFromBubbleData();
                 }
                 return;
             }
-            
-            console.log('🚀 Initializing inspection interface...');
-            
+
+
             loadVehicleSVG();
             setupDamageButtons();
             setupModalActions();
@@ -1949,24 +1800,22 @@
             if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
                 populateFormFromBubbleData();
             }
-            
+
             isInitialized = true;
-            console.log('✅ Initialization complete');
         }
 
         function populateFormFromBubbleData() {
             const vehicleName = bubbleConfig.vehicleName;
             const startingMileage = bubbleConfig.startingMileage;
-            
-            console.log('🔧 Populating form with Bubble data:', { vehicleName, startingMileage });
-            
+
+
             // CLEANUP FIRST - Remove any existing elements to prevent duplication
             const existingVehicleDisplays = document.querySelectorAll('.vehicle-name-display');
             existingVehicleDisplays.forEach(display => display.remove());
-            
+
             const existingTestButtons = document.querySelectorAll('button[onclick*="testSubmitInspection"]');
             existingTestButtons.forEach(button => button.remove());
-            
+
             const existingMileageConfirmation = document.getElementById('mileage-confirmation');
             if (existingMileageConfirmation) {
                 existingMileageConfirmation.closest('div').remove();
@@ -1974,35 +1823,6 @@
 
             // Hide sections when in inspection mode
             if (bubbleConfig.mode === 'inspection') {
-                // Hide basic info section (date, location, coordinator)
-                const basicInfoSection = document.getElementById('basic-info-section');
-                if (basicInfoSection) {
-                    basicInfoSection.style.display = 'none';
-                }
-
-                // Hide driver info section
-                const driverInfoSection = document.getElementById('driver-info-section');
-                if (driverInfoSection) {
-                    driverInfoSection.style.display = 'none';
-                }
-
-                // Modify vehicle information section
-                // Hide license plate row
-                const licensePlateRow = document.getElementById('license-plate-row');
-                if (licensePlateRow) {
-                    licensePlateRow.style.display = 'none';
-                }
-
-                // Remove file uploaders from mileage inputs and update labels
-                const mileageStartPhoto = document.getElementById('mileage-start-photo');
-                if (mileageStartPhoto) {
-                    mileageStartPhoto.style.display = 'none';
-                }
-
-                const mileageEndPhoto = document.getElementById('mileage-end-photo');
-                if (mileageEndPhoto) {
-                    mileageEndPhoto.style.display = 'none';
-                }
 
                 const mileageStartLabel = document.getElementById('mileage-start-label');
                 if (mileageStartLabel) {
@@ -2013,52 +1833,22 @@
                 if (mileageEndLabel) {
                     mileageEndLabel.textContent = 'Mileage at End';
                 }
-
-                // Hide signature and internal sections
-                const signatureInternalSection = document.getElementById('signature-internal-section');
-                if (signatureInternalSection) {
-                    signatureInternalSection.style.display = 'none';
-                }
-
-                // Hide remarks file uploader
-                const remarksPhoto = document.getElementById('remarks-photo');
-                if (remarksPhoto) {
-                    remarksPhoto.style.display = 'none';
-                }
-
-                // Add test submit button for inspection mode
-                const submitForm = document.getElementById('submit-form');
-                if (submitForm) {
-                    // Create test submit button
-                    const testSubmitBtn = document.createElement('button');
-                    testSubmitBtn.innerHTML = '🧪 Test Submit to Bubble';
-                    testSubmitBtn.onclick = testSubmitInspection;
-                    testSubmitBtn.style.cssText = 'background: #ff6b35; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; margin-left: 10px;';
-                    
-                    // Add it next to the regular submit button
-                    submitForm.parentNode.appendChild(testSubmitBtn);
-                }
             }
 
-            
+
             // Populate starting mileage and ending mileage (same value in inspection mode)
             if (startingMileage !== null && startingMileage !== undefined) {
-                console.log('🔢 Attempting to set mileage to:', startingMileage, 'Type:', typeof startingMileage);
-                
+
                 const mileageStartInput = document.getElementById('mileage-start');
-                console.log('🔍 Mileage start input found:', !!mileageStartInput);
                 if (mileageStartInput) {
                     mileageStartInput.value = startingMileage;
-                    console.log('✅ Mileage start set to:', mileageStartInput.value);
                 } else {
                     console.error('❌ Mileage start input not found!');
                 }
-                
+
                 const mileageEndInput = document.getElementById('mileage-end');
-                console.log('🔍 Mileage end input found:', !!mileageEndInput);
                 if (mileageEndInput) {
                     mileageEndInput.value = startingMileage;
-                    console.log('✅ Mileage end set to:', mileageEndInput.value);
                 } else {
                     console.error('❌ Mileage end input not found!');
                 }
@@ -2076,13 +1866,12 @@
                     vehicleNameDisplay.innerHTML = `
                         <div style="background: #f0f8ff; border: 2px solid #006ab4; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
                             <h4 style="margin: 0; color: #006ab4; font-size: 1.1rem;">
-                                🚗 Vehicle: ${vehicleName}
+                                Vehicle: ${vehicleName}
                             </h4>
                         </div>
                     `;
-                    
-                    console.log('🚗 Added vehicle name display:', vehicleName);
-                    
+
+
                     // Insert it after the section header but before the mileage rows
                     const sectionHeader = vehicleInfoSection.querySelector('h3');
                     if (sectionHeader) {
@@ -2099,13 +1888,12 @@
                             </label>
                         </div>
                     `;
-                    
+
                     // Add it at the end of the vehicle info section
                     vehicleInfoSection.appendChild(mileageConfirmationDiv);
                 }
             }
 
-            console.log('Form populated with Bubble data:', { vehicleName, startingMileage });
         }
 
         function validateBubbleData(vehicleName, startingMileage, userId, inspectionId) {
@@ -2126,7 +1914,7 @@
                     // Try to convert to number
                     startingMileage = Number(startingMileage);
                 }
-                
+
                 if (typeof startingMileage !== 'number' || isNaN(startingMileage)) {
                     errors.push('Starting mileage must be a valid number');
                 } else if (startingMileage < 0) {
@@ -2167,19 +1955,19 @@
         }
 
         // Global function for Bubble.io integration - Inspection Module
-        window.initializeInspectionModule = function(vehicleName, startingMileage, userId, inspectionId, submitCallback) {
+        window.initializeInspectionModule = function (vehicleName, startingMileage, userId, inspectionId, submitCallback) {
             // Log all received parameters for debugging
-            console.log('🔧 initializeInspectionModule called with:', {
+            console.log({
                 vehicleName: vehicleName,
                 startingMileage: startingMileage,
                 userId: userId,
                 inspectionId: inspectionId,
                 submitCallback: typeof submitCallback
             });
-            
+
             // Validate incoming data
             const validation = validateBubbleData(vehicleName, startingMileage, userId, inspectionId);
-            
+
             if (!validation.isValid) {
                 console.error('❌ Invalid Bubble data:', validation.errors);
                 console.error('❌ Received parameters:', { vehicleName, startingMileage, userId, inspectionId });
@@ -2207,36 +1995,33 @@
         function formatInspectionDataForBubble(formData) {
             const outputlist1 = [];  // Task/Item names from walk-around checklist
             const outputlist2 = [];  // Status/Results from walk-around checklist
-            
+
             // Add walk-around checklist items only
             if (formData.checklist) {
-                console.log('🔍 DEBUG: formData.checklist:', formData.checklist);
-                
+
                 Object.keys(formData.checklist).forEach(itemKey => {
                     const item = formData.checklist[itemKey];
                     // Always add the item, even if no status is selected (will show as empty/null)
                     const taskName = itemKey.charAt(0).toUpperCase() + itemKey.slice(1).replace(/([A-Z])/g, ' $1');
                     outputlist1.push(taskName);
                     outputlist2.push(item.status || "Not checked");
-                    
-                    console.log(`🔍 ${taskName}: ${item.status || "Not checked"}`);
+
                 });
             }
-            
+
             // Add vehicle parts with damage data
             if (formData.vehicleParts) {
-                console.log('🔍 DEBUG: formData.vehicleParts:', formData.vehicleParts);
-                
+
                 Object.keys(formData.vehicleParts).forEach(partName => {
                     const partData = formData.vehicleParts[partName];
                     if (partData.inspected) {
                         outputlist1.push(partName);
-                        
+
                         // Format damage information
                         if (partData.damages && partData.damages.length > 0) {
                             const damageNames = {
                                 'D': 'Dent',
-                                'S': 'Scratches', 
+                                'S': 'Scratches',
                                 'R': 'Rust',
                                 'K': 'Broken',
                                 'C': 'Chips'
@@ -2246,45 +2031,40 @@
                         } else {
                             outputlist2.push("No damage");
                         }
-                        
-                        console.log(`🔍 ${partName}: ${partData.damages && partData.damages.length > 0 ? 'Damaged: ' + partData.damages.join(', ') : 'No damage'}`);
+
                     }
                 });
             }
-            
+
             return { outputlist1, outputlist2 };
         }
 
         // Global function to submit inspection data back to Bubble
-        window.submitInspectionToBubble = function() {
+        window.submitInspectionToBubble = function () {
             // Check mileage confirmation in inspection mode
             if (bubbleConfig.mode === 'inspection') {
                 const mileageConfirmation = document.getElementById('mileage-confirmation');
                 if (mileageConfirmation && !mileageConfirmation.checked) {
-                    return { 
-                        success: false, 
-                        error: 'Mileage confirmation required. Please check the confirmation box before submitting.' 
+                    return {
+                        success: false,
+                        error: 'Mileage confirmation required. Please check the confirmation box before submitting.'
                     };
                 }
             }
 
             const formData = collectFormData();
             const bubbleData = formatInspectionDataForBubble(formData);
-            
+
             // Console log for testing
-            console.log('🔧 BUBBLE FUNCTION DATA:');
-            console.log('outputlist1 (Tasks/Items):', bubbleData.outputlist1);
-            console.log('outputlist2 (Status/Results):', bubbleData.outputlist2);
-            
+
             // Call Bubble function
             try {
                 if (typeof bubble_fn_SaveInspectionResults === 'function') {
                     bubble_fn_SaveInspectionResults(bubbleData);
-                    console.log('✅ bubble_fn_SaveInspectionResults called successfully');
                     return { success: true, data: bubbleData };
                 } else {
                     console.warn('⚠️ bubble_fn_SaveInspectionResults function not found - using callback instead');
-                    
+
                     // Fallback to callback method
                     if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
                         bubbleConfig.submitCallback(bubbleData);
@@ -2300,7 +2080,7 @@
             }
         };
 
-        
+
 
         // Test function for Inspection Mode
         function testInspectionMode() {
@@ -2309,33 +2089,22 @@
             const testStartingMileage = 45000;
             const testUserId = "user_12345";
             const testInspectionId = "insp_67890";
-            
-            const testCallback = function(inspectionData) {
-                console.log('🧪 TEST: Inspection completed successfully!');
-                console.log('Inspection Data:', inspectionData);
+
+            const testCallback = function (inspectionData) {
                 alert('🧪 TEST: Inspection submitted!\n\nCheck the browser console (F12) to see the complete inspection data.\n\nNotice how the form is now in inspection mode with simplified interface.');
             };
-            
+
             // Initialize inspection mode
             try {
                 window.initializeInspectionModule(testVehicleName, testStartingMileage, testUserId, testInspectionId, testCallback);
-                console.log('🧪 TEST: Inspection mode activated!');
-                console.log('- Basic info section: HIDDEN');
-                console.log('- Driver info section: HIDDEN'); 
-                console.log('- License plate field: HIDDEN');
-                console.log('- File uploaders: HIDDEN');
-                console.log('- Signature section: HIDDEN');
-                console.log('- Starting mileage set to:', testStartingMileage);
-                console.log('- Vehicle name:', testVehicleName);
-                console.log('- User ID:', testUserId);
-                console.log('- Inspection ID:', testInspectionId);
-                
+
+
                 // Hide the test button after activation
                 const testBtn = document.getElementById('test-inspection-btn');
                 if (testBtn) {
                     testBtn.style.display = 'none';
                 }
-                
+
             } catch (error) {
                 console.error('🧪 TEST ERROR:', error);
                 alert('Test failed: ' + error.message);
@@ -2346,7 +2115,6 @@
         function testSubmitInspection() {
             try {
                 const result = window.submitInspectionToBubble();
-                console.log('🧪 TEST: Submit result:', result);
                 if (result.success) {
                     alert('🧪 TEST: Submit successful!\nCheck console for data.');
                 } else {
@@ -2359,22 +2127,20 @@
         }
 
         // Function to switch to a new vehicle inspection - proper workflow
-        window.switchVehicleInspection = function(vehicleName, startingMileage, userId, inspectionId, submitCallback) {
+        window.switchVehicleInspection = function (vehicleName, startingMileage, userId, inspectionId, submitCallback) {
             try {
-                console.log('🔄 Switching to new vehicle inspection:', { vehicleName, startingMileage });
-                
+
                 // Step 1: Clear the current form first
                 const clearResult = window.clearInspectionForm();
                 if (!clearResult.success) {
                     return { success: false, error: 'Failed to clear form: ' + clearResult.error };
                 }
-                
+
                 // Step 2: Initialize with new vehicle data
                 window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, submitCallback);
-                
-                console.log('✅ Successfully switched to new vehicle');
+
                 return { success: true, message: 'Vehicle switched successfully' };
-                
+
             } catch (error) {
                 console.error('❌ Error switching vehicle:', error);
                 return { success: false, error: error.message };
@@ -2382,18 +2148,16 @@
         };
 
         // Function to cancel inspection - calls Bubble's cancel function
-        window.cancelInspection = function() {
+        window.cancelInspection = function () {
             try {
-                console.log('🚫 Canceling inspection...');
-                
+
                 // Call Bubble's cancel function if it exists
                 if (typeof bubble_fn_cancel_inspection === 'function') {
                     bubble_fn_cancel_inspection();
-                    console.log('✅ bubble_fn_cancel_inspection called successfully');
                     return { success: true, message: 'Inspection canceled successfully' };
                 } else {
                     console.warn('⚠️ bubble_fn_cancel_inspection function not found');
-                    
+
                     // Fallback - just clear the form if no Bubble function exists
                     const clearResult = window.clearInspectionForm();
                     if (clearResult.success) {
@@ -2402,7 +2166,7 @@
                         return { success: false, error: 'Failed to clear form: ' + clearResult.error };
                     }
                 }
-                
+
             } catch (error) {
                 console.error('❌ Error canceling inspection:', error);
                 return { success: false, error: error.message };
@@ -2410,34 +2174,33 @@
         };
 
         // Function to clear all form data - for Bubble.io workflow use
-        window.clearInspectionForm = function() {
+        window.clearInspectionForm = function () {
             try {
-                console.log('🧹 Clearing inspection form...');
-                
+
                 // Clear all text inputs
                 const textInputs = document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="number"], textarea');
                 textInputs.forEach(input => {
                     input.value = '';
                 });
-                
+
                 // Clear all file inputs
                 const fileInputs = document.querySelectorAll('input[type="file"]');
                 fileInputs.forEach(input => {
                     input.value = '';
                 });
-                
+
                 // Uncheck all checkboxes
                 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach(checkbox => {
                     checkbox.checked = false;
                 });
-                
+
                 // Clear all radio buttons
                 const radioButtons = document.querySelectorAll('input[type="radio"]');
                 radioButtons.forEach(radio => {
                     radio.checked = false;
                 });
-                
+
                 // Reset inspection data with complete structure
                 inspectionData = {
                     // Basic Information
@@ -2471,33 +2234,33 @@
                     // Progress tracking
                     progress: { totalItems: 0, completedItems: 0, completionPercentage: 0 }
                 };
-                
+
                 // Reset global variables
                 currentPart = null;
                 selectedDamages = [];
-                
+
                 // Clear visual states from SVG parts
                 document.querySelectorAll('.maplink').forEach(element => {
                     element.classList.remove('selected', 'damaged', 'inspected', 'active');
                 });
-                
+
                 // Clear visual states from group elements
                 document.querySelectorAll('g').forEach(element => {
                     element.classList.remove('selected', 'damaged', 'inspected', 'active');
                 });
-                
+
                 // Hide damage form if visible
                 const damageForm = document.getElementById('damage-form');
                 if (damageForm) {
                     damageForm.style.display = 'none';
                 }
-                
+
                 // Clear selected damage list
                 const selectedDamageList = document.getElementById('selected-damage-list');
                 if (selectedDamageList) {
                     selectedDamageList.innerHTML = '<p>No damages selected</p>';
                 }
-                
+
                 // Reset Bubble configuration
                 bubbleConfig = {
                     isInitializedFromBubble: false,
@@ -2508,20 +2271,19 @@
                     inspectionId: null,
                     submitCallback: null
                 };
-                
+
                 // Reset initialization flags to allow re-initialization
                 damageButtonsSetup = false;
                 modalActionsSetup = false;
                 formEventListenersSetup = false;
                 isInitialized = false;
-                
+
                 // Update progress displays
                 updateChecklistProgress();
                 updateProgress();
-                
-                console.log('✅ Form cleared successfully');
+
                 return { success: true, message: 'Form cleared successfully' };
-                
+
             } catch (error) {
                 console.error('❌ Error clearing form:', error);
                 return { success: false, error: error.message };
@@ -2534,14 +2296,14 @@
             const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
                 'tool-box', 'wheel-jack', 'wire-aid', 'air-compressor', 'alloy-wheel',
                 'fire-extinguisher', 'memory-card', 'usb-device', 'smart-key'];
-            
+
             checklistItems.forEach(item => {
                 // Find all checkboxes for this item
                 const checkboxes = document.querySelectorAll(`input[name="${item}"]`);
-                
+
                 // Uncheck all first
                 checkboxes.forEach(cb => cb.checked = false);
-                
+
                 // Check only the "available" option
                 const availableCheckbox = document.querySelector(`input[name="${item}"][value="available"]`);
                 if (availableCheckbox) {
@@ -2550,16 +2312,15 @@
                     availableCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             });
-            
-            console.log('✅ All checklist items marked as Available');
-            
+
+
             // Update button style temporarily to show action was completed
             const button = document.getElementById('select-all-available');
             if (button) {
                 const originalText = button.innerHTML;
                 button.innerHTML = '✅ All Selected!';
                 button.style.background = '#20c997';
-                
+
                 setTimeout(() => {
                     button.innerHTML = originalText;
                     button.style.background = '#28a745';
