@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Inspection Preview</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gem.css">
 </head>
 
 <body>
@@ -773,10 +773,29 @@
 
         // Helper function to check if an item is a vehicle part
         function isVehiclePart(itemName) {
-            // Vehicle parts typically contain these keywords or are in ALL CAPS
-            const vehicleKeywords = ['FRONT', 'REAR', 'NEAR SIDE', 'OFF SIDE', 'SIDE', 'DOOR', 'WINDOW', 'BUMPER', 'PANEL', 'HEADLAMP', 'LIGHT', 'WHEEL', 'TYRE', 'TYPE', 'MIRROR', 'FUEL', 'TRIM', 'EXHAUST', 'BONNET', 'WINDSCREEN', 'GRILL'];
-            return vehicleKeywords.some(keyword => itemName.toUpperCase().includes(keyword)) ||
-                (itemName === itemName.toUpperCase() && itemName.includes(' '));
+            // Exact vehicle part names from SVG (should be filtered OUT of walk-around checklist)
+            const vehiclePartNames = [
+                'FRONT BUMPER', 'FRONT NUMBER PLATE', 'FRONT NEAR SIDE HEADLAMP', 'FRONT GRILL', 'FRONT OFF SIDE HEADLAMP',
+                'FRONT PANEL', 'REAR BUMPER', 'REAR PANEL', 'REAR NUMBER PLATE', 'REAR OFF SIDE LIGHT', 'REAR NEAR SIDE LIGHT',
+                'REAR NEAR SIDE EXHAUST', 'REAR OFF SIDE EXHAUST', 'NEAR SIDE REAR PANEL', 'NEAR SIDE FRONT PANEL',
+                'NEAR SIDE DRIVER DOOR', 'NEAR SIDE DRIVER WINDOW', 'NEAR SIDE PASSENGER DOOR', 'NEAR SIDE SIDE WINDOW',
+                'NEAR SIDE FRONT BUMPER', 'NEAR SIDE REAR BUMPER', 'NEAR SIDE REAR WINDOW', 'NEAR SIDE PASSENGER WINDOW',
+                'NEAR SIDE FRONT HEADLAMP', 'NEAR SIDE REAR HEADLAMP', 'NEAR SIDE FUEL CAP', 'NEAR SIDE WING MIRROR',
+                'NEAR SIDE FRONT TYPE', 'NEAR SIDE FRONT WHEEL', 'NEAR SIDE REAR TYPE', 'NEAR SIDE REAR WHEEL',
+                'NEAR SIDE BODY TRIM', 'NEAR SIDE UNDER TRIM', 'OFF SIDE REAR PANEL', 'OFF SIDE FRONT PANEL',
+                'OFF SIDE DRIVER DOOR', 'OFF SIDE DRIVER WINDOW', 'OFF SIDE PASSENGER DOOR', 'OFF SIDE SIDE WINDOW',
+                'OFF SIDE FRONT BUMPER', 'OFF SIDE REAR BUMPER', 'OFF SIDE REAR WINDOW', 'OFF SIDE PASSENGER WINDOW',
+                'OFF SIDE FRONT HEADLAMP', 'OFF SIDE REAR HEADLAMP', 'OFF SIDE FUEL CAP', 'OFF SIDE WING MIRROR',
+                'OFF SIDE FRONT TYRE', 'OFF SIDE FRONT WHEEL', 'OFF SIDE REAR TYRE', 'OFF SIDE REAR WHEEL',
+                'OFF SIDE BODY TRIM', 'OFF SIDE UNDER TRIM', 'FRONT ROOF PANEL', 'FRONT WINDSCREEN',
+                ' FRONT OFF SIDE PASSENGER WINDOW ', 'FRONT DRIVER WINDOW', 'FRONT DRIVER SIDE WINDOW',
+                'FRONT NEAR SIDE PASSENGER WINDOW', 'FRONT PASSENGER WINDOW', 'FRONT PASSENGER SIDE WINDOW',
+                'FRONT BONNET', 'FRONT REAR PANEL', 'FRONT REAR WINDOW', 'FRONT DRIVER BODY PANEL',
+                'FRONT DRIVER PANEL', 'FRONT PASSENGER PANEL', 'FRONT PASSENGER BODY PANEL'
+            ];
+            
+            // Check if the item name exactly matches any vehicle part name
+            return vehiclePartNames.includes(itemName);
         }
 
         // Helper function to determine if a result indicates damage (supports both codes and full names)
@@ -814,8 +833,8 @@
         }
 
         // Main preview function
-        window.previewInspectionResults = function (tasks, results, vehicleInfo) {
-            console.log('🚀 Starting preview with data:', { tasks, results, vehicleInfo });
+        window.previewInspectionResults = function (tasks, results, vehicleInfo, remarks = []) {
+            console.log('🚀 Starting preview with data:', { tasks, results, vehicleInfo, remarks });
 
             // Prepare vehicle parts damage data
             const vehiclePartsDamage = {};
@@ -835,19 +854,46 @@
 
             const vehicleName = vehicleInfo.vehicleName || 'Unknown Vehicle';
             const startingMileage = vehicleInfo.startingMileage || 'N/A';
+            const fuelLevel = vehicleInfo.fuelLevel || 'Not recorded';
             const inspectionDate = new Date().toLocaleDateString();
 
             // Create preview page content
             const previewHTML = `
                 <!-- Preview Header -->
-                <header class="form-header" style="position: relative;">
-                    <h1>📋 Inspection Results Preview</h1>
-                    <div style="font-size: 0.9rem; color: #e8f2f8; margin-top: 5px; font-weight: normal;">
-                        Vehicle: ${vehicleName} | Mileage: ${startingMileage} | Date: ${inspectionDate}
+                <header style="padding: 20px 0; margin-bottom: 25px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h1 style="margin: 0; font-size: 1.6rem; color: #333; font-weight: 600;">
+                            📋 Inspection Results Preview
+                        </h1>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: #666;">
+                            Generated on ${inspectionDate}
+                        </div>
                     </div>
                     
-                    <div style="position: absolute; bottom: 10px; right: 20px; color: #e8f2f8; font-size: 0.8rem;">
-                        <span class="jameel-logo">JAMEEL<br>MOBILITY SOLUTIONS</span>
+                    <!-- Vehicle Information Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                        <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                                🚗 Vehicle
+                            </div>
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600; word-break: break-word;">${vehicleName}</div>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                                📊 Mileage
+                            </div>
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600;">${startingMileage} ${startingMileage !== 'N/A' ? 'km' : ''}</div>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                                ⛽ Fuel Level
+                            </div>
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600;">
+                                ${fuelLevel}
+                            </div>
+                        </div>
                     </div>
                 </header>
 
@@ -875,10 +921,11 @@
                                 <tr>
                                     <th style="padding: 15px; text-align: left; font-weight: 600;">Item/Part</th>
                                     <th style="padding: 15px; text-align: left; font-weight: 600;">Status/Damage</th>
+                                    <th style="padding: 15px; text-align: left; font-weight: 600;">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${generateResultsTableRows(tasks, results)}
+                                ${generateResultsTableRows(tasks, results, remarks)}
                             </tbody>
                         </table>
                     </div>
@@ -980,12 +1027,30 @@
         }
 
         // Function to generate table rows
-        function generateResultsTableRows(tasks, results) {
+        function generateResultsTableRows(tasks, results, remarks = []) {
             let html = '';
+            let rowIndex = 0; // Track visible row index for alternating colors
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
+                
+                // Skip vehicle parts, only show walk-around checklist items
+                if (isVehiclePart(task)) {
+                    continue;
+                }
+                
                 const result = results[i] || 'Not checked';
-                const rowClass = i % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                const remark = remarks[i] || '';
+                
+                // Determine row styling - highlight rows with remarks
+                let rowClass, borderLeft = '';
+                if (remark && remark.trim()) {
+                    // Row has remarks - use blue highlight
+                    rowClass = rowIndex % 2 === 0 ? '#e3f2fd' : '#f3f9ff';
+                    borderLeft = 'border-left: 4px solid #2196f3;';
+                } else {
+                    // Normal row styling
+                    rowClass = rowIndex % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                }
 
                 // Determine status icon and color based on result type
                 let statusIcon = '⏸️';
@@ -1015,13 +1080,17 @@
                 }
 
                 html += `
-                    <tr style="background: ${rowClass};">
+                    <tr style="background: ${rowClass}; ${borderLeft}">
                         <td style="padding: 12px; border-bottom: 1px solid #e9ecef; font-weight: 500; color: #333;">${task}</td>
                         <td style="padding: 12px; border-bottom: 1px solid #e9ecef; color: ${statusColor}; font-weight: 500;">
                             ${statusIcon} ${result}
                         </td>
+                        <td style="padding: 12px; border-bottom: 1px solid #e9ecef; color: ${remark ? '#333' : '#999'}; font-style: ${remark ? 'normal' : 'italic'}; font-weight: ${remark ? '500' : 'normal'};">
+                            ${remark ? `📝 ${remark}` : 'No remarks'}
+                        </td>
                     </tr>
                 `;
+                rowIndex++; // Increment only for visible rows
             }
             return html;
         }
@@ -1032,52 +1101,82 @@
             console.log('🎯 Preview page ready - call window.previewInspectionResults(tasks, results, vehicleInfo)');
         });
 
-        window.previewInspectionResults(
-            [
-                "Floor Mat",
-                "Lighter",
-                "Ash Tray",
-                "Dvd Nav",
-                "Wheel Caps",
-                "Spare Tire",
-                "Tool Box",
-                "Wheel Jack",
-                "Wire Aid",
-                "Air Compressor",
-                "Alloy Wheel",
-                "Fire Extinguisher",
-                "Memory Card",
-                "Usb Device",
-                "Smart Key",
-                "NEAR SIDE PASSENGER DOOR",
-                "NEAR SIDE DRIVER DOOR",
-                "REAR PANEL"
-            ],
-            [
-                "available",
-                "missing",
-                "available",
-                "available",
-                "missing",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "available",
-                "Dent",
-                "Scratches",
-                "Rust"
-            ],
-            {
-                vehicleName: "V3",
-                startingMileage: 100
-            }
-        );
+        // window.previewInspectionResults(
+        //     [
+        //         "Floor Mat",
+        //         "Lighter",
+        //         "Ash Tray",
+        //         "Dvd Nav",
+        //         "Wheel Caps",
+        //         "Spare Tire",
+        //         "Tool Box",
+        //         "Wheel Jack",
+        //         "Wire Aid",
+        //         "Air Compressor",
+        //         "Alloy Wheel",
+        //         "Fire Extinguisher",
+        //         "Memory Card",
+        //         "Usb Device",
+        //         "Smart Key",
+        //         "NEAR SIDE PASSENGER DOOR",
+        //         "NEAR SIDE DRIVER DOOR",
+        //         "REAR PANEL"
+        //     ],
+        //     [
+        //         "available",
+        //         "missing",
+        //         "available",
+        //         "available",
+        //         "missing",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "available",
+        //         "Dent",
+        //         "Scratches",
+        //         "Rust"
+        //     ],
+        //     {
+        //         vehicleName: "V3",
+        //         startingMileage: 100,
+        //         fuelLevel: "Full"
+        //     },
+        //     [
+        //         "Good condition",
+        //         "",
+        //         "Needs cleaning",
+        //         "Working properly",
+        //         "",
+        //         "Brand new",
+        //         "Well maintained",
+        //         "Functional",
+        //         "Present and working",
+        //         "Good pressure",
+        //         "Like new condition",
+        //         "Certified and functional",
+        //         "Contains important data",
+        //         "Multiple ports available",
+        //         "Battery level good",
+        //         "Small dent on lower section",
+        //         "Minor surface scratches visible",
+        //         "Light rust spots observed"
+        //     ]
+        // );
+
+                window.previewInspectionResults([
+                        "Floor Mat", "Lighter", "Ash Tray", "Dvd Nav", "Wheel Caps", "Spare Tire", "Tool Box", "Wheel Jack", "Wire Aid", "Air Compressor", "Alloy Wheel", "Fire Extinguisher", "Memory Card", "Usb Device", "Smart Key"], ["available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available"],
+                        {
+                            vehicleName: "vehicle test 1",
+                            startingMileage: 14000,
+                            fuelLevel: "½"
+                        }, ["", "", "dirty", "", "", "", "", "missing screw", "", "", "", "", "", "", ""]
+                    );
     </script>
 </body>
 

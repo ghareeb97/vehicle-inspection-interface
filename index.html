@@ -38,18 +38,66 @@
             </div>
         </section>
 
-        <!-- Progress Indicator -->
-        <section class="form-info-section">
-            <div class="progress-indicator">
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
+        <!-- Driver Information Section -->
+        <section class="form-info-section" id="driver-info-section">
+            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">DRIVER INFORMATION</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="incoming-driver">Incoming Driver</label>
+                    <input type="text" id="incoming-driver" placeholder="Enter incoming driver name">
                 </div>
-                <span class="progress-text">0 / 50 items inspected</span>
             </div>
         </section>
 
         <main class="inspection-main">
             <section class="vehicle-diagram">
+                <!-- Fuel Level Indicator -->
+                <div class="fuel-level-section" style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #dee2e6;">
+                    <h4 style="margin: 0 0 12px 0; text-align: center; font-weight: bold; color: #006ab4; font-size: 15px;">⛽ Fuel Level</h4>
+                    <div class="fuel-level-container" style="display: flex; gap: 15px; align-items: flex-start; justify-content: center; flex-wrap: wrap;">
+                        <!-- Visual Fuel Gauge -->
+                        <div class="fuel-gauge" style="display: flex; align-items: flex-start; gap: 25px; flex-wrap: wrap; justify-content: center;">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                <div class="fuel-tank" style="width: 60px; height: 140px; border: 2px solid #333; border-radius: 8px; position: relative; background: linear-gradient(to top, #f5f5f5 0%, #fff 100%); flex-shrink: 0; margin: 0 25px;">
+                                    <div class="fuel-fill" id="fuel-fill" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: #006ab4; border-radius: 0 0 6px 6px; transition: height 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"></div>
+                                    <!-- Fuel level markers -->
+                                    <div class="fuel-level-markers" style="position: absolute; right: -20px; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: #666; font-weight: bold;">
+                                        <span>F</span>
+                                        <span>¾</span>
+                                        <span>½</span>
+                                        <span>¼</span>
+                                        <span>E</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fuel-buttons" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 170px; min-width: 150px;">
+                                <button type="button" class="fuel-btn" data-level="0" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Empty</button>
+                                <button type="button" class="fuel-btn" data-level="12.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅛</button>
+                                <button type="button" class="fuel-btn" data-level="25" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¼</button>
+                                <button type="button" class="fuel-btn" data-level="37.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅜</button>
+                                <button type="button" class="fuel-btn" data-level="50" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">½</button>
+                                <button type="button" class="fuel-btn" data-level="62.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅝</button>
+                                <button type="button" class="fuel-btn" data-level="75" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¾</button>
+                                <button type="button" class="fuel-btn" data-level="87.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅞</button>
+                                <button type="button" class="fuel-btn" data-level="100" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Full</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Compact display and custom -->
+                        <div class="fuel-controls" style="display: flex; flex-direction: column; gap: 8px; min-width: 120px; flex-shrink: 0;">
+                            <div class="fuel-display" style="padding: 6px 8px; background: white; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+                                <div class="fuel-display-label" style="font-size: 11px; color: #666; margin-bottom: 2px;">Selected:</div>
+                                <div id="fuel-level-display" class="fuel-display-value" style="font-size: 13px; color: #006ab4; font-weight: bold;">Not selected</div>
+                            </div>
+                            <button type="button" class="fuel-btn-custom" style="padding: 6px; font-size: 11px; border: 1px solid #006ab4; border-radius: 4px; background: #f0f8ff; cursor: pointer; color: #006ab4; transition: all 0.2s; pointer-events: auto; position: relative; z-index: 10;">✏️ Custom</button>
+                            <input type="text" id="fuel-level-custom" placeholder="Enter level" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; display: none; box-sizing: border-box;">
+                        </div>
+                        
+                        <!-- Hidden input to store the actual value -->
+                        <input type="hidden" id="fuel-level" name="fuel-level">
+                    </div>
+                </div>
+                
                 <!-- Embedded SVG with all vehicle parts -->
                 <div id="vehicle-svg-container">
                     <!-- The complete SVG content will be loaded here -->
@@ -345,12 +393,14 @@
         // Global variables
         let bubbleConfig = {
             isInitializedFromBubble: false,
-            mode: 'inspection', // 'inspection' when from Bubble
+            mode: 'inspection', // 'inspection' or 'assignment-ending'
             vehicleName: null,
             startingMileage: null,
             userId: null,
             inspectionId: null,
-            submitCallback: null
+            submitCallback: null,
+            incomingDriverName: null,
+            endMileage: null
         };
 
         let inspectionData = {
@@ -374,7 +424,8 @@
                 mileageStart: '',
                 mileageStartPhoto: null,
                 mileageEnd: '',
-                mileageEndPhoto: null
+                mileageEndPhoto: null,
+                fuelLevel: ''
             },
             // Vehicle Parts (for damage marking)
             vehicleParts: {},
@@ -398,13 +449,7 @@
             },
             // General remarks
             remarks: '',
-            remarksPhotos: [],
-            // Progress tracking
-            progress: {
-                totalItems: 15,
-                completedItems: 0,
-                completionPercentage: 0
-            }
+            remarksPhotos: []
         };
 
         let currentPart = null;
@@ -1480,7 +1525,6 @@
 
                     // Update visual state of the part
                     updatePartVisualState(currentPart);
-                    updateProgress();
                 }
                 hideDamageForm();
             });
@@ -1531,28 +1575,6 @@
             }
         }
 
-        function updateProgress() {
-            // Count all clickable vehicle parts
-            const allClickableParts = document.querySelectorAll('.maplink');
-            const totalParts = allClickableParts.length;
-            const inspectedParts = Object.values(inspectionData.vehicleParts).filter(part => part.inspected).length;
-
-            inspectionData.progress.totalItems = totalParts;
-            inspectionData.progress.inspectedItems = inspectedParts;
-            inspectionData.progress.completionPercentage = totalParts > 0 ? (inspectedParts / totalParts) * 100 : 0;
-
-            // Update progress display
-            const progressFill = document.querySelector('.progress-fill');
-            const progressText = document.querySelector('.progress-text');
-
-            if (progressFill) {
-                progressFill.style.width = inspectionData.progress.completionPercentage + '%';
-            }
-
-            if (progressText) {
-                progressText.textContent = `${inspectedParts} / ${totalParts} parts inspected`;
-            }
-        }
 
         // Initialize the application (first definition - will be removed)
 
@@ -1593,6 +1615,11 @@
                 inspectionData.vehicleInfo.licensePlate = document.getElementById('license-plate')?.value || '';
                 inspectionData.vehicleInfo.mileageStart = document.getElementById('mileage-start')?.value || '';
                 inspectionData.vehicleInfo.mileageEnd = document.getElementById('mileage-end')?.value || '';
+                
+                // Fuel Level
+                const fuelLevelSelect = document.getElementById('fuel-level')?.value || '';
+                const fuelLevelCustom = document.getElementById('fuel-level-custom')?.value || '';
+                inspectionData.vehicleInfo.fuelLevel = fuelLevelSelect === 'custom' ? fuelLevelCustom : fuelLevelSelect;
 
                 // Collect checklist data
                 const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
@@ -1645,25 +1672,6 @@
             }
         }
 
-        function updateChecklistProgress() {
-            const totalItems = Object.keys(inspectionData.checklist).length;
-            const completedItems = Object.values(inspectionData.checklist).filter(item => item.status !== '').length;
-            const completionPercentage = Math.round((completedItems / totalItems) * 100);
-
-            inspectionData.progress.totalItems = totalItems;
-            inspectionData.progress.completedItems = completedItems;
-            inspectionData.progress.completionPercentage = completionPercentage;
-
-            const progressText = document.querySelector('.progress-text');
-            const progressFill = document.querySelector('.progress-fill');
-
-            if (progressText) {
-                progressText.textContent = `${completedItems} / ${totalItems} items completed (${completionPercentage}%)`;
-            }
-            if (progressFill) {
-                progressFill.style.width = `${completionPercentage}%`;
-            }
-        }
 
         function handleCheckboxChange(event) {
             const name = event.target.name;
@@ -1675,10 +1683,13 @@
                 if (cb !== event.target) cb.checked = false;
             });
 
-            updateChecklistProgress();
         }
 
         function handleFormSubmit() {
+            console.log('🚀 Submit button clicked!');
+            console.log('🚀 Current mode:', bubbleConfig.mode);
+            console.log('🚀 bubbleConfig:', bubbleConfig);
+            
             // Check mileage confirmation in inspection mode
             if (bubbleConfig.mode === 'inspection') {
                 const mileageConfirmation = document.getElementById('mileage-confirmation');
@@ -1707,8 +1718,10 @@
                 const bubbleData = formatInspectionDataForBubble(formData);
 
 
-                // If in Bubble mode, call the Bubble function
+                // If in Bubble mode, call the appropriate Bubble function
+                console.log('🚀 Checking bubble functions...');
                 if (bubbleConfig.mode === 'inspection') {
+                    console.log('🚀 Inspection mode - checking bubble_fn_SaveInspectionResults');
                     if (typeof bubble_fn_SaveInspectionResults === 'function') {
                         bubble_fn_SaveInspectionResults(bubbleData);
                         alert('✅ Inspection submitted successfully to Bubble!');
@@ -1717,6 +1730,21 @@
                         alert('✅ Inspection submitted successfully to Bubble via callback!');
                     } else {
                         alert('Form submitted successfully! Check console for data.');
+                    }
+                } else if (bubbleConfig.mode === 'assignment-ending') {
+                    console.log('🚀 Assignment-ending mode - checking bubble_fn_save');
+                    console.log('🔍 Available bubble functions in window:', Object.keys(window).filter(key => key.startsWith('bubble_fn_')));
+                    console.log('🔍 Type of bubble_fn_save:', typeof bubble_fn_save);
+                    console.log('🔍 bubble_fn_save exists:', 'bubble_fn_save' in window);
+                    
+                    if (typeof bubble_fn_save === 'function') {
+                        bubble_fn_save(bubbleData);
+                        alert('✅ Assignment ending submitted successfully to Bubble!');
+                    } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                        bubbleConfig.submitCallback(bubbleData);
+                        alert('✅ Assignment ending submitted successfully to Bubble via callback!');
+                    } else {
+                        alert('Assignment ending submitted successfully! Check console for data.');
                     }
                 } else {
                     // Regular form submission
@@ -1747,14 +1775,91 @@
             formFields.forEach(field => {
                 field.addEventListener('change', () => {
                     collectFormData();
-                    updateChecklistProgress();
-                });
+                        });
             });
 
             // Submit button
             const submitBtn = document.getElementById('submit-form');
             if (submitBtn) {
                 submitBtn.addEventListener('click', handleFormSubmit);
+            }
+
+            // Handle fuel level visual gauge
+            const fuelButtons = document.querySelectorAll('.fuel-btn');
+            const fuelCustomButton = document.querySelector('.fuel-btn-custom');
+            const fuelFill = document.getElementById('fuel-fill');
+            const fuelLevelDisplay = document.getElementById('fuel-level-display');
+            const fuelLevelInput = document.getElementById('fuel-level');
+            const fuelLevelCustom = document.getElementById('fuel-level-custom');
+
+            console.log('🔧 Fuel buttons found:', fuelButtons.length);
+            console.log('🔧 Fuel custom button found:', fuelCustomButton ? 'Yes' : 'No');
+
+            // Handle preset fuel level buttons
+            fuelButtons.forEach((button, index) => {
+                console.log(`🔧 Setting up fuel button ${index}:`, button);
+                button.addEventListener('click', function(e) {
+                    console.log('🔥 Fuel button clicked:', this.textContent);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const level = parseFloat(this.dataset.level);
+                    const levelText = this.textContent;
+                    
+                    console.log('🔥 Level:', level, 'Text:', levelText);
+                    
+                    // Update visual gauge
+                    if (fuelFill) {
+                        fuelFill.style.height = level + '%';
+                        console.log('🔥 Fuel fill updated to:', level + '%');
+                    }
+                    
+                    // Update display and hidden input
+                    if (fuelLevelDisplay) {
+                        fuelLevelDisplay.textContent = levelText;
+                    }
+                    if (fuelLevelInput) {
+                        fuelLevelInput.value = levelText;
+                    }
+                    
+                    // Hide custom input
+                    fuelLevelCustom.style.display = 'none';
+                    fuelLevelCustom.value = '';
+                    
+                    // Update button states
+                    fuelButtons.forEach(btn => btn.style.background = '#fff');
+                    fuelCustomButton.style.background = '#f0f8ff';
+                    this.style.background = '#e6f3ff';
+                });
+            });
+
+            // Handle custom fuel level button
+            if (fuelCustomButton && fuelLevelCustom) {
+                fuelCustomButton.addEventListener('click', function() {
+                    // Show custom input
+                    fuelLevelCustom.style.display = 'block';
+                    fuelLevelCustom.focus();
+                    
+                    // Update button states
+                    fuelButtons.forEach(btn => btn.style.background = '#fff');
+                    this.style.background = '#d1ecf1';
+                    
+                    // Clear visual gauge
+                    fuelFill.style.height = '0%';
+                    fuelLevelDisplay.textContent = 'Custom (enter below)';
+                });
+                
+                // Handle custom input changes
+                fuelLevelCustom.addEventListener('input', function() {
+                    const customValue = this.value;
+                    if (customValue) {
+                        fuelLevelDisplay.textContent = customValue;
+                        fuelLevelInput.value = customValue;
+                    } else {
+                        fuelLevelDisplay.textContent = 'Custom (enter below)';
+                        fuelLevelInput.value = '';
+                    }
+                });
             }
 
             // Handle traffic violations checkboxes (exclusive selection)
@@ -1776,7 +1881,7 @@
             // Handle re-initialization with new data
             if (isInitialized) {
                 // Always handle Bubble.io data pre-population for re-initialization
-                if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
+                if (bubbleConfig.isInitializedFromBubble) {
                     populateFormFromBubbleData();
                 }
                 return;
@@ -1787,7 +1892,6 @@
             setupDamageButtons();
             setupModalActions();
             setupFormEventListeners();
-            updateChecklistProgress();
 
             // Set current date/time
             const now = new Date();
@@ -1797,7 +1901,7 @@
             }
 
             // Handle Bubble.io data pre-population
-            if (bubbleConfig.isInitializedFromBubble && bubbleConfig.mode === 'inspection') {
+            if (bubbleConfig.isInitializedFromBubble) {
                 populateFormFromBubbleData();
             }
 
@@ -1805,8 +1909,16 @@
         }
 
         function populateFormFromBubbleData() {
+            console.log('🔧 populateFormFromBubbleData called');
+            console.log('🔧 bubbleConfig:', bubbleConfig);
+            
             const vehicleName = bubbleConfig.vehicleName;
             const startingMileage = bubbleConfig.startingMileage;
+            const endMileage = bubbleConfig.endMileage;
+            const incomingDriverName = bubbleConfig.incomingDriverName;
+            const mode = bubbleConfig.mode;
+            
+            console.log('🔧 Values:', { vehicleName, startingMileage, endMileage, incomingDriverName, mode });
 
 
             // CLEANUP FIRST - Remove any existing elements to prevent duplication
@@ -1821,9 +1933,8 @@
                 existingMileageConfirmation.closest('div').remove();
             }
 
-            // Hide sections when in inspection mode
-            if (bubbleConfig.mode === 'inspection') {
-
+            // Apply mode-specific UI modifications
+            if (mode === 'inspection') {
                 const mileageStartLabel = document.getElementById('mileage-start-label');
                 if (mileageStartLabel) {
                     mileageStartLabel.textContent = 'Mileage at Start';
@@ -1833,31 +1944,71 @@
                 if (mileageEndLabel) {
                     mileageEndLabel.textContent = 'Mileage at End';
                 }
+                
+                // Hide driver section in inspection mode
+                const driverSection = document.getElementById('driver-info-section');
+                if (driverSection) {
+                    driverSection.style.display = 'none';
+                    console.log('✅ Driver section hidden for inspection mode');
+                }
+            } else if (mode === 'assignment-ending') {
+                const mileageStartLabel = document.getElementById('mileage-start-label');
+                if (mileageStartLabel) {
+                    mileageStartLabel.textContent = 'Starting Mileage';
+                }
+
+                const mileageEndLabel = document.getElementById('mileage-end-label');
+                if (mileageEndLabel) {
+                    mileageEndLabel.textContent = 'Ending Mileage';
+                }
+                
+                // Show driver section in assignment-ending mode
+                const driverSection = document.getElementById('driver-info-section');
+                if (driverSection) {
+                    driverSection.style.display = 'block';
+                    console.log('✅ Driver section shown for assignment-ending mode');
+                }
             }
 
 
-            // Populate starting mileage and ending mileage (same value in inspection mode)
+            // Populate starting mileage
             if (startingMileage !== null && startingMileage !== undefined) {
-
                 const mileageStartInput = document.getElementById('mileage-start');
                 if (mileageStartInput) {
                     mileageStartInput.value = startingMileage;
                 } else {
                     console.error('❌ Mileage start input not found!');
                 }
-
-                const mileageEndInput = document.getElementById('mileage-end');
-                if (mileageEndInput) {
-                    mileageEndInput.value = startingMileage;
-                } else {
-                    console.error('❌ Mileage end input not found!');
-                }
             } else {
                 console.warn('⚠️ startingMileage is null or undefined:', startingMileage);
             }
 
+            // Populate ending mileage based on mode
+            const mileageEndInput = document.getElementById('mileage-end');
+            if (mileageEndInput) {
+                if (mode === 'inspection') {
+                    // In inspection mode, end mileage defaults to same as start (not needed)
+                    mileageEndInput.value = startingMileage || '';
+                } else if (mode === 'assignment-ending') {
+                    // In assignment-ending mode, use provided endMileage
+                    mileageEndInput.value = endMileage !== null ? endMileage : '';
+                }
+            } else {
+                console.error('❌ Mileage end input not found!');
+            }
+
+            // Populate incoming driver name if provided (assignment-ending mode)
+            if (incomingDriverName && mode === 'assignment-ending') {
+                const incomingDriverInput = document.getElementById('incoming-driver');
+                if (incomingDriverInput) {
+                    incomingDriverInput.value = incomingDriverName;
+                } else {
+                    console.warn('⚠️ Incoming driver input not found!');
+                }
+            }
+
             // Add vehicle name to the vehicle information section
-            if (vehicleName && bubbleConfig.mode === 'inspection') {
+            if (vehicleName) {
                 const vehicleInfoSection = document.getElementById('vehicle-info-section');
                 if (vehicleInfoSection) {
                     // Create vehicle name display element
@@ -1955,13 +2106,16 @@
         }
 
         // Global function for Bubble.io integration - Inspection Module
-        window.initializeInspectionModule = function (vehicleName, startingMileage, userId, inspectionId, submitCallback) {
+        window.initializeInspectionModule = function (vehicleName, startingMileage, userId, inspectionId, mode = 'inspection', incomingDriverName = null, endMileage = null, submitCallback) {
             // Log all received parameters for debugging
             console.log({
                 vehicleName: vehicleName,
                 startingMileage: startingMileage,
                 userId: userId,
                 inspectionId: inspectionId,
+                mode: mode,
+                incomingDriverName: incomingDriverName,
+                endMileage: endMileage,
                 submitCallback: typeof submitCallback
             });
 
@@ -1976,12 +2130,14 @@
 
             // Store Bubble configuration with sanitized data
             bubbleConfig.isInitializedFromBubble = true;
-            bubbleConfig.mode = 'inspection';
+            bubbleConfig.mode = mode || 'inspection';
             bubbleConfig.vehicleName = validation.sanitizedData.vehicleName;
             bubbleConfig.startingMileage = validation.sanitizedData.startingMileage;
             bubbleConfig.userId = validation.sanitizedData.userId;
             bubbleConfig.inspectionId = validation.sanitizedData.inspectionId;
             bubbleConfig.submitCallback = submitCallback;
+            bubbleConfig.incomingDriverName = incomingDriverName && typeof incomingDriverName === 'string' ? incomingDriverName.trim() : null;
+            bubbleConfig.endMileage = endMileage && typeof endMileage === 'number' ? endMileage : null;
 
             // If DOM is already loaded, initialize immediately
             if (document.readyState === 'loading') {
@@ -1995,6 +2151,20 @@
         function formatInspectionDataForBubble(formData) {
             const outputlist1 = [];  // Task/Item names from walk-around checklist
             const outputlist2 = [];  // Status/Results from walk-around checklist
+            const outputlist3 = [];  // Remarks from walk-around checklist
+
+            // For assignment-ending mode, create separate output1, output2, and output3 constants
+            let output1 = '';
+            let output2 = '';
+            let output3 = '';
+            
+            if (bubbleConfig.mode === 'assignment-ending') {
+                output1 = bubbleConfig.incomingDriverName || formData.driverInfo?.incomingDriver || '';
+                output2 = bubbleConfig.vehicleName || '';
+            }
+            
+            // Set output3 to fuel level for all modes
+            output3 = formData.vehicleInfo?.fuelLevel || '';
 
             // Add walk-around checklist items only
             if (formData.checklist) {
@@ -2005,6 +2175,7 @@
                     const taskName = itemKey.charAt(0).toUpperCase() + itemKey.slice(1).replace(/([A-Z])/g, ' $1');
                     outputlist1.push(taskName);
                     outputlist2.push(item.status || "Not checked");
+                    outputlist3.push(item.remarks || ""); // Add remarks to outputlist3
 
                 });
             }
@@ -2036,7 +2207,55 @@
                 });
             }
 
-            return { outputlist1, outputlist2 };
+            // Include additional inspection data
+            const additionalData = {
+                inspectionId: bubbleConfig.inspectionId,
+                userId: bubbleConfig.userId,
+                vehicleName: bubbleConfig.vehicleName,
+                mode: bubbleConfig.mode,
+                startingMileage: formData.vehicleInfo?.mileageStart || bubbleConfig.startingMileage,
+                licensePlate: formData.vehicleInfo?.licensePlate,
+                fuelLevel: formData.vehicleInfo?.fuelLevel,
+                location: formData.formInfo?.location,
+                dateTime: formData.formInfo?.dateTime,
+                remarks: formData.remarks
+            };
+
+            // Add mode-specific data
+            if (bubbleConfig.mode === 'assignment-ending') {
+                additionalData.endMileage = formData.vehicleInfo?.mileageEnd || bubbleConfig.endMileage;
+                additionalData.incomingDriverName = formData.driverInfo?.incomingDriver || bubbleConfig.incomingDriverName;
+            }
+
+            // Return data with mode-specific output constants
+            const returnData = { 
+                outputlist1, 
+                outputlist2,
+                outputlist3,
+                ...additionalData 
+            };
+
+            // Add output3 (fuel level) for all modes
+            returnData.output3 = output3;
+            
+            // Add output1 and output2 for assignment-ending mode only
+            if (bubbleConfig.mode === 'assignment-ending') {
+                returnData.output1 = output1;
+                returnData.output2 = output2;
+                
+                console.log('📤 Assignment-ending mode data:');
+                console.log('📤 output1 (driver):', output1);
+                console.log('📤 output2 (vehicle):', output2);
+                console.log('📤 output3 (fuel level):', output3);
+                console.log('📤 outputlist3 (remarks):', outputlist3);
+                console.log('📤 Full data being sent:', returnData);
+            } else {
+                console.log('📤 Inspection mode data being sent:', returnData);
+                console.log('📤 output3 (fuel level):', output3);
+                console.log('📤 outputlist3 (remarks):', outputlist3);
+            }
+
+            return returnData;
         }
 
         // Global function to submit inspection data back to Bubble
@@ -2057,21 +2276,40 @@
 
             // Console log for testing
 
-            // Call Bubble function
+            // Call appropriate Bubble function based on mode
             try {
-                if (typeof bubble_fn_SaveInspectionResults === 'function') {
-                    bubble_fn_SaveInspectionResults(bubbleData);
-                    return { success: true, data: bubbleData };
-                } else {
-                    console.warn('⚠️ bubble_fn_SaveInspectionResults function not found - using callback instead');
-
-                    // Fallback to callback method
-                    if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
-                        bubbleConfig.submitCallback(bubbleData);
+                if (bubbleConfig.mode === 'assignment-ending') {
+                    if (typeof bubble_fn_save === 'function') {
+                        bubble_fn_save(bubbleData);
                         return { success: true, data: bubbleData };
                     } else {
-                        console.warn('No submit callback defined for Bubble integration');
-                        return { success: false, error: 'No Bubble function or callback defined' };
+                        console.warn('⚠️ bubble_fn_save function not found - using callback instead');
+                        
+                        // Fallback to callback method
+                        if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                            bubbleConfig.submitCallback(bubbleData);
+                            return { success: true, data: bubbleData };
+                        } else {
+                            console.warn('No submit callback defined for assignment-ending mode');
+                            return { success: false, error: 'No Bubble function or callback available for assignment-ending mode' };
+                        }
+                    }
+                } else {
+                    // Default to inspection mode
+                    if (typeof bubble_fn_SaveInspectionResults === 'function') {
+                        bubble_fn_SaveInspectionResults(bubbleData);
+                        return { success: true, data: bubbleData };
+                    } else {
+                        console.warn('⚠️ bubble_fn_SaveInspectionResults function not found - using callback instead');
+
+                        // Fallback to callback method
+                        if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                            bubbleConfig.submitCallback(bubbleData);
+                            return { success: true, data: bubbleData };
+                        } else {
+                            console.warn('No submit callback defined for Bubble integration');
+                            return { success: false, error: 'No Bubble function or callback defined' };
+                        }
                     }
                 }
             } catch (error) {
@@ -2096,7 +2334,7 @@
 
             // Initialize inspection mode
             try {
-                window.initializeInspectionModule(testVehicleName, testStartingMileage, testUserId, testInspectionId, testCallback);
+                window.initializeInspectionModule(testVehicleName, testStartingMileage, testUserId, testInspectionId, 'inspection', null, null, testCallback);
 
 
                 // Hide the test button after activation
@@ -2127,7 +2365,7 @@
         }
 
         // Function to switch to a new vehicle inspection - proper workflow
-        window.switchVehicleInspection = function (vehicleName, startingMileage, userId, inspectionId, submitCallback) {
+        window.switchVehicleInspection = function (vehicleName, startingMileage, userId, inspectionId, mode = 'inspection', incomingDriverName = null, endMileage = null, submitCallback) {
             try {
 
                 // Step 1: Clear the current form first
@@ -2137,7 +2375,7 @@
                 }
 
                 // Step 2: Initialize with new vehicle data
-                window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, submitCallback);
+                window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, mode, incomingDriverName, endMileage, submitCallback);
 
                 return { success: true, message: 'Vehicle switched successfully' };
 
@@ -2150,13 +2388,18 @@
         // Function to cancel inspection - calls Bubble's cancel function
         window.cancelInspection = function () {
             try {
-
                 // Call Bubble's cancel function if it exists
-                if (typeof bubble_fn_cancel_inspection === 'function') {
-                    bubble_fn_cancel_inspection();
+                if (typeof bubble_fn_cancel === 'function') {
+                    bubble_fn_cancel();
                     return { success: true, message: 'Inspection canceled successfully' };
+                } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                    console.warn('⚠️ bubble_fn_cancel function not found - using callback instead');
+                    
+                    // Use callback method with cancel signal
+                    bubbleConfig.submitCallback({ action: 'cancel', inspectionId: bubbleConfig.inspectionId });
+                    return { success: true, message: 'Inspection canceled successfully via callback' };
                 } else {
-                    console.warn('⚠️ bubble_fn_cancel_inspection function not found');
+                    console.warn('⚠️ bubble_fn_cancel function not found');
 
                     // Fallback - just clear the form if no Bubble function exists
                     const clearResult = window.clearInspectionForm();
@@ -2223,16 +2466,15 @@
                         mileageStart: '',
                         mileageStartPhoto: null,
                         mileageEnd: '',
-                        mileageEndPhoto: null
+                        mileageEndPhoto: null,
+                        fuelLevel: ''
                     },
                     // Vehicle Parts (for damage marking)
                     vehicleParts: {},
                     // Walk Around Checklist
                     checklist: {},
                     // Remarks
-                    remarks: '',
-                    // Progress tracking
-                    progress: { totalItems: 0, completedItems: 0, completionPercentage: 0 }
+                    remarks: ''
                 };
 
                 // Reset global variables
@@ -2269,7 +2511,9 @@
                     startingMileage: null,
                     userId: null,
                     inspectionId: null,
-                    submitCallback: null
+                    submitCallback: null,
+                    incomingDriverName: null,
+                    endMileage: null
                 };
 
                 // Reset initialization flags to allow re-initialization
@@ -2278,9 +2522,7 @@
                 formEventListenersSetup = false;
                 isInitialized = false;
 
-                // Update progress displays
-                updateChecklistProgress();
-                updateProgress();
+                // Progress displays removed
 
                 return { success: true, message: 'Form cleared successfully' };
 
@@ -2329,7 +2571,22 @@
         }
 
         document.addEventListener('DOMContentLoaded', init);
+    const result =
+        window.clearInspectionForm();
+    if (result.success) {
+        console.log('Form cleared:',
+            result.message);
+    } else {
+        console.error('Clear failed:',
+            result.Error);
+    }
+    window.initializeInspectionModule("vyh", 900, "1713795474128x214390577892173980", "1754917033458x718194046232952800", 'inspection', function (inspectionData) {
+        // Handle completed inspection
+        console.log('Inspection completed:',
+            inspectionData);
+    });
+    
     </script>
 </body>
 
-</html>
+</html>\

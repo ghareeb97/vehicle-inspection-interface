@@ -4,21 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Vehicle Inspection Interface** application built with vanilla HTML, CSS, and JavaScript. The application provides an interactive web-based interface for conducting vehicle inspections with the following key components:
+This is a **Vehicle Walk-Around Inspection Form** - a digital inspection tool featuring an interactive vehicle diagram for documenting damage, completing safety checklists, and recording vehicle condition data. Built with vanilla HTML, CSS, and JavaScript for maximum compatibility with Bubble.io integration.
 
-- **Interactive Vehicle Diagram**: SVG-based vehicle diagram with clickable parts for detailed inspection
-- **Dynamic Inspection Checklist**: Real-time checklist that updates based on selected vehicle components
-- **Progress Tracking**: Visual progress indicators showing inspection completion status
-- **Remarks System**: Text areas for adding inspection notes and observations
+### Core Functionality
+- **Interactive SVG Vehicle Diagram**: Clickable parts for damage documentation with visual feedback
+- **Fuel Level Indicator**: Visual gauge with preset buttons and custom input
+- **Walk-Around Checklist**: Safety equipment and vehicle component verification
+- **Damage Classification**: Five damage types (D-Dent, S-Scratches, R-Rust, K-Broken, C-Chips)
+- **Multi-Mode Operation**: Supports inspection and assignment-ending workflows
+- **Progress Tracking**: Real-time completion percentage calculation
 
 ## File Structure
 
 ### Main Application Files
 - `index.html` - Complete inspection interface with external CSS reference
-- `styles.css` - Shared stylesheet containing all application styling
-- `preview.html` - Preview interface for inspection results
+- `gem.css` - Unified stylesheet containing all application styling (consolidates previous styles.css)
+- `preview.html` - Preview interface for inspection results (uses legacy styles.css reference)
 - `vehicle.svg` - Interactive SVG vehicle diagram
 - `Vehicle_inspection_template.pdf` - Reference template document
+- `do not use.css` - Deprecated CSS file (kept for reference)
 
 ## Architecture
 
@@ -26,7 +30,7 @@ This is a **Vehicle Inspection Interface** application built with vanilla HTML, 
 - **Vanilla JavaScript** - No frameworks, pure DOM manipulation
 - **CSS Grid & Flexbox** - Responsive layout system
 - **SVG Graphics** - Interactive vehicle diagrams with clickable regions
-- **Modular CSS** - Shared stylesheet architecture with external CSS file
+- **Unified CSS** - Single stylesheet (gem.css) architecture for all Bubble.io HTML elements
 - **Preview System** - Separate preview interface for inspection results
 
 ### Key JavaScript Functionality
@@ -91,88 +95,83 @@ inspectionData = {
 - `showTooltip()` / `hideTooltip()` - Manages hover tooltips for vehicle parts
 - `testInspectionMode()` - Development function to test Bubble.io integration
 
-## Bubble.io Integration
+## Bubble.io Integration Architecture
 
-### Overview
-The vehicle inspection interface supports integration with Bubble.io applications through global JavaScript functions. This allows the HTML component to be embedded in Bubble apps and receive/send data seamlessly.
+### Integration Modes
+The application supports three distinct operational modes:
 
-### Integration Mode: Inspection Module
-Used when accessing from Bubble's inspection module where users start an inspection and select a vehicle.
+1. **Inspection Mode** (`'inspection'`): Standard vehicle inspection workflow
+   - Driver section hidden
+   - Mileage labels: "Mileage at Start" / "Mileage at End"
+   - Calls `bubble_fn_SaveInspectionResults()` on submission
 
-#### Global Functions
+2. **Assignment Ending Mode** (`'assignment-ending'`): End-of-trip inspection with driver handover
+   - Driver section visible with incoming driver field
+   - Mileage labels: "Starting Mileage" / "Ending Mileage"
+   - Calls `bubble_fn_save()` on submission
 
-**Initialization:**
+3. **Standalone Mode**: Independent operation without Bubble integration
+
+### Primary Integration Function
 ```javascript
-window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, submitCallback)
+window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, mode, incomingDriverName, endMileage, submitCallback)
 ```
 
-**Parameters:**
-- `vehicleName` (string): Complete vehicle name/identifier
-- `startingMileage` (number): Current vehicle mileage/odometer reading
-- `userId` (string/number): User ID of the person performing the inspection
-- `inspectionId` (string/number): Unique inspection ID from Bubble database
-- `submitCallback` (function): Callback function to handle form submission back to Bubble
+**Critical Implementation Details:**
+- Mode parameter determines UI layout and submission behavior
+- Driver section visibility automatically managed based on mode
+- Form data structure adapts to mode requirements
+- Validation handles different parameter combinations per mode
 
-**Data Submission:**
+### HTML Element Requirements in Bubble
+- Element must be **visible** (scripts won't execute if hidden)
+- **DO NOT** enable "Run as independent web page"
+- **Enable** "Expose HTML ID attributes" in Settings > General
+- Use HTML element, not iframe or embed
+
+### Data Flow Architecture
+1. **Initialization**: Bubble passes parameters to global function
+2. **Form Population**: UI updates based on mode and provided data
+3. **User Interaction**: Inspector completes form sections
+4. **Data Collection**: `collectFormData()` aggregates all form inputs
+5. **Submission**: Mode-specific Bubble function called with formatted data
+
+## Recent Changes and Architecture Notes
+
+### CSS Architecture Evolution
+- **Current**: `gem.css` - Unified stylesheet containing all application styles
+- **Legacy**: `preview.html` still references `styles.css` (needs updating for consistency)
+- **Deprecated**: `do not use.css` - Contains older styles kept for reference
+
+### Critical Implementation Notes
+- **No Build System**: Direct HTML/CSS/JS files, no package manager or build process
+- **Embedded SVG**: Vehicle diagram is embedded directly in HTML, not loaded externally
+- **Inline Styles with Responsive CSS**: Uses inline styles with CSS media queries for responsive behavior
+- **Event Delegation**: Fuel buttons and SVG parts use direct event listeners (not delegation)
+- **Global State**: `bubbleConfig` and `inspectionData` objects manage application state
+
+### Debugging and Common Issues
+- **JavaScript Syntax Errors**: Check browser console; syntax errors break entire page functionality
+- **Missing Elements**: SVG and fuel buttons not appearing indicates DOM loading or JavaScript errors
+- **Fuel Buttons Not Clickable**: Ensure `pointer-events: auto` and proper z-index on buttons
+- **Driver Section Visibility**: Automatically controlled by mode parameter in initialization
+- **Form Data Collection**: All form inputs must have proper IDs for `collectFormData()` to work
+
+### Global JavaScript API Functions
 ```javascript
-window.submitInspectionToBubble()
+window.initializeInspectionModule()  // Primary integration entry point
+window.submitInspectionToBubble()    // Form submission with mode-specific callbacks
+window.switchVehicleInspection()     // Switch between vehicles in same session
+window.cancelInspection()            // Cancel current inspection
+window.clearInspectionForm()         // Reset all form data and UI state
+window.handleDamageButtonClick()     // Handle damage type selection (D,S,R,K,C)
+window.testChecklistCollection()     // Development function for testing
+window.testDamageButtons()           // Development function for damage testing
 ```
 
-Returns: `{ success: boolean, data: object, error?: string }`
-
-### Usage in Bubble.io
-
-#### HTML Element Setup
-1. Add HTML element to Bubble page
-2. Ensure element is visible (required for scripts)
-3. Do NOT enable "Run as independent web page"
-4. Enable "Expose HTML ID attributes" in Settings > General
-
-#### Example Integration
-
-**Method 1: Direct Function Call (Recommended)**
-```javascript
-// In Bubble workflow - Run JavaScript action
-const vehicleName = "Toyota Camry 2023";
-const startingMileage = 45000;
-const userId = "user_12345";
-const inspectionId = "insp_67890";
-
-const submitCallback = function(inspectionData) {
-    // Handle inspection data in Bubble
-    console.log('Inspection completed:', inspectionData);
-    // Trigger Bubble workflow or update database
-};
-
-window.initializeInspectionModule(vehicleName, startingMileage, userId, inspectionId, submitCallback);
-```
-
-**Method 2: Dynamic Data Insertion**
-```html
-<script>
-// Insert dynamic data from Bubble database
-window.initializeInspectionModule(
-    [BUBBLE_VEHICLE_NAME],
-    [BUBBLE_STARTING_MILEAGE],
-    [BUBBLE_USER_ID],
-    [BUBBLE_INSPECTION_ID],
-    function(data) {
-        // Handle form submission
-        console.log('Form submitted:', data);
-    }
-);
-</script>
-```
-
-### Data Validation
-The integration automatically validates:
-- Vehicle name as non-empty string
-- Starting mileage as numeric value (0-9,999,999 range)  
-- User ID as non-empty string or number
-- Inspection ID as non-empty string or number
-- Parameter type validation and sanitization
-
-### Error Handling
-- Invalid data throws descriptive error messages
-- Failed submissions return error objects
-- Console logging for debugging integration issues
+### Fuel Level System Architecture
+- **Visual Gauge**: CSS-based height animation with primary color (#006ab4)
+- **Preset Buttons**: 9 preset levels from Empty to Full with fractional options
+- **Custom Input**: Text field for non-standard fuel levels
+- **Responsive Layout**: 3→2 column grid on mobile with larger touch targets
+- **State Management**: Updates visual gauge, display text, and hidden form input
