@@ -4,16 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Inspection Preview</title>
+    <title data-i18n="Vehicle Inspection Preview">Vehicle Inspection Preview</title>
     <link rel="stylesheet" href="gem.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24;
+            line-height: 1;
+        }
+    </style>
+
+    <!-- i18next for internationalization -->
+    <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+    <script src="translation_utils.js"></script>
 </head>
 
 <body>
     <div class="inspection-container">
+        <!-- Language Switcher -->
+        <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+            <div class="language-switcher" style="display: flex; gap: 5px;">
+                <button type="button" class="language-btn active" onclick="updateLanguage('en_us')"
+                    style="padding: 5px 10px; border: 1px solid #006ab4; background: #006ab4; color: white; border-radius: 3px; cursor: pointer; font-size: 12px;">English</button>
+                <button type="button" class="language-btn" onclick="updateLanguage('ar_ar')"
+                    style="padding: 5px 10px; border: 1px solid #006ab4; background: white; color: #006ab4; border-radius: 3px; cursor: pointer; font-size: 12px;">العربية</button>
+            </div>
+        </div>
+
         <!-- Preview content will be dynamically generated -->
     </div>
 
+    <!-- Tooltip element -->
+    <div id="tooltip"
+        style="position: absolute; background: rgba(0,0,0,0.8); color: white; padding: 5px 10px; border-radius: 3px; font-size: 12px; display: none; z-index: 1000;">
+    </div>
+
     <script>
+        // Material Symbols mapping
+        const MATERIAL_ICON_MAP = {
+            car: 'directions_car',
+            odometer: 'speed',
+            fuel: 'local_gas_station',
+            check: 'check_circle',
+            warning: 'warning',
+            alert: 'error',
+            pause: 'pause_circle'
+        };
+
+        function renderIcon(name, color = '#006ab4', size = 18) {
+            const mi = MATERIAL_ICON_MAP[name];
+            if (!mi) return '';
+            return `<span class="material-symbols-outlined" style="font-size:${size}px;color:${color};">${mi}</span>`;
+        }
         // Embedded SVG content will be added here
         const EMBEDDED_VEHICLE_SVG = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 400 300" style="enable-background: new 0 0 400 300" xml:space="preserve">
           <g>
@@ -793,7 +840,7 @@
                 'FRONT BONNET', 'FRONT REAR PANEL', 'FRONT REAR WINDOW', 'FRONT DRIVER BODY PANEL',
                 'FRONT DRIVER PANEL', 'FRONT PASSENGER PANEL', 'FRONT PASSENGER BODY PANEL'
             ];
-            
+
             // Check if the item name exactly matches any vehicle part name
             return vehiclePartNames.includes(itemName);
         }
@@ -834,7 +881,7 @@
 
         // Main preview function
         window.previewInspectionResults = function (tasks, results, vehicleInfo, remarks = []) {
-            console.log('🚀 Starting preview with data:', { tasks, results, vehicleInfo, remarks });
+            console.log('Starting preview with data:', { tasks, results, vehicleInfo, remarks });
 
             // Prepare vehicle parts damage data
             const vehiclePartsDamage = {};
@@ -862,35 +909,33 @@
                 <!-- Preview Header -->
                 <header style="padding: 20px 0; margin-bottom: 25px;">
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <h1 style="margin: 0; font-size: 1.6rem; color: #333; font-weight: 600;">
-                            📋 Inspection Results Preview
-                        </h1>
+                        <h1 style="margin: 0; font-size: 1.6rem; color: #333; font-weight: 600;" data-i18n="Inspection Results Preview">Inspection Results Preview</h1>
                         <div style="margin-top: 5px; font-size: 0.9rem; color: #666;">
-                            Generated on ${inspectionDate}
+                            <span data-i18n="Generated on">Generated on</span> ${inspectionDate}
                         </div>
                     </div>
                     
                     <!-- Vehicle Information Cards -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
                         <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
-                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
-                                🚗 Vehicle
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                                ${renderIcon('car', '#006ab4', 18)} <span data-i18n="Vehicle">Vehicle</span>
                             </div>
-                            <div style="font-size: 1.1rem; color: #333; font-weight: 600; word-break: break-word;">${vehicleName}</div>
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600; word-break: break-word; text-align: center;">${vehicleName}</div>
                         </div>
                         
                         <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
-                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
-                                📊 Mileage
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                                ${renderIcon('odometer', '#006ab4', 18)} <span data-i18n="Mileage">Mileage</span>
                             </div>
-                            <div style="font-size: 1.1rem; color: #333; font-weight: 600;">${startingMileage} ${startingMileage !== 'N/A' ? 'km' : ''}</div>
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600; text-align: center;">${startingMileage} ${startingMileage !== 'N/A' ? `<span data-i18n="km">km</span>` : ''}</div>
                         </div>
                         
                         <div style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease;">
-                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
-                                ⛽ Fuel Level
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                                ${renderIcon('fuel', '#006ab4', 18)} <span data-i18n="Fuel Level">Fuel Level</span>
                             </div>
-                            <div style="font-size: 1.1rem; color: #333; font-weight: 600;">
+                            <div style="font-size: 1.1rem; color: #333; font-weight: 600; text-align: center;">
                                 ${fuelLevel}
                             </div>
                         </div>
@@ -899,7 +944,7 @@
 
                 <!-- Vehicle Diagram Section -->
                 <section class="vehicle-diagram">
-                    <h2 style="color: #006ab4; margin-bottom: 15px;">🚗 Vehicle Diagram</h2>
+                    <h2 style="color: #006ab4; margin-bottom: 15px; display:flex; align-items:center; gap:8px;">${renderIcon('car', '#006ab4', 20)} <span data-i18n="Vehicle Diagram">Vehicle Diagram</span></h2>
                     <div id="vehicle-svg-container-preview" style="width: 100%; height: 400px; border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
                         <!-- SVG will be loaded here -->
                     </div>
@@ -910,18 +955,18 @@
 
                 <!-- Results Table -->
                 <section class="form-info-section">
-                    <h2 style="color: #006ab4; margin-bottom: 15px;">📊 Inspection Results</h2>
+                    <h2 style="color: #006ab4; margin-bottom: 15px; display:flex; align-items:center; gap:8px;">${renderIcon('odometer', '#006ab4', 20)} <span data-i18n="Inspection Results">Inspection Results</span></h2>
                     <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
-                        <strong>Total Items Inspected: ${tasks.length}</strong>
+                        <strong><span data-i18n="Total Items Inspected">Total Items Inspected</span>: ${tasks.length}</strong>
                     </div>
                     
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                             <thead style="background: linear-gradient(135deg, #006ab4, #0078c4); color: white;">
                                 <tr>
-                                    <th style="padding: 15px; text-align: left; font-weight: 600;">Item/Part</th>
-                                    <th style="padding: 15px; text-align: left; font-weight: 600;">Status/Damage</th>
-                                    <th style="padding: 15px; text-align: left; font-weight: 600;">Remarks</th>
+                                    <th style="padding: 15px; text-align: left; font-weight: 600;" data-i18n="Item/Part">Item/Part</th>
+                                    <th style="padding: 15px; text-align: left; font-weight: 600;" data-i18n="Status/Damage">Status/Damage</th>
+                                    <th style="padding: 15px; text-align: left; font-weight: 600;" data-i18n="Remarks">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -934,6 +979,11 @@
 
             // Replace container content
             document.querySelector('.inspection-container').innerHTML = previewHTML;
+
+            // Apply translations to the dynamically generated content
+            if (window.applyTranslations) {
+                window.applyTranslations();
+            }
 
             // Load SVG and highlight damaged parts
             loadEmbeddedSVG(vehiclePartsDamage);
@@ -950,9 +1000,7 @@
 
             let damageHTML = `
                 <section style="margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #ffebee, #ffcdd2); border-radius: 8px; border-left: 4px solid #f44336;">
-                    <h3 style="color: #c62828; margin-bottom: 10px; display: flex; align-items: center;">
-                        ⚠️ Damaged Parts Found
-                    </h3>
+                    <h3 style="color: #c62828; margin-bottom: 10px; display: flex; align-items: center; gap:8px;">${renderIcon('warning', '#c62828', 18)} <span data-i18n="Damaged Parts Found">Damaged Parts Found</span></h3>
                     <div style="display: grid; gap: 8px;">
             `;
 
@@ -981,19 +1029,19 @@
             if (EMBEDDED_VEHICLE_SVG && EMBEDDED_VEHICLE_SVG.includes('<svg')) {
                 svgContainer.innerHTML = EMBEDDED_VEHICLE_SVG;
                 setupPreviewSVG(vehiclePartsDamage);
-                console.log('✅ SVG loaded from embedded content');
+                console.log('SVG loaded from embedded content');
             } else {
                 // Fallback message
                 svgContainer.innerHTML = `
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; border-radius: 4px;">
                         <div style="text-align: center; color: #6b7280;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">🚗</div>
-                            <div>SVG content not yet embedded</div>
-                            <div style="font-size: 0.9rem; margin-top: 5px;">Vehicle diagram will be available soon</div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;"></div>
+                            <div data-i18n="SVG content not yet embedded">SVG content not yet embedded</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;" data-i18n="Vehicle diagram will be available soon">Vehicle diagram will be available soon</div>
                         </div>
                     </div>
                 `;
-                console.log('ℹ️ SVG content placeholder shown');
+                console.log('SVG content placeholder shown');
             }
         }
 
@@ -1032,15 +1080,15 @@
             let rowIndex = 0; // Track visible row index for alternating colors
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
-                
+
                 // Skip vehicle parts, only show walk-around checklist items
                 if (isVehiclePart(task)) {
                     continue;
                 }
-                
+
                 const result = results[i] || 'Not checked';
                 const remark = remarks[i] || '';
-                
+
                 // Determine row styling - highlight rows with remarks
                 let rowClass, borderLeft = '';
                 if (remark && remark.trim()) {
@@ -1053,40 +1101,41 @@
                 }
 
                 // Determine status icon and color based on result type
-                let statusIcon = '⏸️';
+                let statusIcon = '';
                 let statusColor = '#6c757d';
+                let statusIconName = 'pause';
                 const resultLower = result.toLowerCase().trim();
 
                 // Good statuses (green checkmark)
                 const goodStatuses = ['available', 'no damage', 'good', 'ok', 'fine'];
                 if (goodStatuses.includes(resultLower)) {
-                    statusIcon = '✅';
+                    statusIconName = 'check';
                     statusColor = '#28a745';
                 }
                 // Warning statuses (orange warning)
                 else if (['missing', 'not available', 'not fitted', 'n/a'].includes(resultLower)) {
-                    statusIcon = '⚠️';
+                    statusIconName = 'warning';
                     statusColor = '#ffc107';
                 }
                 // Damage statuses (red alert) - using isDamageResult function
                 else if (isDamageResult(result)) {
-                    statusIcon = '🔺';
+                    statusIconName = 'alert';
                     statusColor = '#dc3545';
                 }
                 // Default for unchecked/unknown
                 else if (['not checked', ''].includes(resultLower) || !result) {
-                    statusIcon = '⏸️';
+                    statusIconName = 'pause';
                     statusColor = '#6c757d';
                 }
 
                 html += `
                     <tr style="background: ${rowClass}; ${borderLeft}">
-                        <td style="padding: 12px; border-bottom: 1px solid #e9ecef; font-weight: 500; color: #333;">${task}</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #e9ecef; font-weight: 500; color: #333;"><span data-i18n="${task}">${task}</span></td>
                         <td style="padding: 12px; border-bottom: 1px solid #e9ecef; color: ${statusColor}; font-weight: 500;">
-                            ${statusIcon} ${result}
+                            <span style="display:inline-flex;align-items:center;gap:6px;">${renderIcon(statusIconName, statusColor, 16)} <span data-i18n="${result}">${result}</span></span>
                         </td>
                         <td style="padding: 12px; border-bottom: 1px solid #e9ecef; color: ${remark ? '#333' : '#999'}; font-style: ${remark ? 'normal' : 'italic'}; font-weight: ${remark ? '500' : 'normal'};">
-                            ${remark ? `📝 ${remark}` : 'No remarks'}
+                            ${remark ? `${remark}` : `<span data-i18n="No remarks">No remarks</span>`}
                         </td>
                     </tr>
                 `;
@@ -1098,7 +1147,7 @@
         // Auto-run if data is provided in URL parameters (for testing)
         window.addEventListener('load', function () {
             // This allows for easy testing of the preview
-            console.log('🎯 Preview page ready - call window.previewInspectionResults(tasks, results, vehicleInfo)');
+            console.log('Preview page ready - call window.previewInspectionResults(tasks, results, vehicleInfo)');
         });
 
         // window.previewInspectionResults(
@@ -1169,14 +1218,39 @@
         //     ]
         // );
 
-                window.previewInspectionResults([
-                        "Floor Mat", "Lighter", "Ash Tray", "Dvd Nav", "Wheel Caps", "Spare Tire", "Tool Box", "Wheel Jack", "Wire Aid", "Air Compressor", "Alloy Wheel", "Fire Extinguisher", "Memory Card", "Usb Device", "Smart Key"], ["available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available"],
-                        {
-                            vehicleName: "vehicle test 1",
-                            startingMileage: 14000,
-                            fuelLevel: "½"
-                        }, ["", "", "dirty", "", "", "", "", "missing screw", "", "", "", "", "", "", ""]
-                    );
+        window.previewInspectionResults([
+            "Floor Mat", "Lighter", "Ash Tray", "Dvd Nav", "Wheel Caps", "Spare Tire", "Tool Box", "Wheel Jack", "Wire Aid", "Air Compressor", "Alloy Wheel", "Fire Extinguisher", "Memory Card", "Usb Device", "Smart Key"], ["available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available", "available"],
+            {
+                vehicleName: "vehicle test 1",
+                startingMileage: 14000,
+                fuelLevel: "½"
+            }, ["", "", "dirty", "", "", "", "", "missing screw", "", "", "", "", "", "", ""]
+        );
+
+        // Tooltip functions
+        function showTooltip(evt, text) {
+            const tooltip = document.getElementById('tooltip');
+            // Translate the text if translation function is available
+            const translatedText = window.translate ? (window.translate(text.trim()) || text) : text;
+            tooltip.textContent = translatedText;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (evt.pageX + 10) + 'px';
+            tooltip.style.top = (evt.pageY - 10) + 'px';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.style.display = 'none';
+        }
+
+        // Initialize translations when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeTranslations().then(() => {
+                console.log('Preview translations initialized successfully');
+            }).catch(error => {
+                console.error('Preview translation initialization failed:', error);
+            });
+        });
     </script>
 </body>
 

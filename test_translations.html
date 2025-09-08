@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Test</title>
+    <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+    <script src="translation_utils.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .language-btn { margin: 5px; padding: 10px; border: 1px solid #006ab4; background: white; color: #006ab4; cursor: pointer; }
+        .language-btn.active { background: #006ab4; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <button class="language-btn active" onclick="updateLanguage('en_us')">English</button>
+        <button class="language-btn" onclick="updateLanguage('ar_ar')">العربية</button>
+    </div>
+
+    <div class="test-section">
+        <h1 data-i18n="Vehicle Inspection">Vehicle Inspection</h1>
+        <h3 data-i18n="VEHICLE INFORMATION">VEHICLE INFORMATION</h3>
+        <h3 data-i18n="DRIVER INFORMATION">DRIVER INFORMATION</h3>
+        <h4 data-i18n="Fuel Level">Fuel Level</h4>
+        
+        <label data-i18n="Mileage at Start">Mileage at Start</label>
+        <input type="text" data-i18n-placeholder="Enter starting mileage" placeholder="Enter starting mileage">
+        
+        <br><br>
+        
+        <label data-i18n="Incoming Driver">Incoming Driver</label>
+        <input type="text" data-i18n-placeholder="Enter incoming driver name" placeholder="Enter incoming driver name">
+        
+        <br><br>
+        
+        <button data-i18n="Empty">Empty</button>
+        <button data-i18n="Full">Full</button>
+        <button data-i18n="Custom">Custom</button>
+        
+        <hr>
+        
+        <h3 data-i18n="WALK AROUND CHECK">WALK AROUND CHECK</h3>
+        <button data-i18n="Select All Available">Select All Available</button>
+        
+        <br><br>
+        
+        <span data-i18n="I confirm the mileage readings above are correct">I confirm the mileage readings above are correct</span>
+        
+        <br><br>
+        
+        <button data-i18n="Cancel Inspection">Cancel Inspection</button>
+        <button data-i18n="Submit Form">Submit Form</button>
+        
+        <hr>
+        
+        <h4 data-i18n="Mark Damage:">Mark Damage:</h4>
+        <h5 data-i18n="Select Damage Type:">Select Damage Type:</h5>
+        
+        <button data-i18n="D-Dent">D-Dent</button>
+        <button data-i18n="S-Scratches">S-Scratches</button>
+        <button data-i18n="R-Rust">R-Rust</button>
+        <button data-i18n="K-Broken">K-Broken</button>
+        <button data-i18n="C-Chips">C-Chips</button>
+        
+        <br><br>
+        
+        <h5 data-i18n="Selected Damages:">Selected Damages:</h5>
+        <div style="border: 1px solid #ccc; padding: 10px;">
+            <span data-i18n="No damages selected">No damages selected</span>
+        </div>
+        
+        <br>
+        
+        <button data-i18n="Save Damage">Save Damage</button>
+        <button data-i18n="Close">Close</button>
+        <button data-i18n="Clear All">Clear All</button>
+        
+        <hr>
+        
+        <h4>Checklist Status Options:</h4>
+        <label><input type="checkbox"> <span data-i18n="Available">Available</span></label><br>
+        <label><input type="checkbox"> <span data-i18n="Missing">Missing</span></label><br>
+        <label><input type="checkbox"> <span data-i18n="N/A">N/A</span></label><br>
+        <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks">
+        
+        <hr>
+        
+        <h4>Vehicle Direction Labels:</h4>
+        <span data-i18n="OFF SIDE">OFF SIDE</span> | 
+        <span data-i18n="NEAR SIDE">NEAR SIDE</span> | 
+        <span data-i18n="FRONT">FRONT</span> | 
+        <span data-i18n="REAR">REAR</span>
+        
+        <hr>
+        
+        <h4>Vehicle Parts (Examples):</h4>
+        <span data-i18n="NEAR SIDE DRIVER DOOR">NEAR SIDE DRIVER DOOR</span><br>
+        <span data-i18n="FRONT BUMPER">FRONT BUMPER</span><br>
+        <span data-i18n="FRONT WINDSCREEN">FRONT WINDSCREEN</span><br>
+        <span data-i18n="FRONT BONNET">FRONT BONNET</span><br>
+        <span data-i18n="NEAR SIDE WING MIRROR">NEAR SIDE WING MIRROR</span>
+        
+        <hr>
+        
+        <h4>Vehicle Name Display Test:</h4>
+        <div style="background: #f0f8ff; border: 2px solid #006ab4; border-radius: 8px; padding: 15px; margin: 10px 0;">
+            <h4 style="margin: 0; color: #006ab4; font-size: 1.1rem;">
+                <span data-i18n="Vehicle:">Vehicle:</span> <span class="vehicle-name-value">Toyota Camry</span>
+            </h4>
+        </div>
+    </div>
+    
+    <!-- Tooltip element for testing -->
+    <div id="tooltip" style="position: absolute; background: rgba(0,0,0,0.8); color: white; padding: 5px 10px; border-radius: 3px; font-size: 12px; display: none; z-index: 1000;"></div>
+
+    <script>
+        // Tooltip functions for testing
+        function showTooltip(evt, text) {
+            const tooltip = document.getElementById('tooltip');
+            const translatedText = window.translate ? (window.translate(text.trim()) || text) : text;
+            tooltip.textContent = translatedText;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (evt.pageX + 10) + 'px';
+            tooltip.style.top = (evt.pageY - 10) + 'px';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.style.display = 'none';
+        }
+
+        // Initialize translations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTranslations().then(() => {
+                console.log('Test translations initialized successfully');
+            }).catch(error => {
+                console.error('Translation initialization failed:', error);
+            });
+        });
+    </script>
+</body>
+</html>

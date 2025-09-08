@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Translation Test</title>
+    <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+    <script src="translation_utils.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .language-btn { margin: 5px; padding: 10px; border: 1px solid #006ab4; background: white; color: #006ab4; cursor: pointer; }
+        .language-btn.active { background: #006ab4; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .translation-key { color: #666; font-family: monospace; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <button class="language-btn active" onclick="updateLanguage('en_us')">English</button>
+        <button class="language-btn" onclick="updateLanguage('ar_ar')">العربية</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Preview Page Translation Test</h2>
+        
+        <h3>Header Elements:</h3>
+        <p><span class="translation-key">Inspection Results Preview:</span> <strong data-i18n="Inspection Results Preview">📋 Inspection Results Preview</strong></p>
+        <p><span class="translation-key">Generated on:</span> <strong data-i18n="Generated on">Generated on</strong> 2025-08-12</p>
+        
+        <h3>Vehicle Information Cards:</h3>
+        <p><span class="translation-key">Vehicle:</span> 🚗 <strong data-i18n="Vehicle">Vehicle</strong></p>
+        <p><span class="translation-key">Mileage:</span> 📊 <strong data-i18n="Mileage">Mileage</strong></p>
+        <p><span class="translation-key">Fuel Level:</span> ⛽ <strong data-i18n="Fuel Level">Fuel Level</strong></p>
+        
+        <h3>Section Headers:</h3>
+        <p><span class="translation-key">🚗 Vehicle Diagram:</span> <strong data-i18n="🚗 Vehicle Diagram">🚗 Vehicle Diagram</strong></p>
+        <p><span class="translation-key">📊 Inspection Results:</span> <strong data-i18n="📊 Inspection Results">📊 Inspection Results</strong></p>
+        <p><span class="translation-key">⚠️ Damaged Parts Found:</span> <strong data-i18n="⚠️ Damaged Parts Found">⚠️ Damaged Parts Found</strong></p>
+        
+        <h3>Table Headers:</h3>
+        <p><span class="translation-key">Total Items Inspected:</span> <strong data-i18n="Total Items Inspected">Total Items Inspected</strong></p>
+        <p><span class="translation-key">Item/Part:</span> <strong data-i18n="Item/Part">Item/Part</strong></p>
+        <p><span class="translation-key">Status/Damage:</span> <strong data-i18n="Status/Damage">Status/Damage</strong></p>
+        <p><span class="translation-key">Remarks:</span> <strong data-i18n="Remarks">Remarks</strong></p>
+        <p><span class="translation-key">No remarks:</span> <strong data-i18n="No remarks">No remarks</strong></p>
+        
+        <h3>SVG Fallback Messages:</h3>
+        <p><span class="translation-key">SVG content not yet embedded:</span> <strong data-i18n="SVG content not yet embedded">SVG content not yet embedded</strong></p>
+        <p><span class="translation-key">Vehicle diagram will be available soon:</span> <strong data-i18n="Vehicle diagram will be available soon">Vehicle diagram will be available soon</strong></p>
+        
+        <h3>Mock Preview Content (Dynamically Generated):</h3>
+        <div id="dynamic-content" style="border: 1px solid #ccc; padding: 15px; background: #f9f9f9;">
+            <!-- This will be populated with dynamic content -->
+        </div>
+        
+        <button onclick="generateMockPreview()" style="margin: 10px 0; padding: 10px 20px; background: #006ab4; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Generate Mock Preview Content
+        </button>
+    </div>
+
+    <script>
+        function generateMockPreview() {
+            const mockHTML = `
+                <h4 data-i18n="Inspection Results Preview">📋 Inspection Results Preview</h4>
+                <p><span data-i18n="Generated on">Generated on</span> 2025-08-12</p>
+                
+                <div style="margin: 10px 0;">
+                    <strong>🚗 <span data-i18n="Vehicle">Vehicle</span>:</strong> Toyota Camry
+                </div>
+                <div style="margin: 10px 0;">
+                    <strong>📊 <span data-i18n="Mileage">Mileage</span>:</strong> 25000 km
+                </div>
+                <div style="margin: 10px 0;">
+                    <strong>⛽ <span data-i18n="Fuel Level">Fuel Level</span>:</strong> Full
+                </div>
+                
+                <h5 data-i18n="📊 Inspection Results">📊 Inspection Results</h5>
+                <p><strong><span data-i18n="Total Items Inspected">Total Items Inspected</span>: 15</strong></p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                    <thead style="background: #006ab4; color: white;">
+                        <tr>
+                            <th style="padding: 8px; text-align: left;" data-i18n="Item/Part">Item/Part</th>
+                            <th style="padding: 8px; text-align: left;" data-i18n="Status/Damage">Status/Damage</th>
+                            <th style="padding: 8px; text-align: left;" data-i18n="Remarks">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 8px;">Horn</td>
+                            <td style="padding: 8px;">✅ Available</td>
+                            <td style="padding: 8px;"><span data-i18n="No remarks">No remarks</span></td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 8px;">Lights</td>
+                            <td style="padding: 8px;">⚠️ Missing</td>
+                            <td style="padding: 8px;">📝 Left headlight not working</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="background: #ffebee; padding: 10px; border-left: 4px solid #f44336; margin: 10px 0;">
+                    <h6 data-i18n="⚠️ Damaged Parts Found">⚠️ Damaged Parts Found</h6>
+                    <p>Front Bumper: <strong>D-Dent</strong></p>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; text-align: center; margin: 10px 0;">
+                    <div data-i18n="SVG content not yet embedded">SVG content not yet embedded</div>
+                    <div data-i18n="Vehicle diagram will be available soon">Vehicle diagram will be available soon</div>
+                </div>
+            `;
+            
+            document.getElementById('dynamic-content').innerHTML = mockHTML;
+            
+            // Apply translations to the newly generated content
+            if (window.applyTranslations) {
+                window.applyTranslations();
+            }
+        }
+        
+        // Initialize translations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTranslations().then(() => {
+                console.log('✅ Preview translation test initialized successfully');
+            }).catch(error => {
+                console.error('❌ Translation initialization failed:', error);
+            });
+        });
+    </script>
+</body>
+</html>

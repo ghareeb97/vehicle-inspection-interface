@@ -9,30 +9,44 @@
     <link rel="stylesheet" href="gem.css">
     <!-- Using unified gem.css for all Bubble.io HTML elements -->
     <!-- All styles including vehicle inspection now in gem.css -->
+
+    <!-- i18next for internationalization -->
+    <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+    <script src="translation_utils.js"></script>
 </head>
 
 <body>
     <div class="inspection-container" id="inspection-container">
         <header class="form-header">
-            <h1>Vehicle Inspection</h1>
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+                <h1 data-i18n="Vehicle Inspection" style="text-align: center; margin: 0;">Vehicle Inspection</h1>
+                <!-- <div class="language-switcher" style="display: flex; gap: 5px;">
+                    <button type="button" class="language-btn active" onclick="updateLanguage('en_us')" style="padding: 5px 10px; border: 1px solid #006ab4; background: #006ab4; color: white; border-radius: 3px; cursor: pointer; font-size: 12px;">English</button>
+                    <button type="button" class="language-btn" onclick="updateLanguage('ar_ar')" style="padding: 5px 10px; border: 1px solid #006ab4; background: white; color: #006ab4; border-radius: 3px; cursor: pointer; font-size: 12px;">العربية</button>
+                </div> -->
+            </div>
         </header>
 
         <!-- Vehicle Information Section -->
         <section class="form-info-section" id="vehicle-info-section">
-            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">VEHICLE
+            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;"
+                data-i18n="VEHICLE INFORMATION">VEHICLE
                 INFORMATION</h3>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="mileage-start" id="mileage-start-label">Mileage at Start </label>
+                    <label for="mileage-start" id="mileage-start-label" data-i18n="Mileage at Start">Mileage at Start
+                    </label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="number" id="mileage-start" placeholder="Enter starting mileage" style="flex: 1;">
+                        <input type="number" id="mileage-start" data-i18n-placeholder="Enter starting mileage"
+                            placeholder="Enter starting mileage" style="flex: 1;">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mileage-end" id="mileage-end-label">Mileage at End </label>
+                    <label for="mileage-end" id="mileage-end-label" data-i18n="Mileage at End">Mileage at End </label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="number" id="mileage-end" placeholder="Enter ending mileage" style="flex: 1;">
+                        <input type="number" id="mileage-end" data-i18n-placeholder="Enter ending mileage"
+                            placeholder="Enter ending mileage" style="flex: 1;">
                     </div>
                 </div>
             </div>
@@ -40,11 +54,13 @@
 
         <!-- Driver Information Section -->
         <section class="form-info-section" id="driver-info-section">
-            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">DRIVER INFORMATION</h3>
+            <h3 style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;"
+                data-i18n="DRIVER INFORMATION">DRIVER INFORMATION</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="incoming-driver">Incoming Driver</label>
-                    <input type="text" id="incoming-driver" placeholder="Enter incoming driver name">
+                    <label for="incoming-driver" data-i18n="Incoming Driver">Incoming Driver</label>
+                    <input type="text" id="incoming-driver" data-i18n-placeholder="Enter incoming driver name"
+                        placeholder="Enter incoming driver name">
                 </div>
             </div>
         </section>
@@ -52,16 +68,24 @@
         <main class="inspection-main">
             <section class="vehicle-diagram">
                 <!-- Fuel Level Indicator -->
-                <div class="fuel-level-section" style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #dee2e6;">
-                    <h4 style="margin: 0 0 12px 0; text-align: center; font-weight: bold; color: #006ab4; font-size: 15px;">⛽ Fuel Level</h4>
-                    <div class="fuel-level-container" style="display: flex; gap: 15px; align-items: flex-start; justify-content: center; flex-wrap: wrap;">
+                <div class="fuel-level-section"
+                    style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #dee2e6;">
+                    <h4 style="margin: 0 0 12px 0; text-align: center; font-weight: bold; color: #006ab4; font-size: 15px;"
+                        data-i18n="Fuel Level">⛽ Fuel Level</h4>
+                    <div class="fuel-level-container"
+                        style="display: flex; gap: 15px; align-items: flex-start; justify-content: center; flex-wrap: wrap;">
                         <!-- Visual Fuel Gauge -->
-                        <div class="fuel-gauge" style="display: flex; align-items: flex-start; gap: 25px; flex-wrap: wrap; justify-content: center;">
+                        <div class="fuel-gauge"
+                            style="display: flex; align-items: flex-start; gap: 25px; flex-wrap: wrap; justify-content: center;">
                             <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                                <div class="fuel-tank" style="width: 60px; height: 140px; border: 2px solid #333; border-radius: 8px; position: relative; background: linear-gradient(to top, #f5f5f5 0%, #fff 100%); flex-shrink: 0; margin: 0 25px;">
-                                    <div class="fuel-fill" id="fuel-fill" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: #006ab4; border-radius: 0 0 6px 6px; transition: height 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);"></div>
+                                <div class="fuel-tank"
+                                    style="width: 60px; height: 140px; border: 2px solid #333; border-radius: 8px; position: relative; background: linear-gradient(to top, #f5f5f5 0%, #fff 100%); flex-shrink: 0; margin: 0 25px;">
+                                    <div class="fuel-fill" id="fuel-fill"
+                                        style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: #006ab4; border-radius: 0 0 6px 6px; transition: height 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                                    </div>
                                     <!-- Fuel level markers -->
-                                    <div class="fuel-level-markers" style="position: absolute; right: -20px; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: #666; font-weight: bold;">
+                                    <div class="fuel-level-markers"
+                                        style="position: absolute; right: -20px; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: #666; font-weight: bold;">
                                         <span>F</span>
                                         <span>¾</span>
                                         <span>½</span>
@@ -70,34 +94,48 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="fuel-buttons" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 170px; min-width: 150px;">
-                                <button type="button" class="fuel-btn" data-level="0" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Empty</button>
-                                <button type="button" class="fuel-btn" data-level="12.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅛</button>
-                                <button type="button" class="fuel-btn" data-level="25" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¼</button>
-                                <button type="button" class="fuel-btn" data-level="37.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅜</button>
-                                <button type="button" class="fuel-btn" data-level="50" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">½</button>
-                                <button type="button" class="fuel-btn" data-level="62.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅝</button>
-                                <button type="button" class="fuel-btn" data-level="75" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¾</button>
-                                <button type="button" class="fuel-btn" data-level="87.5" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅞</button>
-                                <button type="button" class="fuel-btn" data-level="100" style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Full</button>
+                            <div class="fuel-buttons"
+                                style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 170px; min-width: 150px;">
+                                <button type="button" class="fuel-btn" data-level="0" data-i18n="Empty"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Empty</button>
+                                <button type="button" class="fuel-btn" data-level="12.5"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅛</button>
+                                <button type="button" class="fuel-btn" data-level="25"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¼</button>
+                                <button type="button" class="fuel-btn" data-level="37.5"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅜</button>
+                                <button type="button" class="fuel-btn" data-level="50"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">½</button>
+                                <button type="button" class="fuel-btn" data-level="62.5"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅝</button>
+                                <button type="button" class="fuel-btn" data-level="75"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">¾</button>
+                                <button type="button" class="fuel-btn" data-level="87.5"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">⅞</button>
+                                <button type="button" class="fuel-btn" data-level="100" data-i18n="Full"
+                                    style="padding: 6px 4px; font-size: 10px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; pointer-events: auto; position: relative; z-index: 10;">Full</button>
                             </div>
                         </div>
-                        
+
                         <!-- Compact display and custom -->
-                        <div class="fuel-controls" style="display: flex; flex-direction: column; gap: 8px; min-width: 120px; flex-shrink: 0;">
-                            <div class="fuel-display" style="padding: 6px 8px; background: white; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
-                                <div class="fuel-display-label" style="font-size: 11px; color: #666; margin-bottom: 2px;">Selected:</div>
-                                <div id="fuel-level-display" class="fuel-display-value" style="font-size: 13px; color: #006ab4; font-weight: bold;">Not selected</div>
+                        <div class="fuel-controls"
+                            style="display: flex; flex-direction: column; gap: 8px; min-width: 120px; flex-shrink: 0;">
+                            <div class="fuel-display"
+                                style="padding: 6px 8px; background: white; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+                                <div class="fuel-display-label"
+                                    style="font-size: 11px; color: #666; margin-bottom: 2px;" data-i18n="Selected:">
+                                    Selected:</div>
+                                <div id="fuel-level-display" class="fuel-display-value"
+                                    style="font-size: 13px; color: #006ab4; font-weight: bold;"
+                                    data-i18n="Not selected">Not selected</div>
                             </div>
-                            <button type="button" class="fuel-btn-custom" style="padding: 6px; font-size: 11px; border: 1px solid #006ab4; border-radius: 4px; background: #f0f8ff; cursor: pointer; color: #006ab4; transition: all 0.2s; pointer-events: auto; position: relative; z-index: 10;">✏️ Custom</button>
-                            <input type="text" id="fuel-level-custom" placeholder="Enter level" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; display: none; box-sizing: border-box;">
                         </div>
-                        
+
                         <!-- Hidden input to store the actual value -->
                         <input type="hidden" id="fuel-level" name="fuel-level">
                     </div>
                 </div>
-                
+
                 <!-- Embedded SVG with all vehicle parts -->
                 <div id="vehicle-svg-container">
                     <!-- The complete SVG content will be loaded here -->
@@ -116,58 +154,68 @@
                     style="display: none; margin-top: 20px; padding: 20px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px;">
                     <h3 id="damage-part-name"
                         style="margin-top: 0; color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">
-                        Mark Damage: [Part Name]</h3>
+                        <span data-i18n="Mark Damage:">Mark Damage:</span> [Part Name]
+                    </h3>
 
                     <div class="damage-categories" style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px;">Select Damage Type:</h4>
+                        <h4 style="margin-bottom: 10px;" data-i18n="Select Damage Type:">Select Damage Type:</h4>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button class="damage-btn" data-damage="D" onclick="handleDamageButtonClick('D')"
-                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">D
+                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;"
+                                data-i18n="D-Dent">D
                                 - Dent</button>
                             <button class="damage-btn" data-damage="S" onclick="handleDamageButtonClick('S')"
-                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">S
+                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;"
+                                data-i18n="S-Scratches">S
                                 - Scratches</button>
                             <button class="damage-btn" data-damage="R" onclick="handleDamageButtonClick('R')"
-                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">R
+                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;"
+                                data-i18n="R-Rust">R
                                 - Rust</button>
                             <button class="damage-btn" data-damage="K" onclick="handleDamageButtonClick('K')"
-                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">K
+                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;"
+                                data-i18n="K-Broken">K
                                 - Broken</button>
                             <button class="damage-btn" data-damage="C" onclick="handleDamageButtonClick('C')"
-                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;">C
+                                style="padding: 8px 16px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; cursor: pointer; pointer-events: auto; position: relative; z-index: 10;"
+                                data-i18n="C-Chips">C
                                 - Chips</button>
                         </div>
                     </div>
 
                     <div class="selected-damages" style="margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px;">Selected Damages:</h4>
+                        <h4 style="margin-bottom: 10px;" data-i18n="Selected Damages:">Selected Damages:</h4>
                         <div id="selected-damage-list"
                             style="min-height: 30px; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 4px;">
-                            No damages selected
+                            <span data-i18n="No damages selected">No damages selected</span>
                         </div>
                     </div>
 
                     <div class="damage-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
                         <button id="save-damage-btn"
-                            style="background: #006ab4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Save</button>
+                            style="background: #006ab4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;"
+                            data-i18n="Save Damage">Save</button>
                         <button id="clear-damage-btn"
-                            style="background: #ea580c; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Clear
+                            style="background: #ea580c; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;"
+                            data-i18n="Clear All">Clear
                             All</button>
                         <button id="cancel-damage-btn"
-                            style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+                            style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;"
+                            data-i18n="Close">Cancel</button>
                     </div>
                 </div>
             </section>
 
             <section class="inspection-checklist">
-                <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">WALK AROUND CHECK
+                <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;"
+                    data-i18n="WALK AROUND CHECK">WALK AROUND CHECK
                 </h2>
 
                 <!-- Select All Available Button -->
                 <div style="margin-bottom: 15px; text-align: right;">
                     <button id="select-all-available" onclick="selectAllAvailable()"
                         style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; font-weight: bold;">
-                        ✓ Select All Available
+                        <span data-i18n="Select All Available">✓ Select All Available</span>
                     </button>
                 </div>
 
@@ -178,33 +226,42 @@
                         <div class="checklist-item">
                             <label><strong>1. Floor Mat</strong> - <span style="color: #666;">بساط أرضي</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="floor-mat" value="available"> Available</label>
-                                <label><input type="checkbox" name="floor-mat" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="floor-mat" value="na"> N/A</label>
+                                <label><input type="checkbox" name="floor-mat" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="floor-mat" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="floor-mat" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
                         <div class="checklist-item">
                             <label><strong>2. Lighter</strong> - <span style="color: #666;">ولاعة</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="lighter" value="available"> Available</label>
-                                <label><input type="checkbox" name="lighter" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="lighter" value="na"> N/A</label>
+                                <label><input type="checkbox" name="lighter" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="lighter" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="lighter" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
                         <div class="checklist-item">
                             <label><strong>3. Ash Tray</strong> - <span style="color: #666;">طفاية سجائر</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="ash-tray" value="available"> Available</label>
-                                <label><input type="checkbox" name="ash-tray" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="ash-tray" value="na"> N/A</label>
+                                <label><input type="checkbox" name="ash-tray" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="ash-tray" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="ash-tray" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -213,11 +270,14 @@
                             <label><strong>4. DVD/Nav System</strong> - <span style="color: #666;">نظام
                                     الملاحة</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="dvd-nav" value="available"> Available</label>
-                                <label><input type="checkbox" name="dvd-nav" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="dvd-nav" value="na"> N/A</label>
+                                <label><input type="checkbox" name="dvd-nav" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="dvd-nav" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="dvd-nav" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -225,11 +285,14 @@
                             <label><strong>5. Wheel Caps</strong> - <span style="color: #666;">كابات
                                     العجلات</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="wheel-caps" value="available"> Available</label>
-                                <label><input type="checkbox" name="wheel-caps" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="wheel-caps" value="na"> N/A</label>
+                                <label><input type="checkbox" name="wheel-caps" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="wheel-caps" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="wheel-caps" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -237,11 +300,14 @@
                             <label><strong>6. Spare Tire</strong> - <span style="color: #666;">الإطار
                                     الاحتياطي</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="spare-tire" value="available"> Available</label>
-                                <label><input type="checkbox" name="spare-tire" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="spare-tire" value="na"> N/A</label>
+                                <label><input type="checkbox" name="spare-tire" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="spare-tire" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="spare-tire" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -249,11 +315,14 @@
                         <div class="checklist-item">
                             <label><strong>7. Tool Box</strong> - <span style="color: #666;">صندوق العدة</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="tool-box" value="available"> Available</label>
-                                <label><input type="checkbox" name="tool-box" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="tool-box" value="na"> N/A</label>
+                                <label><input type="checkbox" name="tool-box" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="tool-box" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="tool-box" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -261,11 +330,14 @@
                             <label><strong>8. Wheel Jack</strong> - <span style="color: #666;">رافعة
                                     العجلة</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="wheel-jack" value="available"> Available</label>
-                                <label><input type="checkbox" name="wheel-jack" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="wheel-jack" value="na"> N/A</label>
+                                <label><input type="checkbox" name="wheel-jack" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="wheel-jack" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="wheel-jack" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -273,11 +345,14 @@
                             <label><strong>9. Wire Aid Kit</strong> - <span style="color: #666;">الإسعافات
                                     الأولية</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="wire-aid" value="available"> Available</label>
-                                <label><input type="checkbox" name="wire-aid" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="wire-aid" value="na"> N/A</label>
+                                <label><input type="checkbox" name="wire-aid" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="wire-aid" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="wire-aid" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -286,11 +361,14 @@
                             <label><strong>10. Air Compressor</strong> - <span style="color: #666;">ضاغط
                                     الهواء</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="air-compressor" value="available"> Available</label>
-                                <label><input type="checkbox" name="air-compressor" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="air-compressor" value="na"> N/A</label>
+                                <label><input type="checkbox" name="air-compressor" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="air-compressor" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="air-compressor" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -298,11 +376,14 @@
                             <label><strong>11. Alloy Wheel</strong> - <span style="color: #666;">جنط
                                     معدني</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="alloy-wheel" value="available"> Available</label>
-                                <label><input type="checkbox" name="alloy-wheel" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="alloy-wheel" value="na"> N/A</label>
+                                <label><input type="checkbox" name="alloy-wheel" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="alloy-wheel" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="alloy-wheel" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -310,12 +391,14 @@
                             <label><strong>12. Fire Extinguisher</strong> - <span style="color: #666;">طفاية
                                     حريق</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="fire-extinguisher" value="available">
+                                <label><input type="checkbox" name="fire-extinguisher" value="Available">
                                     Available</label>
-                                <label><input type="checkbox" name="fire-extinguisher" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="fire-extinguisher" value="na"> N/A</label>
+                                <label><input type="checkbox" name="fire-extinguisher" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="fire-extinguisher" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -324,11 +407,14 @@
                             <label><strong>13. Memory Card</strong> - <span style="color: #666;">كارت ذاكرة
                                     خارجية</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="memory-card" value="available"> Available</label>
-                                <label><input type="checkbox" name="memory-card" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="memory-card" value="na"> N/A</label>
+                                <label><input type="checkbox" name="memory-card" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="memory-card" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="memory-card" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -336,11 +422,14 @@
                             <label><strong>14. USB Device</strong> - <span style="color: #666;">فلاش الدولة
                                     المحتويات</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="usb-device" value="available"> Available</label>
-                                <label><input type="checkbox" name="usb-device" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="usb-device" value="na"> N/A</label>
+                                <label><input type="checkbox" name="usb-device" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="usb-device" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="usb-device" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -348,11 +437,14 @@
                             <label><strong>15. Smart Key/Remote</strong> - <span style="color: #666;">المفتاح
                                     الذكي/الريموت</span></label>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <label><input type="checkbox" name="smart-key" value="available"> Available</label>
-                                <label><input type="checkbox" name="smart-key" value="missing"> Missing</label>
-                                <label><input type="checkbox" name="smart-key" value="na"> N/A</label>
+                                <label><input type="checkbox" name="smart-key" value="Available"> <span
+                                        data-i18n="Available">Available</span></label>
+                                <label><input type="checkbox" name="smart-key" value="Missing"> <span
+                                        data-i18n="Missing">Missing</span></label>
+                                <label><input type="checkbox" name="smart-key" value="N/A"> <span
+                                        data-i18n="N/A">N/A</span></label>
                             </div>
-                            <input type="text" placeholder="Remarks"
+                            <input type="text" data-i18n-placeholder="Remarks" placeholder="Remarks"
                                 style="width: 100%; margin-top: 5px; padding: 3px;">
                         </div>
 
@@ -360,32 +452,27 @@
                 </div>
             </section>
 
-            <section class="remarks-section">
-                <h2 style="color: #006ab4; border-bottom: 2px solid #006ab4; padding-bottom: 5px;">REMARKS</h2>
-                <textarea id="remarks" placeholder="Enter general inspection remarks..."
-                    style="width: 100%; min-height: 100px; margin-bottom: 10px;"></textarea>
-            </section>
 
 
-            <!-- Submit Button Section (outside signature section for inspection mode) -->
-            <section class="form-info-section" id="submit-section">
-                <div
-                    style="text-align: center; margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
-                    <button id="cancel-inspection"
-                        style="background: #dc3545; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;"
-                        onclick="window.cancelInspection()" onmouseover="this.style.backgroundColor='#c82333'"
-                        onmouseout="this.style.backgroundColor='#dc3545'">
-                        Cancel Inspection
-                    </button>
-                    <button id="submit-form"
-                        style="background: #006ab4; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;"
-                        onmouseover="this.style.backgroundColor='#005a9e'"
-                        onmouseout="this.style.backgroundColor='#006ab4'">
-                        Submit Form
-                    </button>
-                </div>
-            </section>
         </main>
+        <!-- Submit Button Section (outside signature section for inspection mode) -->
+        <section class="form-info-section" id="submit-section">
+            <div
+                style="text-align: center; margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+                <button id="cancel-inspection"
+                    style="background: #dc3545; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;"
+                    onclick="window.cancelInspection()" onmouseover="this.style.backgroundColor='#c82333'"
+                    onmouseout="this.style.backgroundColor='#dc3545'">
+                    <span data-i18n="Cancel Inspection">Cancel Inspection</span>
+                </button>
+                <button id="submit-form"
+                    style="background: #006ab4; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;"
+                    onmouseover="this.style.backgroundColor='#005a9e'"
+                    onmouseout="this.style.backgroundColor='#006ab4'">
+                    <span data-i18n="Submit Form">Submit Form</span>
+                </button>
+            </div>
+        </section>
     </div>
 
 
@@ -393,7 +480,7 @@
         // Global variables
         let bubbleConfig = {
             isInitializedFromBubble: false,
-            mode: 'inspection', // 'inspection' or 'assignment-ending'
+            mode: 'inspection', // 'inspection', 'assignment-ending', or 'new-assignment'
             vehicleName: null,
             startingMileage: null,
             userId: null,
@@ -529,10 +616,10 @@
         <path class="st0" d="M101.88,188.12c0,0-20.27,6.97-36.39,7.61l-10.38-1.31H35.24c0,0-1.29,0.64-1.5-1.17v-8.75
          c0,0,0.43-1.91,1.71-1.88c1.29,0.04,4.62-0.04,4.62-0.04"></path>
           </g>
-      <text transform="matrix(1 0 0 1 186.0109 21.897)" class="st6 st7">OFF SIDE</text>
-      <text transform="matrix(0 -1 1 0 28.5222 162.375)" class="st6 st7">FRONT</text>
-      <text transform="matrix(1 0 0 1 179.9365 282.1082)" class="st6 st7">NEAR SIDE</text>
-      <text transform="matrix(0 -1 1 0 376.6293 159.4824)" class="st6 st7">REAR</text>
+      <text transform="matrix(1 0 0 1 186.0109 21.897)" class="st6 st7" data-i18n="OFF SIDE">OFF SIDE</text>
+      <text transform="matrix(0 -1 1 0 28.5222 162.375)" class="st6 st7" data-i18n="FRONT">FRONT</text>
+      <text transform="matrix(1 0 0 1 179.9365 282.1082)" class="st6 st7" data-i18n="NEAR SIDE">NEAR SIDE</text>
+      <text transform="matrix(0 -1 1 0 376.6293 159.4824)" class="st6 st7" data-i18n="REAR">REAR</text>
       <path class="st8" d="M101.05,187.18c-0.02-0.01-0.04-0.03-0.06-0.04C101.01,187.15,101.03,187.17,101.05,187.18z"></path>
   
       <g>
@@ -1256,14 +1343,13 @@
                     
                     /* Interactive styles */
                     .maplink{fill:#ffffff;cursor:pointer;transition:all 0.2s ease;}
-                    .maplink:hover{fill:#7bd6ef;}
-                    /* Selected state with high specificity to override st classes */
-                    .st8.maplink.selected, .st2.maplink.selected, .st3.maplink.selected, .st5.maplink.selected, .st3.linea.maplink.selected, .maplink.selected{fill:#E3F2FD !important;stroke:#007bff !important;stroke-width:2 !important;}
-                    .st8.maplink.active, .st2.maplink.active, .st3.maplink.active, .st5.maplink.active, .st3.linea.maplink.active, .maplink.active{fill:#E3F2FD !important;stroke:#007bff !important;stroke-width:2 !important;}
-                    /* Damaged state with high specificity */
-                    .st8.damaged, .st2.damaged, .st3.damaged, .st5.damaged, .st3.linea.damaged, .damaged{fill:#FFCDD2 !important;stroke:#F44336 !important;stroke-width:2 !important;}
-                    /* Inspected state with high specificity */
-                    .st8.inspected, .st2.inspected, .st3.inspected, .st5.inspected, .st3.linea.inspected, .inspected{fill:#E8F5E8 !important;stroke:#28a745 !important;stroke-width:2 !important;}
+                    /* Only apply hover to elements without inline fill styles */
+                    .maplink:not([style*="fill"]):hover{fill:#7bd6ef;}
+                    /* For elements with inline styles, just change opacity on hover */
+                    .maplink[style*="fill"]:hover {
+                        opacity: 0.8 !important;
+                    }
+                    /* Removed old class-based styles - using inline styles now */
                     
                     /* Text labels */
                     .maptext{font-family:"MyriadPro-Regular";font-size:6;}
@@ -1284,7 +1370,9 @@
         // Tooltip functions
         function showTooltip(evt, text) {
             const tooltip = document.getElementById('tooltip');
-            tooltip.textContent = text;
+            // Translate the text if translation function is available
+            const translatedText = window.translate ? (window.translate(text.trim()) || text) : text;
+            tooltip.textContent = translatedText;
             tooltip.style.display = 'block';
             tooltip.style.left = (evt.pageX + 10) + 'px';
             tooltip.style.top = (evt.pageY - 10) + 'px';
@@ -1299,25 +1387,42 @@
         function partClick(evt, partName) {
             evt.preventDefault();
 
-            // Remove 'selected' class from all parts
-            document.querySelectorAll('.maplink.selected').forEach(element => {
-                element.classList.remove('selected');
+            // Remove 'selected' styling from all parts
+            document.querySelectorAll('.maplink').forEach(element => {
+                element.style.removeProperty('fill');
+                element.style.removeProperty('stroke');
+                element.style.removeProperty('stroke-width');
             });
 
             // Convert part name spaces to underscores to match SVG element IDs
             const partId = partName.replace(/ /g, '_');
 
-            // Add 'selected' class to clicked part
+            // Add 'selected' styling to clicked part
             const partElement = document.getElementById(partId);
             if (partElement) {
-                partElement.classList.add('selected');
+                console.log('🎨 Applying selected styling to:', partId);
+                console.log('🎨 Element before styling:', partElement.outerHTML.substring(0, 200));
+                console.log('🎨 Computed style before:', window.getComputedStyle(partElement).fill);
+
+                partElement.style.setProperty('fill', '#E3F2FD', 'important');
+                partElement.style.setProperty('stroke', '#007bff', 'important');
+                partElement.style.setProperty('stroke-width', '2', 'important');
+
+                console.log('🎨 Applied styles:', partElement.style.cssText);
+                console.log('🎨 Computed style after:', window.getComputedStyle(partElement).fill);
+                console.log('🎨 Element after styling:', partElement.outerHTML.substring(0, 200));
+            } else {
+                console.error('❌ Part element not found:', partId);
             }
 
             currentPart = partName;
             selectedDamages = inspectionData.vehicleParts[partName]?.damages || [];
 
             // Update inline form
-            document.getElementById('damage-part-name').textContent = `Mark Damage: ${partName}`;
+            // Translate the part name if translation function is available
+            const translatedPartName = window.translate ? (window.translate(partName) || partName) : partName;
+            const markDamageText = window.translate ? (window.translate('Mark Damage:') || 'Mark Damage:') : 'Mark Damage:';
+            document.getElementById('damage-part-name').innerHTML = `${markDamageText} ${translatedPartName}`;
             updateSelectedDamagesList();
 
             // Show inline damage form
@@ -1336,7 +1441,7 @@
         let formEventListenersSetup = false;
 
         // Track overall initialization state to prevent duplication
-        let isInitialized = false;
+        let inspection_isInitialized = false;
 
         // Debounce mechanism for damage button clicks
         let lastClickTime = 0;
@@ -1363,74 +1468,6 @@
             } catch (error) {
                 console.error('❌ Error handling damage button click:', error);
             }
-        };
-
-        // Debug function to test checklist data collection
-        window.testChecklistCollection = function () {
-
-            const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
-                'tool-box', 'wheel-jack', 'wire-aid', 'air-compressor', 'alloy-wheel',
-                'fire-extinguisher', 'memory-card', 'usb-device', 'smart-key'];
-
-            const results = {};
-
-            checklistItems.forEach(item => {
-                const checkboxes = document.querySelectorAll(`input[name="${item}"]`);
-                let status = '';
-                let checkedCount = 0;
-
-                checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        status = cb.value;
-                        checkedCount++;
-                    }
-                });
-
-                results[item] = {
-                    checkboxesFound: checkboxes.length,
-                    checkedCount: checkedCount,
-                    status: status
-                };
-            });
-
-            return results;
-        };
-
-        // Debug function to test damage buttons in Bubble.io
-        window.testDamageButtons = function () {
-
-            const buttons = document.querySelectorAll('.damage-btn');
-
-            buttons.forEach((button, index) => {
-                const damage = button.dataset.damage;
-                const isVisible = button.offsetParent !== null;
-                const hasOnclick = typeof button.onclick === 'function';
-                // The following block was incorrectly written as an object literal without assignment or usage
-                // It should probably be a console.log or similar for debugging, or removed if not needed
-                // For now, let's log the button state for debugging:
-                console.log({
-                    visible: isVisible,
-                    hasOnclick: hasOnclick,
-                    clickable: !button.disabled,
-                    zIndex: window.getComputedStyle(button).zIndex,
-                    pointerEvents: window.getComputedStyle(button).pointerEvents
-                });
-            });
-
-            // Test clicking the first button programmatically
-            if (buttons.length > 0) {
-                try {
-                    window.handleDamageButtonClick('D');
-                } catch (error) {
-                    console.error('❌ Programmatic click failed:', error);
-                }
-            }
-
-            return {
-                buttonsFound: buttons.length,
-                damageButtonsSetup: damageButtonsSetup,
-                currentDamages: selectedDamages
-            };
         };
 
         // Damage category selection with inline onclick as primary method
@@ -1483,17 +1520,25 @@
         function updateSelectedDamagesList() {
             const list = document.getElementById('selected-damage-list');
             if (selectedDamages.length === 0) {
-                list.innerHTML = '<p>No damages selected</p>';
+                // Translate "No damages selected"
+                const noDamagesText = window.translate ? (window.translate('No damages selected') || 'No damages selected') : 'No damages selected';
+                list.innerHTML = `<p>${noDamagesText}</p>`;
             } else {
                 list.innerHTML = selectedDamages.map(damage => {
-                    const damageNames = {
-                        'D': 'Dent',
-                        'S': 'Scratches',
-                        'R': 'Rust',
-                        'K': 'Broken',
-                        'C': 'Chips'
+                    // Use translation keys that match the button data-i18n attributes
+                    const damageTranslationKeys = {
+                        'D': 'D-Dent',
+                        'S': 'S-Scratches',
+                        'R': 'R-Rust',
+                        'K': 'K-Broken',
+                        'C': 'C-Chips'
                     };
-                    return `<span class="damage-tag">${damage} - ${damageNames[damage]}</span>`;
+
+                    // Get translated damage name, fall back to English if translation not available
+                    const translationKey = damageTranslationKeys[damage];
+                    const translatedName = window.translate ? (window.translate(translationKey) || translationKey) : translationKey;
+
+                    return `<span class="damage-tag">${translatedName}</span>`;
                 }).join('');
             }
 
@@ -1558,17 +1603,22 @@
             if (partElement) {
                 const partData = inspectionData.vehicleParts[partName];
 
-                // Remove inspection state classes but preserve selected state
-                partElement.classList.remove('damaged', 'inspected');
+                // Reset all styling first
+                partElement.style.fill = '';
+                partElement.style.stroke = '';
+                partElement.style.strokeWidth = '';
 
                 if (partData && partData.inspected) {
-                    // Remove selected state when part becomes inspected
-                    partElement.classList.remove('selected');
-
                     if (partData.damages && partData.damages.length > 0) {
-                        partElement.classList.add('damaged');
+                        // Apply damaged styling
+                        partElement.style.fill = '#FFCDD2';
+                        partElement.style.stroke = '#F44336';
+                        partElement.style.strokeWidth = '2';
                     } else {
-                        partElement.classList.add('inspected');
+                        // Apply inspected styling
+                        partElement.style.fill = '#E8F5E8';
+                        partElement.style.stroke = '#28a745';
+                        partElement.style.strokeWidth = '2';
                     }
                 }
                 // If not inspected, keep selected state if it was previously selected
@@ -1615,11 +1665,10 @@
                 inspectionData.vehicleInfo.licensePlate = document.getElementById('license-plate')?.value || '';
                 inspectionData.vehicleInfo.mileageStart = document.getElementById('mileage-start')?.value || '';
                 inspectionData.vehicleInfo.mileageEnd = document.getElementById('mileage-end')?.value || '';
-                
+
                 // Fuel Level
                 const fuelLevelSelect = document.getElementById('fuel-level')?.value || '';
-                const fuelLevelCustom = document.getElementById('fuel-level-custom')?.value || '';
-                inspectionData.vehicleInfo.fuelLevel = fuelLevelSelect === 'custom' ? fuelLevelCustom : fuelLevelSelect;
+                inspectionData.vehicleInfo.fuelLevel = fuelLevelSelect;
 
                 // Collect checklist data
                 const checklistItems = ['floor-mat', 'lighter', 'ash-tray', 'dvd-nav', 'wheel-caps', 'spare-tire',
@@ -1643,10 +1692,10 @@
 
                     // Find the remark field for this item (it should be the next input after the checkboxes)
                     const itemContainer = document.querySelector(`input[name="${item}"]`)?.closest('.checklist-item');
-                    const remarkField = itemContainer?.querySelector('input[placeholder="Remarks"]') ||
+                    const remarkField = itemContainer?.querySelector('input[data-i18n-placeholder="Remarks"]') ||
+                        itemContainer?.querySelector('input[placeholder="Remarks"]') ||
                         document.querySelector(`input[placeholder="Remarks for ${item}"]`);
                     const remarks = remarkField ? remarkField.value : '';
-
 
                     // Convert hyphenated names to camelCase (e.g., 'floor-mat' -> 'floorMat')
                     const itemKey = item.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase()).replace('-', '');
@@ -1658,10 +1707,6 @@
                     };
 
                 });
-
-
-                // General remarks
-                inspectionData.remarks = document.getElementById('remarks')?.value || '';
 
                 return inspectionData;
 
@@ -1683,18 +1728,102 @@
                 if (cb !== event.target) cb.checked = false;
             });
 
+            // Recalculate and store the latest form/checklist data
+            try {
+                collectFormData();
+            } catch (e) {
+                console.error('Failed to update checklist status on change:', e);
+            }
+        }
+
+        const DEBUG = false;
+
+        function showToast(message, options = {}) {
+            const { type = 'info', duration = 3000 } = options;
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.style.position = 'fixed';
+                container.style.top = '16px';
+                container.style.right = '16px';
+                container.style.zIndex = '9999';
+                container.style.display = 'flex';
+                container.style.flexDirection = 'column';
+                container.style.gap = '8px';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.padding = '10px 14px';
+            toast.style.borderRadius = '6px';
+            toast.style.color = '#ffffff';
+            toast.style.fontSize = '14px';
+            toast.style.boxShadow = '0 4px 10px rgba(0,0,0,0.15)';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-6px)';
+            toast.style.transition = 'opacity 150ms ease, transform 150ms ease';
+
+            const bg = type === 'success' ? '#2ea44f' : type === 'error' ? '#d93025' : type === 'warning' ? '#f59e0b' : '#2563eb';
+            toast.style.background = bg;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            });
+
+            const timeout = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                setTimeout(() => container.removeChild(toast), 180);
+            }, duration);
+
+            toast.addEventListener('click', () => {
+                clearTimeout(timeout);
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                setTimeout(() => container.removeChild(toast), 180);
+            });
+        }
+
+        function withButtonLoading(button, fn) {
+            if (!button) return fn();
+            const originalText = button.innerHTML;
+            const originalDisabled = button.disabled;
+            button.disabled = true;
+            button.innerHTML = 'Submitting…';
+            button.style.opacity = '0.8';
+            button.style.cursor = 'not-allowed';
+
+            const done = () => {
+                button.disabled = originalDisabled;
+                button.innerHTML = originalText;
+                button.style.opacity = '';
+                button.style.cursor = '';
+            };
+            const result = fn();
+            if (result && typeof result.finally === 'function') {
+                result.finally(done);
+            } else {
+                done();
+            }
+            return result;
         }
 
         function handleFormSubmit() {
-            console.log('🚀 Submit button clicked!');
-            console.log('🚀 Current mode:', bubbleConfig.mode);
-            console.log('🚀 bubbleConfig:', bubbleConfig);
-            
+            if (DEBUG) {
+                console.log('Submit button clicked!');
+                console.log('Current mode:', bubbleConfig.mode);
+                console.log('bubbleConfig:', bubbleConfig);
+            }
+
             // Check mileage confirmation in inspection mode
             if (bubbleConfig.mode === 'inspection') {
                 const mileageConfirmation = document.getElementById('mileage-confirmation');
                 if (mileageConfirmation && !mileageConfirmation.checked) {
-                    alert('⚠️ Please confirm the mileage readings are correct before submitting the inspection.');
+                    showToast('Please confirm the mileage readings before submitting.', { type: 'warning', duration: 4000 });
                     // Scroll to the mileage section
                     const vehicleInfoSection = document.getElementById('vehicle-info-section');
                     if (vehicleInfoSection) {
@@ -1713,50 +1842,55 @@
             }
 
             // Use the same logic as submitInspectionToBubble for consistency
-            try {
-                const formData = collectFormData();
-                const bubbleData = formatInspectionDataForBubble(formData);
+            const submitBtn = document.getElementById('submit-form');
+            return withButtonLoading(submitBtn, () => {
+                try {
+                    const formData = collectFormData();
+                    const bubbleData = formatInspectionDataForBubble(formData);
 
 
-                // If in Bubble mode, call the appropriate Bubble function
-                console.log('🚀 Checking bubble functions...');
-                if (bubbleConfig.mode === 'inspection') {
-                    console.log('🚀 Inspection mode - checking bubble_fn_SaveInspectionResults');
-                    if (typeof bubble_fn_SaveInspectionResults === 'function') {
-                        bubble_fn_SaveInspectionResults(bubbleData);
-                        alert('✅ Inspection submitted successfully to Bubble!');
-                    } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
-                        bubbleConfig.submitCallback(bubbleData);
-                        alert('✅ Inspection submitted successfully to Bubble via callback!');
+                    // If in Bubble mode, call the appropriate Bubble function
+                    if (DEBUG) console.log('Checking bubble functions...');
+                    if (bubbleConfig.mode === 'inspection') {
+                        if (DEBUG) console.log('Inspection mode - checking bubble_fn_SaveInspectionResults');
+                        if (typeof bubble_fn_SaveInspectionResults === 'function') {
+                            bubble_fn_SaveInspectionResults(bubbleData);
+                            showToast('Inspection submitted successfully.', { type: 'success' });
+                        } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                            bubbleConfig.submitCallback(bubbleData);
+                            showToast('Inspection submitted successfully.', { type: 'success' });
+                        } else {
+                            showToast('Form submitted successfully.', { type: 'success' });
+                        }
+                    } else if (bubbleConfig.mode === 'assignment-ending') {
+                        if (DEBUG) {
+                            console.log('Assignment-ending mode - checking bubble_fn_save');
+                            console.log('Available bubble functions in window:', Object.keys(window).filter(key => key.startsWith('bubble_fn_')));
+                            console.log('Type of bubble_fn_save:', typeof bubble_fn_save);
+                            console.log('bubble_fn_save exists:', 'bubble_fn_save' in window);
+                        }
+
+                        if (typeof bubble_fn_save === 'function') {
+                            bubble_fn_save(bubbleData);
+                            showToast('Assignment ending submitted successfully.', { type: 'success' });
+                        } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
+                            bubbleConfig.submitCallback(bubbleData);
+                            showToast('Assignment ending submitted successfully.', { type: 'success' });
+                        } else {
+                            showToast('Assignment ending submitted.', { type: 'success' });
+                        }
                     } else {
-                        alert('Form submitted successfully! Check console for data.');
+                        // Regular form submission
+                        showToast('Form submitted successfully.', { type: 'success' });
                     }
-                } else if (bubbleConfig.mode === 'assignment-ending') {
-                    console.log('🚀 Assignment-ending mode - checking bubble_fn_save');
-                    console.log('🔍 Available bubble functions in window:', Object.keys(window).filter(key => key.startsWith('bubble_fn_')));
-                    console.log('🔍 Type of bubble_fn_save:', typeof bubble_fn_save);
-                    console.log('🔍 bubble_fn_save exists:', 'bubble_fn_save' in window);
-                    
-                    if (typeof bubble_fn_save === 'function') {
-                        bubble_fn_save(bubbleData);
-                        alert('✅ Assignment ending submitted successfully to Bubble!');
-                    } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
-                        bubbleConfig.submitCallback(bubbleData);
-                        alert('✅ Assignment ending submitted successfully to Bubble via callback!');
-                    } else {
-                        alert('Assignment ending submitted successfully! Check console for data.');
-                    }
-                } else {
-                    // Regular form submission
-                    alert('Form submitted successfully! Check console for data.');
+
+                    return { success: true, data: bubbleData };
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    showToast('Submission failed: ' + error.message, { type: 'error', duration: 5000 });
+                    return { success: false, error: error.message };
                 }
-
-                return { success: true, data: bubbleData };
-            } catch (error) {
-                console.error('Form submission error:', error);
-                alert('Form submission failed: ' + error.message);
-                return { success: false, error: error.message };
-            }
+            });
         }
 
         function setupFormEventListeners() {
@@ -1775,7 +1909,7 @@
             formFields.forEach(field => {
                 field.addEventListener('change', () => {
                     collectFormData();
-                        });
+                });
             });
 
             // Submit button
@@ -1786,34 +1920,31 @@
 
             // Handle fuel level visual gauge
             const fuelButtons = document.querySelectorAll('.fuel-btn');
-            const fuelCustomButton = document.querySelector('.fuel-btn-custom');
             const fuelFill = document.getElementById('fuel-fill');
             const fuelLevelDisplay = document.getElementById('fuel-level-display');
             const fuelLevelInput = document.getElementById('fuel-level');
-            const fuelLevelCustom = document.getElementById('fuel-level-custom');
 
             console.log('🔧 Fuel buttons found:', fuelButtons.length);
-            console.log('🔧 Fuel custom button found:', fuelCustomButton ? 'Yes' : 'No');
 
             // Handle preset fuel level buttons
             fuelButtons.forEach((button, index) => {
                 console.log(`🔧 Setting up fuel button ${index}:`, button);
-                button.addEventListener('click', function(e) {
+                button.addEventListener('click', function (e) {
                     console.log('🔥 Fuel button clicked:', this.textContent);
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     const level = parseFloat(this.dataset.level);
                     const levelText = this.textContent;
-                    
+
                     console.log('🔥 Level:', level, 'Text:', levelText);
-                    
+
                     // Update visual gauge
                     if (fuelFill) {
                         fuelFill.style.height = level + '%';
                         console.log('🔥 Fuel fill updated to:', level + '%');
                     }
-                    
+
                     // Update display and hidden input
                     if (fuelLevelDisplay) {
                         fuelLevelDisplay.textContent = levelText;
@@ -1821,46 +1952,13 @@
                     if (fuelLevelInput) {
                         fuelLevelInput.value = levelText;
                     }
-                    
-                    // Hide custom input
-                    fuelLevelCustom.style.display = 'none';
-                    fuelLevelCustom.value = '';
-                    
+
                     // Update button states
                     fuelButtons.forEach(btn => btn.style.background = '#fff');
-                    fuelCustomButton.style.background = '#f0f8ff';
                     this.style.background = '#e6f3ff';
                 });
             });
 
-            // Handle custom fuel level button
-            if (fuelCustomButton && fuelLevelCustom) {
-                fuelCustomButton.addEventListener('click', function() {
-                    // Show custom input
-                    fuelLevelCustom.style.display = 'block';
-                    fuelLevelCustom.focus();
-                    
-                    // Update button states
-                    fuelButtons.forEach(btn => btn.style.background = '#fff');
-                    this.style.background = '#d1ecf1';
-                    
-                    // Clear visual gauge
-                    fuelFill.style.height = '0%';
-                    fuelLevelDisplay.textContent = 'Custom (enter below)';
-                });
-                
-                // Handle custom input changes
-                fuelLevelCustom.addEventListener('input', function() {
-                    const customValue = this.value;
-                    if (customValue) {
-                        fuelLevelDisplay.textContent = customValue;
-                        fuelLevelInput.value = customValue;
-                    } else {
-                        fuelLevelDisplay.textContent = 'Custom (enter below)';
-                        fuelLevelInput.value = '';
-                    }
-                });
-            }
 
             // Handle traffic violations checkboxes (exclusive selection)
             const violationsCheckboxes = document.querySelectorAll('input[name="traffic-violations"]');
@@ -1874,12 +1972,115 @@
                 });
             });
 
+            // Try to setup mileage confirmation locking if checkbox already exists
+            setupMileageConfirmationLocking();
+
             formEventListenersSetup = true;
         }
 
-        function init() {
+        // Setup mileage confirmation checkbox locking functionality
+        function setupMileageConfirmationLocking() {
+            const mileageConfirmation = document.getElementById('mileage-confirmation');
+
+            // Check if already setup to prevent duplicate event listeners
+            if (mileageConfirmation && mileageConfirmation.hasAttribute('data-locking-setup')) {
+                return;
+            }
+
+            // Gather all fields to be locked
+            const fieldsToLock = [
+                // Vehicle Information - always include mileage fields
+                { element: document.getElementById('mileage-start'), label: document.getElementById('mileage-start-label'), name: 'Starting Mileage' },
+                { element: document.getElementById('mileage-end'), label: document.getElementById('mileage-end-label'), name: 'Ending Mileage' }
+            ];
+
+            // Only include driver info if the driver section is visible (assignment-ending mode)
+            const driverSection = document.getElementById('driver-info-section');
+            const isDriverSectionVisible = driverSection && driverSection.style.display !== 'none';
+
+            if (isDriverSectionVisible) {
+                const incomingDriverElement = document.getElementById('incoming-driver');
+                const incomingDriverLabel = document.querySelector('label[for="incoming-driver"]');
+                if (incomingDriverElement) {
+                    fieldsToLock.push({
+                        element: incomingDriverElement,
+                        label: incomingDriverLabel,
+                        name: 'Incoming Driver'
+                    });
+                }
+            }
+
+            // Filter to only include fields that exist
+            const validFieldsToLock = fieldsToLock.filter(field => field.element);
+
+            if (mileageConfirmation && validFieldsToLock.length > 0) {
+                mileageConfirmation.addEventListener('change', function () {
+                    const isLocked = this.checked;
+
+                    // Lock/unlock all specified fields
+                    validFieldsToLock.forEach(field => {
+                        const { element, label, name } = field;
+
+                        // Apply field locking
+                        element.disabled = isLocked;
+                        element.style.backgroundColor = isLocked ? '#f8f9fa' : 'white';
+                        element.style.cursor = isLocked ? 'not-allowed' : 'text';
+                        element.title = isLocked ? `${name} is locked after confirmation` : '';
+
+                        // Add/remove lock icons to labels
+                        if (label) {
+                            if (isLocked) {
+                                if (!label.querySelector('.lock-icon')) {
+                                    const lockIcon = document.createElement('span');
+                                    lockIcon.className = 'lock-icon';
+                                    lockIcon.innerHTML = ' 🔒';
+                                    lockIcon.style.color = '#6c757d';
+                                    label.appendChild(lockIcon);
+                                }
+                            } else {
+                                const lockIcon = label.querySelector('.lock-icon');
+                                if (lockIcon) {
+                                    lockIcon.remove();
+                                }
+                            }
+                        }
+                    });
+
+                    // Console feedback
+                    if (isLocked) {
+                        const lockedFields = validFieldsToLock.map(f => f.name).join(', ');
+                        console.log(`🔒 Locked fields after confirmation: ${lockedFields}`);
+                    } else {
+                        console.log('🔓 Mileage and driver information fields unlocked');
+                    }
+                });
+
+                // Check initial state on page load (if checkbox is already checked)
+                if (mileageConfirmation.checked) {
+                    mileageConfirmation.dispatchEvent(new Event('change'));
+                }
+
+                // Mark as setup to prevent duplicate event listeners
+                mileageConfirmation.setAttribute('data-locking-setup', 'true');
+            }
+        }
+
+        // Function to apply translations to placeholder attributes
+        function applyPlaceholderTranslations() {
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (key && window.translate) {
+                    const translatedText = window.translate(key);
+                    if (translatedText) {
+                        element.placeholder = translatedText;
+                    }
+                }
+            });
+        }
+
+        window.init = function () {
             // Handle re-initialization with new data
-            if (isInitialized) {
+            if (inspection_isInitialized) {
                 // Always handle Bubble.io data pre-population for re-initialization
                 if (bubbleConfig.isInitializedFromBubble) {
                     populateFormFromBubbleData();
@@ -1887,6 +2088,14 @@
                 return;
             }
 
+            // Initialize translations first
+            initializeTranslations().then(() => {
+                console.log('Translations initialized successfully');
+                // Apply translations to placeholder attributes
+                applyPlaceholderTranslations();
+            }).catch(error => {
+                console.error('Translation initialization failed:', error);
+            });
 
             loadVehicleSVG();
             setupDamageButtons();
@@ -1905,19 +2114,19 @@
                 populateFormFromBubbleData();
             }
 
-            isInitialized = true;
-        }
+            inspection_isInitialized = true;
+        };
 
         function populateFormFromBubbleData() {
             console.log('🔧 populateFormFromBubbleData called');
             console.log('🔧 bubbleConfig:', bubbleConfig);
-            
+
             const vehicleName = bubbleConfig.vehicleName;
             const startingMileage = bubbleConfig.startingMileage;
             const endMileage = bubbleConfig.endMileage;
             const incomingDriverName = bubbleConfig.incomingDriverName;
             const mode = bubbleConfig.mode;
-            
+
             console.log('🔧 Values:', { vehicleName, startingMileage, endMileage, incomingDriverName, mode });
 
 
@@ -1944,14 +2153,14 @@
                 if (mileageEndLabel) {
                     mileageEndLabel.textContent = 'Mileage at End';
                 }
-                
+
                 // Hide driver section in inspection mode
                 const driverSection = document.getElementById('driver-info-section');
                 if (driverSection) {
                     driverSection.style.display = 'none';
                     console.log('✅ Driver section hidden for inspection mode');
                 }
-            } else if (mode === 'assignment-ending') {
+            } else if (mode === 'assignment-ending' || mode === 'new-assignment') {
                 const mileageStartLabel = document.getElementById('mileage-start-label');
                 if (mileageStartLabel) {
                     mileageStartLabel.textContent = 'Starting Mileage';
@@ -1959,14 +2168,24 @@
 
                 const mileageEndLabel = document.getElementById('mileage-end-label');
                 if (mileageEndLabel) {
-                    mileageEndLabel.textContent = 'Ending Mileage';
+                    if (mode === 'assignment-ending') {
+                        mileageEndLabel.textContent = 'Ending Mileage';
+                    } else {
+                        // new-assignment mode - hide or disable end mileage
+                        mileageEndLabel.textContent = 'Ending Mileage (Optional)';
+                        const mileageEndInput = document.getElementById('mileage-end');
+                        if (mileageEndInput) {
+                            mileageEndInput.style.display = 'none';
+                            mileageEndLabel.style.display = 'none';
+                        }
+                    }
                 }
-                
-                // Show driver section in assignment-ending mode
+
+                // Show driver section in both assignment-ending and new-assignment modes
                 const driverSection = document.getElementById('driver-info-section');
                 if (driverSection) {
                     driverSection.style.display = 'block';
-                    console.log('✅ Driver section shown for assignment-ending mode');
+                    console.log(`✅ Driver section shown for ${mode} mode`);
                 }
             }
 
@@ -1992,13 +2211,16 @@
                 } else if (mode === 'assignment-ending') {
                     // In assignment-ending mode, use provided endMileage
                     mileageEndInput.value = endMileage !== null ? endMileage : '';
+                } else if (mode === 'new-assignment') {
+                    // In new-assignment mode, end mileage is not needed (field is hidden)
+                    mileageEndInput.value = '';
                 }
             } else {
                 console.error('❌ Mileage end input not found!');
             }
 
-            // Populate incoming driver name if provided (assignment-ending mode)
-            if (incomingDriverName && mode === 'assignment-ending') {
+            // Populate incoming driver name if provided (assignment-ending or new-assignment mode)
+            if (incomingDriverName && (mode === 'assignment-ending' || mode === 'new-assignment')) {
                 const incomingDriverInput = document.getElementById('incoming-driver');
                 if (incomingDriverInput) {
                     incomingDriverInput.value = incomingDriverName;
@@ -2017,7 +2239,7 @@
                     vehicleNameDisplay.innerHTML = `
                         <div style="background: #f0f8ff; border: 2px solid #006ab4; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
                             <h4 style="margin: 0; color: #006ab4; font-size: 1.1rem;">
-                                Vehicle: ${vehicleName}
+                                <span data-i18n="Vehicle:">Vehicle:</span> <span class="vehicle-name-value">${vehicleName}</span>
                             </h4>
                         </div>
                     `;
@@ -2029,19 +2251,32 @@
                         sectionHeader.insertAdjacentElement('afterend', vehicleNameDisplay);
                     }
 
+                    // Apply translations to the newly created element
+                    if (window.applyTranslations) {
+                        window.applyTranslations();
+                    }
+
                     // Add mileage confirmation checkbox after mileage fields
                     const mileageConfirmationDiv = document.createElement('div');
                     mileageConfirmationDiv.innerHTML = `
                         <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 6px;">
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: bold; color: #856404; cursor: pointer;">
                                 <input type="checkbox" id="mileage-confirmation" required style="transform: scale(1.2);">
-                                ✓ I confirm the mileage readings above are correct
+                                <span data-i18n="I confirm the mileage readings above are correct">✓ I confirm the mileage readings above are correct</span>
                             </label>
                         </div>
                     `;
 
                     // Add it at the end of the vehicle info section
                     vehicleInfoSection.appendChild(mileageConfirmationDiv);
+
+                    // Apply translations to the newly added element
+                    if (window.applyTranslations) {
+                        window.applyTranslations();
+                    }
+
+                    // Setup mileage confirmation locking functionality
+                    setupMileageConfirmationLocking();
                 }
             }
 
@@ -2105,45 +2340,73 @@
             };
         }
 
-        // Global function for Bubble.io integration - Inspection Module
-        window.initializeInspectionModule = function (vehicleName, startingMileage, userId, inspectionId, mode = 'inspection', incomingDriverName = null, endMileage = null, submitCallback) {
-            // Log all received parameters for debugging
-            console.log({
-                vehicleName: vehicleName,
-                startingMileage: startingMileage,
-                userId: userId,
-                inspectionId: inspectionId,
-                mode: mode,
-                incomingDriverName: incomingDriverName,
-                endMileage: endMileage,
-                submitCallback: typeof submitCallback
-            });
+        // Global function for Bubble.io integration - Inspection Module (Object Parameter Pattern)
+        window.initializeInspectionModule = function (config = {}) {
+            // Extract parameters with fallbacks for empty/undefined values
+            const {
+                vehicleName = null,
+                startingMileage = null,
+                userId = null,
+                inspectionId = null,
+                mode = 'inspection',
+                incomingDriverName = null,
+                endMileage = null,
+                submitCallback = null
+            } = config;
 
-            // Validate incoming data
-            const validation = validateBubbleData(vehicleName, startingMileage, userId, inspectionId);
+            // Clean up empty strings and convert to null
+            const cleanedConfig = {
+                vehicleName: vehicleName && vehicleName.trim() !== '' ? vehicleName.trim() : null,
+                startingMileage: (startingMileage !== undefined && startingMileage !== null && startingMileage !== '') ? startingMileage : null,
+                userId: userId && userId.trim() !== '' ? userId.trim() : null,
+                inspectionId: inspectionId && inspectionId.trim() !== '' ? inspectionId.trim() : null,
+                mode: mode || 'inspection',
+                incomingDriverName: incomingDriverName && incomingDriverName.trim() !== '' ? incomingDriverName.trim() : null,
+                endMileage: (endMileage !== undefined && endMileage !== null && endMileage !== '') ? endMileage : null,
+                submitCallback: submitCallback
+            };
+
+            // Log all received parameters for debugging
+            console.log('Raw config received:', config);
+            console.log('Cleaned parameters:', cleanedConfig);
+
+            // Validate incoming data using cleaned config
+            const validation = validateBubbleData(cleanedConfig.vehicleName, cleanedConfig.startingMileage, cleanedConfig.userId, cleanedConfig.inspectionId);
 
             if (!validation.isValid) {
                 console.error('❌ Invalid Bubble data:', validation.errors);
-                console.error('❌ Received parameters:', { vehicleName, startingMileage, userId, inspectionId });
+                console.error('❌ Received parameters:', cleanedConfig);
                 throw new Error('Invalid data provided: ' + validation.errors.join(', '));
             }
 
             // Store Bubble configuration with sanitized data
             bubbleConfig.isInitializedFromBubble = true;
-            bubbleConfig.mode = mode || 'inspection';
+            bubbleConfig.mode = cleanedConfig.mode;
             bubbleConfig.vehicleName = validation.sanitizedData.vehicleName;
             bubbleConfig.startingMileage = validation.sanitizedData.startingMileage;
             bubbleConfig.userId = validation.sanitizedData.userId;
             bubbleConfig.inspectionId = validation.sanitizedData.inspectionId;
-            bubbleConfig.submitCallback = submitCallback;
-            bubbleConfig.incomingDriverName = incomingDriverName && typeof incomingDriverName === 'string' ? incomingDriverName.trim() : null;
-            bubbleConfig.endMileage = endMileage && typeof endMileage === 'number' ? endMileage : null;
+            bubbleConfig.submitCallback = cleanedConfig.submitCallback;
+            bubbleConfig.incomingDriverName = cleanedConfig.incomingDriverName;
+            bubbleConfig.endMileage = cleanedConfig.endMileage;
 
             // If DOM is already loaded, initialize immediately
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
+            if (typeof window.init === 'function') {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', window.init);
+                } else {
+                    window.init();
+                }
             } else {
-                init();
+                console.error('❌ window.init function not found. Script may not be fully loaded.');
+                // Retry after a short delay
+                setTimeout(() => {
+                    if (typeof window.init === 'function') {
+                        window.init();
+                    } else {
+                        console.error('❌ window.init still not available after retry.');
+                    }
+                }, 100);
             }
         };
 
@@ -2153,16 +2416,16 @@
             const outputlist2 = [];  // Status/Results from walk-around checklist
             const outputlist3 = [];  // Remarks from walk-around checklist
 
-            // For assignment-ending mode, create separate output1, output2, and output3 constants
+            // For assignment-ending and new-assignment modes, create separate output1, output2, and output3 constants
             let output1 = '';
             let output2 = '';
             let output3 = '';
-            
-            if (bubbleConfig.mode === 'assignment-ending') {
+
+            if (bubbleConfig.mode === 'assignment-ending' || bubbleConfig.mode === 'new-assignment') {
                 output1 = bubbleConfig.incomingDriverName || formData.driverInfo?.incomingDriver || '';
                 output2 = bubbleConfig.vehicleName || '';
             }
-            
+
             // Set output3 to fuel level for all modes
             output3 = formData.vehicleInfo?.fuelLevel || '';
 
@@ -2217,33 +2480,35 @@
                 licensePlate: formData.vehicleInfo?.licensePlate,
                 fuelLevel: formData.vehicleInfo?.fuelLevel,
                 location: formData.formInfo?.location,
-                dateTime: formData.formInfo?.dateTime,
-                remarks: formData.remarks
+                dateTime: formData.formInfo?.dateTime
             };
 
             // Add mode-specific data
             if (bubbleConfig.mode === 'assignment-ending') {
                 additionalData.endMileage = formData.vehicleInfo?.mileageEnd || bubbleConfig.endMileage;
                 additionalData.incomingDriverName = formData.driverInfo?.incomingDriver || bubbleConfig.incomingDriverName;
+            } else if (bubbleConfig.mode === 'new-assignment') {
+                // new-assignment mode: no end mileage needed, but include incoming driver
+                additionalData.incomingDriverName = formData.driverInfo?.incomingDriver || bubbleConfig.incomingDriverName;
             }
 
             // Return data with mode-specific output constants
-            const returnData = { 
-                outputlist1, 
+            const returnData = {
+                outputlist1,
                 outputlist2,
                 outputlist3,
-                ...additionalData 
+                ...additionalData
             };
 
             // Add output3 (fuel level) for all modes
             returnData.output3 = output3;
-            
-            // Add output1 and output2 for assignment-ending mode only
-            if (bubbleConfig.mode === 'assignment-ending') {
+
+            // Add output1 and output2 for assignment-ending and new-assignment modes
+            if (bubbleConfig.mode === 'assignment-ending' || bubbleConfig.mode === 'new-assignment') {
                 returnData.output1 = output1;
                 returnData.output2 = output2;
-                
-                console.log('📤 Assignment-ending mode data:');
+
+                console.log(`📤 ${bubbleConfig.mode} mode data:`);
                 console.log('📤 output1 (driver):', output1);
                 console.log('📤 output2 (vehicle):', output2);
                 console.log('📤 output3 (fuel level):', output3);
@@ -2278,20 +2543,20 @@
 
             // Call appropriate Bubble function based on mode
             try {
-                if (bubbleConfig.mode === 'assignment-ending') {
+                if (bubbleConfig.mode === 'assignment-ending' || bubbleConfig.mode === 'new-assignment') {
                     if (typeof bubble_fn_save === 'function') {
                         bubble_fn_save(bubbleData);
                         return { success: true, data: bubbleData };
                     } else {
                         console.warn('⚠️ bubble_fn_save function not found - using callback instead');
-                        
+
                         // Fallback to callback method
                         if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
                             bubbleConfig.submitCallback(bubbleData);
                             return { success: true, data: bubbleData };
                         } else {
-                            console.warn('No submit callback defined for assignment-ending mode');
-                            return { success: false, error: 'No Bubble function or callback available for assignment-ending mode' };
+                            console.warn(`No submit callback defined for ${bubbleConfig.mode} mode`);
+                            return { success: false, error: `No Bubble function or callback available for ${bubbleConfig.mode} mode` };
                         }
                     }
                 } else {
@@ -2317,52 +2582,6 @@
                 return { success: false, error: error.message };
             }
         };
-
-
-
-        // Test function for Inspection Mode
-        function testInspectionMode() {
-            // Test data - includes all required parameters
-            const testVehicleName = "Toyota Camry 2023";
-            const testStartingMileage = 45000;
-            const testUserId = "user_12345";
-            const testInspectionId = "insp_67890";
-
-            const testCallback = function (inspectionData) {
-                alert('🧪 TEST: Inspection submitted!\n\nCheck the browser console (F12) to see the complete inspection data.\n\nNotice how the form is now in inspection mode with simplified interface.');
-            };
-
-            // Initialize inspection mode
-            try {
-                window.initializeInspectionModule(testVehicleName, testStartingMileage, testUserId, testInspectionId, 'inspection', null, null, testCallback);
-
-
-                // Hide the test button after activation
-                const testBtn = document.getElementById('test-inspection-btn');
-                if (testBtn) {
-                    testBtn.style.display = 'none';
-                }
-
-            } catch (error) {
-                console.error('🧪 TEST ERROR:', error);
-                alert('Test failed: ' + error.message);
-            }
-        }
-
-        // Test function for submitting inspection data
-        function testSubmitInspection() {
-            try {
-                const result = window.submitInspectionToBubble();
-                if (result.success) {
-                    alert('🧪 TEST: Submit successful!\nCheck console for data.');
-                } else {
-                    alert('🧪 TEST: Submit failed!\n' + result.error);
-                }
-            } catch (error) {
-                console.error('🧪 TEST ERROR:', error);
-                alert('Submit test failed: ' + error.message);
-            }
-        }
 
         // Function to switch to a new vehicle inspection - proper workflow
         window.switchVehicleInspection = function (vehicleName, startingMileage, userId, inspectionId, mode = 'inspection', incomingDriverName = null, endMileage = null, submitCallback) {
@@ -2394,7 +2613,7 @@
                     return { success: true, message: 'Inspection canceled successfully' };
                 } else if (bubbleConfig.submitCallback && typeof bubbleConfig.submitCallback === 'function') {
                     console.warn('⚠️ bubble_fn_cancel function not found - using callback instead');
-                    
+
                     // Use callback method with cancel signal
                     bubbleConfig.submitCallback({ action: 'cancel', inspectionId: bubbleConfig.inspectionId });
                     return { success: true, message: 'Inspection canceled successfully via callback' };
@@ -2481,14 +2700,18 @@
                 currentPart = null;
                 selectedDamages = [];
 
-                // Clear visual states from SVG parts
+                // Clear visual styles from SVG parts
                 document.querySelectorAll('.maplink').forEach(element => {
-                    element.classList.remove('selected', 'damaged', 'inspected', 'active');
+                    element.style.fill = '';
+                    element.style.stroke = '';
+                    element.style.strokeWidth = '';
                 });
 
-                // Clear visual states from group elements
+                // Clear visual styles from group elements
                 document.querySelectorAll('g').forEach(element => {
-                    element.classList.remove('selected', 'damaged', 'inspected', 'active');
+                    element.style.fill = '';
+                    element.style.stroke = '';
+                    element.style.strokeWidth = '';
                 });
 
                 // Hide damage form if visible
@@ -2520,7 +2743,7 @@
                 damageButtonsSetup = false;
                 modalActionsSetup = false;
                 formEventListenersSetup = false;
-                isInitialized = false;
+                inspection_isInitialized = false;
 
                 // Progress displays removed
 
@@ -2547,7 +2770,7 @@
                 checkboxes.forEach(cb => cb.checked = false);
 
                 // Check only the "available" option
-                const availableCheckbox = document.querySelector(`input[name="${item}"][value="available"]`);
+                const availableCheckbox = document.querySelector(`input[name="${item}"][value="Available"]`);
                 if (availableCheckbox) {
                     availableCheckbox.checked = true;
                     // Trigger change event to update progress
@@ -2556,37 +2779,28 @@
             });
 
 
-            // Update button style temporarily to show action was completed
-            const button = document.getElementById('select-all-available');
-            if (button) {
-                const originalText = button.innerHTML;
-                button.innerHTML = '✅ All Selected!';
-                button.style.background = '#20c997';
-
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.style.background = '#28a745';
-                }, 2000);
+            // Notify user of action
+            try { collectFormData(); } catch (_) { }
+            if (typeof showToast === 'function') {
+                showToast('All checklist items set to Available.', { type: 'success' });
             }
         }
 
         document.addEventListener('DOMContentLoaded', init);
-    const result =
-        window.clearInspectionForm();
-    if (result.success) {
-        console.log('Form cleared:',
-            result.message);
-    } else {
-        console.error('Clear failed:',
-            result.Error);
-    }
-    window.initializeInspectionModule("vyh", 900, "1713795474128x214390577892173980", "1754917033458x718194046232952800", 'inspection', function (inspectionData) {
-        // Handle completed inspection
-        console.log('Inspection completed:',
-            inspectionData);
-    });
-    
+
+        window.initializeInspectionModule({
+            vehicleName: "Vehicle Name",
+            startingMileage: 12500,
+            userId: "user123",
+            inspectionId: "inspection456",
+            mode: "end-assignment",  // <- Use this mode
+            incomingDriverName: "John Doe",
+            // endMileage is not needed for new-assignment
+            submitCallback: function (data) {
+                console.log('New assignment inspection completed:', data);
+            }
+        });
     </script>
 </body>
 
-</html>\
+</html>

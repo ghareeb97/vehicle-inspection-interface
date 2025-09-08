@@ -24,6 +24,14 @@ This is a **Vehicle Walk-Around Inspection Form** - a digital inspection tool fe
 - `Vehicle_inspection_template.pdf` - Reference template document
 - `do not use.css` - Deprecated CSS file (kept for reference)
 
+### Internationalization System
+- `translation_utils.js` - i18next-based translation system with English and Arabic support
+- `test_translations.html` - Test interface for translation functionality
+- `test_preview_translations.html` - Translation testing for preview interface
+
+### Documentation Files
+- `BUBBLE_INTEGRATION.md` - Detailed API documentation for Bubble.io integration modes
+
 ## Architecture
 
 ### Frontend Technology Stack
@@ -32,6 +40,7 @@ This is a **Vehicle Walk-Around Inspection Form** - a digital inspection tool fe
 - **SVG Graphics** - Interactive vehicle diagrams with clickable regions
 - **Unified CSS** - Single stylesheet (gem.css) architecture for all Bubble.io HTML elements
 - **Preview System** - Separate preview interface for inspection results
+- **i18next Internationalization** - Dynamic translation system supporting English and Arabic with RTL layout support
 
 ### Key JavaScript Functionality
 - **Part Selection System**: Click handlers for vehicle diagram components with damage tracking
@@ -61,6 +70,15 @@ This project uses no build system or package manager. Development is done by:
 2. **Live reload** - Use browser developer tools or live server extension (e.g., VS Code Live Server)
 3. **Testing** - Manual testing in browser, no automated test framework
 4. **File serving** - Any local HTTP server (Python: `python -m http.server`, Node: `npx serve`)
+5. **Translation testing** - Open `test_translations.html` to test translation functionality
+6. **Preview testing** - Open `test_preview_translations.html` to test preview translations
+7. **Browser testing** - Test in Chrome, Firefox, Safari for cross-browser compatibility
+8. **Mobile testing** - Test responsive design on mobile devices and tablets
+
+### Language Testing
+- Add `?lang=en_us` or `?lang=ar_ar` to URL for language testing
+- Default language is English (`en_us`)
+- Arabic enables RTL layout automatically
 
 ## Key Implementation Details
 
@@ -81,7 +99,6 @@ inspectionData = {
     vehicleInfo: { /* customer and vehicle details */ },
     checklist: { /* inspection item statuses */ },
     damageData: { /* vehicle damage documentation */ },
-    remarks: "general inspection notes",
     progress: { totalItems: X, completedItems: Y, completionPercentage: Z }
 }
 ```
@@ -94,6 +111,13 @@ inspectionData = {
 - `setupFormEventListeners()` - Initializes all form interaction handlers
 - `showTooltip()` / `hideTooltip()` - Manages hover tooltips for vehicle parts
 - `testInspectionMode()` - Development function to test Bubble.io integration
+
+### Translation System Functions (translation_utils.js)
+- `initializeTranslations()` - Initializes i18next with language detection from URL parameters
+- `translate(key)` - Core translation function for dynamic content
+- `updateLanguage(newLang)` - Switches interface language and updates RTL/LTR direction
+- `applyTranslations()` - Applies translations to elements with `data-i18n` attributes
+- `updateDynamicTranslations()` - Handles dynamic content translation updates
 
 ## Bubble.io Integration Architecture
 
@@ -139,9 +163,9 @@ window.initializeInspectionModule(vehicleName, startingMileage, userId, inspecti
 ## Recent Changes and Architecture Notes
 
 ### CSS Architecture Evolution
-- **Current**: `gem.css` - Unified stylesheet containing all application styles
-- **Legacy**: `preview.html` still references `styles.css` (needs updating for consistency)
-- **Deprecated**: `do not use.css` - Contains older styles kept for reference
+- **Current**: `gem.css` - Unified stylesheet containing all application styles (consolidated from previous separate files)
+- **Legacy**: `preview.html` still references legacy CSS (may need updating for full consistency)
+- **Deprecated**: Older CSS files consolidated into `gem.css` for unified styling across all Bubble.io HTML elements
 
 ### Critical Implementation Notes
 - **No Build System**: Direct HTML/CSS/JS files, no package manager or build process
@@ -159,14 +183,16 @@ window.initializeInspectionModule(vehicleName, startingMileage, userId, inspecti
 
 ### Global JavaScript API Functions
 ```javascript
-window.initializeInspectionModule()  // Primary integration entry point
-window.submitInspectionToBubble()    // Form submission with mode-specific callbacks
-window.switchVehicleInspection()     // Switch between vehicles in same session
-window.cancelInspection()            // Cancel current inspection
-window.clearInspectionForm()         // Reset all form data and UI state
-window.handleDamageButtonClick()     // Handle damage type selection (D,S,R,K,C)
-window.testChecklistCollection()     // Development function for testing
-window.testDamageButtons()           // Development function for damage testing
+window.initializeInspectionModule()     // Primary integration entry point
+window.initializeInspectionChecklist()  // Set custom walkaround checklist items (supports strings or objects)
+window.setWalkaroundChecklist()         // Low-level checklist function (used internally)
+window.submitInspectionToBubble()       // Form submission with mode-specific callbacks
+window.switchVehicleInspection()        // Switch between vehicles in same session
+window.cancelInspection()               // Cancel current inspection
+window.clearInspectionForm()            // Reset all form data and UI state
+window.handleDamageButtonClick()        // Handle damage type selection (D,S,R,K,C)
+window.testChecklistCollection()        // Development function for testing
+window.testDamageButtons()              // Development function for damage testing
 ```
 
 ### Fuel Level System Architecture
@@ -175,3 +201,27 @@ window.testDamageButtons()           // Development function for damage testing
 - **Custom Input**: Text field for non-standard fuel levels
 - **Responsive Layout**: 3→2 column grid on mobile with larger touch targets
 - **State Management**: Updates visual gauge, display text, and hidden form input
+
+## Internationalization Architecture
+
+### Translation System (translation_utils.js)
+- **i18next Integration**: Global instance with English and Arabic translations
+- **URL Language Detection**: Automatic language detection from `?lang=` parameter  
+- **RTL Support**: Automatic RTL layout switching for Arabic (`ar_ar`)
+- **Attribute-based Translation**: Uses `data-i18n` and `data-i18n-placeholder` attributes
+- **Dynamic Content**: Handles tooltips, dynamic text, and form validation messages
+
+### Translation Implementation Pattern
+```javascript
+// Static content: Use data attributes in HTML
+<span data-i18n="Vehicle Inspection">Vehicle Inspection</span>
+<input data-i18n-placeholder="Enter mileage" placeholder="Enter mileage">
+
+// Dynamic content: Use translate() function
+const message = translate('Vehicle:') + ' ' + vehicleName;
+tooltip.textContent = translate(partName) || partName;
+```
+
+### Supported Languages
+- **English** (`en_us`): Default language, LTR layout
+- **Arabic** (`ar_ar`): Complete RTL layout with direction-aware CSS

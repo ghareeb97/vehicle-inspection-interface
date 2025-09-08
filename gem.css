@@ -41,6 +41,26 @@
 /*                  2. Global Styles                   */
 /* ================================================== */
 
+/* RTL (Right-to-Left) Language Support */
+html[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+    text-align: right;
+}
+
+html[dir="rtl"] .language-switcher {
+    order: -1;
+}
+
+html[dir="rtl"] .form-header div {
+    flex-direction: row-reverse;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: var(--background-color);
@@ -53,6 +73,12 @@ body {
     -webkit-text-size-adjust: 100%;
     /* From route-playback - Mobile first */
 }
+
+/* Prevent horizontal overflow on small screens */
+html, body { overflow-x: hidden; }
+
+/* Ensure padding and borders are included in widths */
+*, *::before, *::after { box-sizing: border-box; }
 
 .container {
     width: 100%;
@@ -3663,6 +3689,12 @@ html[dir="rtl"] .stat-value {
     padding: 20px;
 }
 
+/* Clamp major containers to viewport width */
+.inspection-container,
+.form-info-section,
+.inspection-checklist,
+.vehicle-diagram { max-width: 100%; }
+
 .form-header {
     color: #333;
     padding: 15px 0;
@@ -3756,6 +3788,8 @@ select {
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+    width: fit-content;
 }
 
 #vehicle-svg-container,
@@ -3879,12 +3913,11 @@ text{fill:#333333;font-weight:bold;}
 /* Inspection Layout */
 .inspection-main {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: auto 1fr;
     gap: 20px;
 }
 
-.inspection-checklist,
-.remarks-section {
+.inspection-checklist {
     background: linear-gradient(145deg, #ffffff, #f8f9fa);
     padding: 25px;
     border-radius: 12px;
@@ -3893,8 +3926,7 @@ text{fill:#333333;font-weight:bold;}
     margin-bottom: 20px;
 }
 
-.inspection-checklist h2,
-.remarks-section h2 {
+.inspection-checklist h2 {
     font-size: 1.2rem;
     margin-bottom: 15px;
     color: #374151;
@@ -3918,7 +3950,10 @@ text{fill:#333333;font-weight:bold;}
     background: white;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
+
+.checklist-item label { display: block; }
 
 .checklist-item:hover {
     transform: translateY(-2px);
@@ -4110,7 +4145,8 @@ input[type="checkbox"]:hover {
 /* Vehicle Inspection Mobile Responsive */
 @media (max-width: 768px) {
     .inspection-main {
-        grid-template-columns: 1fr;
+        grid-template-columns: auto 1fr;
+        gap: 15px;
     }
 
     .progress-indicator {
@@ -4228,6 +4264,48 @@ input[type="checkbox"]:hover {
         width: 100% !important;
         height: 100% !important;
         display: block;
+    }
+}
+
+/* Responsive tweaks for tablets (iPad) and small laptops */
+@media (max-width: 1024px) {
+    /* Keep side-by-side layout but adjust gap */
+    .inspection-main {
+        grid-template-columns: auto 1fr;
+        gap: 16px;
+    }
+
+    /* Show two checklist columns on tablets for better density */
+    .checklist-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* Ensure diagram doesn't dominate height */
+    #vehicle-svg-container,
+    #vehicle-svg-container-preview {
+        height: 340px;
+    }
+
+    /* Make button group span cleanly without overflow */
+    #submit-section {
+        width: 100%;
+        overflow-x: hidden;
+    }
+    #submit-section button {
+        max-width: 100% !important;
+        flex: 1 1 45% !important;
+    }
+}
+
+/* Extra small devices: enforce single column everywhere */
+@media (max-width: 480px) {
+    .checklist-grid {
+        grid-template-columns: 1fr !important;
+    }
+    #submit-section button {
+        flex: 1 1 100% !important;
+        width: 100% !important;
     }
 }
 
@@ -4606,8 +4684,7 @@ input[type="checkbox"]:hover {
     }
 
     /* Typography improvements for mobile */
-    .inspection-checklist h2,
-    .remarks-section h2 {
+    .inspection-checklist h2 {
         font-size: 1.3rem;
         margin-bottom: 15px;
     }
