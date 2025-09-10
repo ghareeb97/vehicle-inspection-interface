@@ -28,6 +28,26 @@
         .inspection-container {
             min-height: 100vh;
         }
+
+        /* Photo thumbnail styles for preview */
+        .photo-thumbnail-preview:hover img {
+            border-color: #006ab4;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .photo-thumbnail-preview img {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            #preview-photo-modal img {
+                max-width: 95% !important;
+                max-height: 95% !important;
+            }
+        }
     </style>
 
     <!-- i18next for internationalization -->
@@ -881,8 +901,8 @@
         }
 
         // Main preview function
-        window.previewInspectionResults = function (tasks, results, vehicleInfo, remarks = []) {
-            console.log('Starting preview with data:', { tasks, results, vehicleInfo, remarks });
+        window.previewInspectionResults = function (tasks, results, vehicleInfo, remarks = [], photos = []) {
+            console.log('Starting preview with data:', { tasks, results, vehicleInfo, remarks, photos });
             console.log('Container element:', document.querySelector('.inspection-container'));
 
             // Prepare vehicle parts damage data
@@ -891,12 +911,17 @@
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
                 const result = results[i];
+                const photoUrls = photos[i] || "";
 
                 // Check if this is a vehicle part (not a checklist item)
                 if (isVehiclePart(task)) {
+                    // Parse photo URLs (semicolon-separated)
+                    const photoArray = photoUrls ? photoUrls.split(';').filter(url => url.trim()) : [];
+                    
                     vehiclePartsDamage[task] = {
                         hasDamage: isDamageResult(result),
-                        damage: result
+                        damage: result,
+                        photos: photoArray
                     };
                 }
             }
@@ -1056,10 +1081,26 @@
             damagedParts.forEach(partName => {
                 const partData = vehiclePartsDamage[partName];
                 const fullDamageName = getDamageDisplayName(partData.damage);
+                const photos = partData.photos || [];
+                
                 damageHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: white; border-radius: 4px; border-left: 3px solid #f44336;">
-                        <span style="font-weight: 500; color: #333;">${partName}</span>
-                        <span style="color: #d32f2f; font-weight: bold; font-size: 0.9rem;">${fullDamageName}</span>
+                    <div style="padding: 12px; background: white; border-radius: 4px; border-left: 3px solid #f44336;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: ${photos.length > 0 ? '8px' : '0'};">
+                            <span style="font-weight: 500; color: #333;">${partName}</span>
+                            <span style="color: #d32f2f; font-weight: bold; font-size: 0.9rem;">${fullDamageName}</span>
+                        </div>
+                        ${photos.length > 0 ? `
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                                ${photos.map(photoUrl => `
+                                    <div class="photo-thumbnail-preview" onclick="showPreviewPhotoModal('${photoUrl}')" style="cursor: pointer;">
+                                        <img src="${photoUrl}" alt="Damage photo" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">
+                                ${photos.length} photo${photos.length !== 1 ? 's' : ''} available - click to view
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             });
@@ -1235,6 +1276,85 @@
                 console.error('Preview translation initialization failed:', error);
             });
         });
+
+        // Photo modal functionality for preview
+        function showPreviewPhotoModal(photoUrl) {
+            // Create modal if it doesn't exist
+            let modal = document.getElementById('preview-photo-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'preview-photo-modal';
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.9);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                `;
+
+                const closeBtn = document.createElement('span');
+                closeBtn.style.cssText = `
+                    position: absolute;
+                    top: 20px;
+                    right: 30px;
+                    color: white;
+                    font-size: 30px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    z-index: 10001;
+                `;
+                closeBtn.innerHTML = '×';
+                closeBtn.onclick = hidePreviewPhotoModal;
+
+                const img = document.createElement('img');
+                img.id = 'preview-photo-modal-img';
+                img.style.cssText = `
+                    max-width: 90%;
+                    max-height: 90%;
+                    object-fit: contain;
+                    border-radius: 8px;
+                `;
+
+                modal.appendChild(closeBtn);
+                modal.appendChild(img);
+                document.body.appendChild(modal);
+
+                // Close modal when clicking outside the image
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        hidePreviewPhotoModal();
+                    }
+                });
+
+                // Close modal with Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.style.visibility === 'visible') {
+                        hidePreviewPhotoModal();
+                    }
+                });
+            }
+
+            const img = document.getElementById('preview-photo-modal-img');
+            img.src = photoUrl;
+            modal.style.opacity = '1';
+            modal.style.visibility = 'visible';
+        }
+
+        function hidePreviewPhotoModal() {
+            const modal = document.getElementById('preview-photo-modal');
+            if (modal) {
+                modal.style.opacity = '0';
+                modal.style.visibility = 'hidden';
+            }
+        }
     </script>
 </body>
 
