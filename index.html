@@ -204,6 +204,42 @@
                             data-i18n="Close">Cancel</button>
                     </div>
                 </div>
+
+                <!-- Damage Tracking Table -->
+                <div id="damage-summary-section" class="damage-summary" 
+                    style="display: none; margin-top: 20px; padding: 20px; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; cursor: pointer;" 
+                        onclick="toggleDamageTable()">
+                        <h3 style="margin: 0; color: #dc2626; display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #dc2626; font-size: 18px;">⚠️</span>
+                            <span data-i18n="Damaged Parts Summary">Damaged Parts Summary</span>
+                            <span id="damage-count" style="background: #dc2626; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">0</span>
+                        </h3>
+                        <span id="damage-table-toggle" style="color: #666; font-size: 14px; user-select: none;">
+                            <span data-i18n="Click to expand">▼ Click to expand</span>
+                        </span>
+                    </div>
+                    
+                    <div id="damage-table-content" style="display: none;">
+                        <div class="damage-table-container" style="overflow-x: auto;">
+                            <table id="damage-table" style="width: 100%; border-collapse: collapse; background: white;">
+                                <thead>
+                                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                                        <th style="padding: 12px; text-align: left; font-weight: bold; color: #495057;" data-i18n="Part Name">Part Name</th>
+                                        <th style="padding: 12px; text-align: left; font-weight: bold; color: #495057;" data-i18n="Damage Types">Damage Types</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold; color: #495057; width: 120px;" data-i18n="Actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="damage-table-body">
+                                    <!-- Damage entries will be populated here -->
+                                </tbody>
+                            </table>
+                            <div id="no-damage-message" style="padding: 40px; text-align: center; color: #6c757d; font-style: italic;">
+                                <span data-i18n="No damaged parts recorded yet">No damaged parts recorded yet. Click on vehicle parts above to mark damage.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section class="inspection-checklist">
@@ -1384,42 +1420,296 @@
         }
 
         // Part click handler
-        function partClick(evt, partName) {
-            evt.preventDefault();
-
-            // Remove 'selected' styling from all parts
-            document.querySelectorAll('.maplink').forEach(element => {
-                element.style.removeProperty('fill');
-                element.style.removeProperty('stroke');
-                element.style.removeProperty('stroke-width');
-            });
-
-            // Convert part name spaces to underscores to match SVG element IDs
+        // Function to update part styling based on its status
+        function updatePartStyling(partName, isCurrentlySelected = false) {
             const partId = partName.replace(/ /g, '_');
-
-            // Add 'selected' styling to clicked part
             const partElement = document.getElementById(partId);
-            if (partElement) {
-                console.log('🎨 Applying selected styling to:', partId);
-                console.log('🎨 Element before styling:', partElement.outerHTML.substring(0, 200));
-                console.log('🎨 Computed style before:', window.getComputedStyle(partElement).fill);
+            
+            if (!partElement) {
+                console.error('❌ Part element not found:', partId);
+                return;
+            }
 
+            const partData = inspectionData.vehicleParts[partName];
+            const hasDamage = partData && partData.damages && partData.damages.length > 0;
+            const isInspected = partData && partData.inspected;
+
+            // Remove all existing status classes and attributes
+            partElement.classList.remove('part-selected', 'part-damaged', 'part-inspected');
+            partElement.removeAttribute('data-status');
+            
+            // CRITICAL: Temporarily remove original SVG classes to force style recalculation
+            const originalClasses = [];
+            partElement.classList.forEach(cls => {
+                if (cls.startsWith('st') || cls === 'maplink') {
+                    originalClasses.push(cls);
+                }
+            });
+            
+            // Remove original classes temporarily
+            originalClasses.forEach(cls => partElement.classList.remove(cls));
+            
+            // Reset inline styles that might conflict
+            partElement.style.removeProperty('fill');
+            partElement.style.removeProperty('stroke');
+            partElement.style.removeProperty('stroke-width');
+
+            // Determine status and apply classes/attributes
+            let status = 'none';
+            if (isCurrentlySelected) {
+                status = 'selected';
+                partElement.classList.add('part-selected');
+                partElement.setAttribute('data-status', 'selected');
+                // Also set SVG attributes directly for Bubble.io compatibility
+                partElement.setAttribute('fill', '#E3F2FD');
+                partElement.setAttribute('stroke', '#007bff');
+                partElement.setAttribute('stroke-width', '2');
+                // Force inline styles as final fallback
                 partElement.style.setProperty('fill', '#E3F2FD', 'important');
                 partElement.style.setProperty('stroke', '#007bff', 'important');
                 partElement.style.setProperty('stroke-width', '2', 'important');
-
-                console.log('🎨 Applied styles:', partElement.style.cssText);
-                console.log('🎨 Computed style after:', window.getComputedStyle(partElement).fill);
-                console.log('🎨 Element after styling:', partElement.outerHTML.substring(0, 200));
+            } else if (hasDamage) {
+                status = 'damaged';
+                partElement.classList.add('part-damaged');
+                partElement.setAttribute('data-status', 'damaged');
+                // Also set SVG attributes directly for Bubble.io compatibility
+                partElement.setAttribute('fill', '#FEE2E2');
+                partElement.setAttribute('stroke', '#dc2626');
+                partElement.setAttribute('stroke-width', '2');
+                // Force inline styles as final fallback
+                partElement.style.setProperty('fill', '#FEE2E2', 'important');
+                partElement.style.setProperty('stroke', '#dc2626', 'important');
+                partElement.style.setProperty('stroke-width', '2', 'important');
+            } else if (isInspected) {
+                status = 'inspected';
+                partElement.classList.add('part-inspected');
+                partElement.setAttribute('data-status', 'inspected');
+                // Also set SVG attributes directly for Bubble.io compatibility
+                partElement.setAttribute('fill', '#FEF3C7');
+                partElement.setAttribute('stroke', '#f59e0b');
+                partElement.setAttribute('stroke-width', '1');
+                // Force inline styles as final fallback
+                partElement.style.setProperty('fill', '#FEF3C7', 'important');
+                partElement.style.setProperty('stroke', '#f59e0b', 'important');
+                partElement.style.setProperty('stroke-width', '1', 'important');
             } else {
-                console.error('❌ Part element not found:', partId);
+                // Reset to original state - remove all custom styling
+                partElement.removeAttribute('fill');
+                partElement.removeAttribute('stroke');
+                partElement.removeAttribute('stroke-width');
             }
 
+            // CRITICAL: Add back original classes after our styling is applied
+            originalClasses.forEach(cls => partElement.classList.add(cls));
+            
+            // Force immediate DOM refresh for Bubble.io
+            partElement.style.display = 'none';
+            partElement.offsetHeight; // Trigger reflow
+            partElement.style.display = '';
+
+            console.log(`🎨 Part ${partName} styled as: ${status}`, {
+                hasDamage,
+                isInspected,
+                isCurrentlySelected,
+                classList: partElement.classList.toString(),
+                dataStatus: partElement.getAttribute('data-status'),
+                actualFill: partElement.getAttribute('fill'),
+                actualStroke: partElement.getAttribute('stroke'),
+                originalClasses: originalClasses
+            });
+        }
+
+        // Function to refresh all part styling
+        function refreshAllPartStyling() {
+            // Clear current selection styling and reapply based on data
+            Object.keys(inspectionData.vehicleParts).forEach(partName => {
+                updatePartStyling(partName, false);
+            });
+            
+            // Highlight currently selected part
+            if (currentPart) {
+                updatePartStyling(currentPart, true);
+            }
+        }
+
+        // Force part styling refresh - Bubble.io compatibility function
+        function forceStyleRefresh() {
+            if (typeof inspectionData !== 'undefined' && inspectionData.vehicleParts) {
+                refreshAllPartStyling();
+                console.log('🔄 Forced part styling refresh for Bubble.io compatibility');
+            }
+        }
+
+        // Set up periodic refresh for Bubble.io environment
+        let bubbleStyleRefreshInterval;
+        function startBubbleCompatibilityMode() {
+            if (bubbleStyleRefreshInterval) {
+                clearInterval(bubbleStyleRefreshInterval);
+            }
+            
+            // Refresh styling every 2 seconds to combat Bubble.io interference
+            bubbleStyleRefreshInterval = setInterval(forceStyleRefresh, 2000);
+            console.log('🔄 Started Bubble.io compatibility mode - periodic style refresh');
+        }
+
+        // Global debug function for Bubble.io troubleshooting
+        window.debugPartStyling = function(partName) {
+            const partId = partName ? partName.replace(/ /g, '_') : 'ALL_PARTS';
+            
+            if (partName) {
+                const element = document.getElementById(partId);
+                if (element) {
+                    const computedStyle = window.getComputedStyle(element);
+                    console.log(`🔍 Debug info for part: ${partName}`, {
+                        partId: partId,
+                        classList: element.classList.toString(),
+                        dataStatus: element.getAttribute('data-status'),
+                        svgAttributes: {
+                            fill: element.getAttribute('fill'),
+                            stroke: element.getAttribute('stroke'),
+                            strokeWidth: element.getAttribute('stroke-width')
+                        },
+                        computedStyles: {
+                            fill: computedStyle.fill,
+                            stroke: computedStyle.stroke,
+                            strokeWidth: computedStyle.strokeWidth
+                        },
+                        inlineStyles: element.style.cssText,
+                        partData: inspectionData.vehicleParts[partName] || 'No damage data'
+                    });
+                    return {
+                        success: true,
+                        element: element,
+                        partData: inspectionData.vehicleParts[partName]
+                    };
+                } else {
+                    console.log(`❌ Part element not found: ${partId}`);
+                    return { success: false, error: 'Element not found' };
+                }
+            } else {
+                console.log('🔍 Debug info for all parts with data:', {
+                    totalPartsWithData: Object.keys(inspectionData.vehicleParts).length,
+                    currentPart: currentPart,
+                    parts: inspectionData.vehicleParts
+                });
+                
+                // Force refresh all styling
+                forceStyleRefresh();
+                return {
+                    success: true,
+                    totalParts: Object.keys(inspectionData.vehicleParts).length,
+                    currentPart: currentPart
+                };
+            }
+        };
+
+        // Global function to manually refresh all part styling (callable from Bubble.io)
+        window.refreshPartStyling = function() {
+            forceStyleRefresh();
+            console.log('✅ Manual part styling refresh completed');
+            return { success: true, message: 'All part styling refreshed' };
+        };
+
+        // Nuclear option: Force style override with maximum priority
+        window.forcePartStyleOverride = function(partName, status) {
+            const partId = partName.replace(/ /g, '_');
+            const partElement = document.getElementById(partId);
+            
+            if (!partElement) {
+                console.error('Part not found:', partId);
+                return false;
+            }
+
+            // Remove any existing style overrides
+            partElement.style.cssText = '';
+            
+            let colors;
+            switch(status) {
+                case 'selected':
+                    colors = { fill: '#E3F2FD', stroke: '#007bff', strokeWidth: '2' };
+                    break;
+                case 'damaged':
+                    colors = { fill: '#FEE2E2', stroke: '#dc2626', strokeWidth: '2' };
+                    break;
+                case 'inspected':
+                    colors = { fill: '#FEF3C7', stroke: '#f59e0b', strokeWidth: '1' };
+                    break;
+                default:
+                    // Reset - remove all styling
+                    partElement.removeAttribute('style');
+                    partElement.removeAttribute('fill');
+                    partElement.removeAttribute('stroke');
+                    partElement.removeAttribute('stroke-width');
+                    return true;
+            }
+            
+            // Apply with maximum CSS specificity using cssText
+            partElement.style.cssText = `
+                fill: ${colors.fill} !important;
+                stroke: ${colors.stroke} !important;
+                stroke-width: ${colors.strokeWidth}px !important;
+            `;
+            
+            // Also set as SVG attributes
+            partElement.setAttribute('fill', colors.fill);
+            partElement.setAttribute('stroke', colors.stroke);
+            partElement.setAttribute('stroke-width', colors.strokeWidth);
+            
+            console.log(`🔥 Nuclear style override applied to ${partName}:`, {
+                status: status,
+                colors: colors,
+                cssText: partElement.style.cssText,
+                computedFill: window.getComputedStyle(partElement).fill
+            });
+            
+            return true;
+        };
+
+        // Enhanced debug function that can fix styling issues
+        window.fixPartStyling = function(partName) {
+            const partData = inspectionData.vehicleParts[partName];
+            let targetStatus = 'none';
+            
+            if (partName === currentPart) {
+                targetStatus = 'selected';
+            } else if (partData && partData.damages && partData.damages.length > 0) {
+                targetStatus = 'damaged';
+            } else if (partData && partData.inspected) {
+                targetStatus = 'inspected';
+            }
+            
+            console.log(`🔧 Fixing styling for ${partName} -> ${targetStatus}`);
+            
+            // Try normal method first
+            updatePartStyling(partName, partName === currentPart);
+            
+            // If that doesn't work, use nuclear option
+            setTimeout(() => {
+                forcePartStyleOverride(partName, targetStatus);
+            }, 100);
+            
+            return { partName, targetStatus, success: true };
+        };
+
+        function partClick(evt, partName) {
+            evt.preventDefault();
+
+            // Update styling for all parts to show persistent highlighting
+            refreshAllPartStyling();
+            
+            // Set current part and update its styling as selected
             currentPart = partName;
+            updatePartStyling(partName, true);
+
+            // Force immediate style application for Bubble.io compatibility
+            setTimeout(() => {
+                updatePartStyling(partName, true);
+                console.log('🎯 Forced immediate re-styling for current part');
+            }, 100);
+
             selectedDamages = inspectionData.vehicleParts[partName]?.damages || [];
 
             // Update inline form
-            // Translate the part name if translation function is available
             const translatedPartName = window.translate ? (window.translate(partName) || partName) : partName;
             const markDamageText = window.translate ? (window.translate('Mark Damage:') || 'Mark Damage:') : 'Mark Damage:';
             document.getElementById('damage-part-name').innerHTML = `${markDamageText} ${translatedPartName}`;
@@ -1596,32 +1886,165 @@
         }
 
         function updatePartVisualState(partName) {
-            // Convert part name spaces to underscores to match SVG element IDs
-            const partId = partName.replace(/ /g, '_');
-            const partElement = document.getElementById(partId);
+            // Use the new unified styling function and then refresh all parts to maintain consistency
+            updatePartStyling(partName, partName === currentPart);
+            
+            // Also update the damage table if it exists
+            if (typeof updateDamageTable === 'function') {
+                updateDamageTable();
+            }
+        }
 
-            if (partElement) {
+        // Damage Table Functions
+        function toggleDamageTable() {
+            const content = document.getElementById('damage-table-content');
+            const toggle = document.getElementById('damage-table-toggle');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.innerHTML = '<span data-i18n="Click to collapse">▲ Click to collapse</span>';
+            } else {
+                content.style.display = 'none';
+                toggle.innerHTML = '<span data-i18n="Click to expand">▼ Click to expand</span>';
+            }
+            
+            // Re-apply translations if available
+            if (window.applyTranslations) {
+                window.applyTranslations();
+            }
+        }
+
+        function updateDamageTable() {
+            const damageTableBody = document.getElementById('damage-table-body');
+            const noDataMessage = document.getElementById('no-damage-message');
+            const damageSection = document.getElementById('damage-summary-section');
+            const damageCount = document.getElementById('damage-count');
+            
+            if (!damageTableBody) return;
+            
+            // Get all parts with damage
+            const damagedParts = Object.keys(inspectionData.vehicleParts)
+                .filter(partName => {
+                    const part = inspectionData.vehicleParts[partName];
+                    return part && part.damages && part.damages.length > 0;
+                });
+            
+            // Update damage count
+            if (damageCount) {
+                damageCount.textContent = damagedParts.length;
+            }
+            
+            // Show/hide the entire damage section based on whether there are damaged parts
+            if (damageSection) {
+                damageSection.style.display = damagedParts.length > 0 ? 'block' : 'none';
+            }
+            
+            // Clear existing rows
+            damageTableBody.innerHTML = '';
+            
+            if (damagedParts.length === 0) {
+                if (noDataMessage) noDataMessage.style.display = 'block';
+                return;
+            }
+            
+            if (noDataMessage) noDataMessage.style.display = 'none';
+            
+            // Create rows for each damaged part
+            damagedParts.forEach(partName => {
                 const partData = inspectionData.vehicleParts[partName];
+                const row = createDamageTableRow(partName, partData);
+                damageTableBody.appendChild(row);
+            });
+        }
 
-                // Reset all styling first
-                partElement.style.fill = '';
-                partElement.style.stroke = '';
-                partElement.style.strokeWidth = '';
+        function createDamageTableRow(partName, partData) {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid #dee2e6';
+            row.style.transition = 'background-color 0.2s';
+            
+            // Hover effect
+            row.onmouseover = () => row.style.backgroundColor = '#f8f9fa';
+            row.onmouseout = () => row.style.backgroundColor = '';
+            
+            // Part name cell
+            const partCell = document.createElement('td');
+            partCell.style.padding = '12px';
+            partCell.style.borderRight = '1px solid #dee2e6';
+            const translatedPartName = window.translate ? (window.translate(partName) || partName) : partName;
+            partCell.textContent = translatedPartName;
+            
+            // Damage types cell
+            const damageCell = document.createElement('td');
+            damageCell.style.padding = '12px';
+            damageCell.style.borderRight = '1px solid #dee2e6';
+            
+            const damageTypes = partData.damages.map(damage => {
+                const damageTranslationKeys = {
+                    'D': 'D-Dent',
+                    'S': 'S-Scratches', 
+                    'R': 'R-Rust',
+                    'K': 'K-Broken',
+                    'C': 'C-Chips'
+                };
+                
+                const translationKey = damageTranslationKeys[damage];
+                const translatedName = window.translate ? (window.translate(translationKey) || translationKey) : translationKey;
+                
+                return `<span style="display: inline-block; background: #dc2626; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: bold; margin: 1px;">${translatedName}</span>`;
+            }).join('');
+            
+            damageCell.innerHTML = damageTypes;
+            
+            // Actions cell
+            const actionCell = document.createElement('td');
+            actionCell.style.padding = '12px';
+            actionCell.style.textAlign = 'center';
+            
+            const editBtn = document.createElement('button');
+            editBtn.innerHTML = '✏️';
+            editBtn.title = window.translate ? (window.translate('Edit') || 'Edit') : 'Edit';
+            editBtn.style.cssText = 'background: #007bff; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px; font-size: 12px;';
+            editBtn.onclick = () => editDamageEntry(partName);
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '🗑️';
+            deleteBtn.title = window.translate ? (window.translate('Delete') || 'Delete') : 'Delete';
+            deleteBtn.style.cssText = 'background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;';
+            deleteBtn.onclick = () => deleteDamageEntry(partName);
+            
+            actionCell.appendChild(editBtn);
+            actionCell.appendChild(deleteBtn);
+            
+            row.appendChild(partCell);
+            row.appendChild(damageCell);
+            row.appendChild(actionCell);
+            
+            return row;
+        }
 
-                if (partData && partData.inspected) {
-                    if (partData.damages && partData.damages.length > 0) {
-                        // Apply damaged styling
-                        partElement.style.fill = '#FFCDD2';
-                        partElement.style.stroke = '#F44336';
-                        partElement.style.strokeWidth = '2';
-                    } else {
-                        // Apply inspected styling
-                        partElement.style.fill = '#E8F5E8';
-                        partElement.style.stroke = '#28a745';
-                        partElement.style.strokeWidth = '2';
-                    }
+        function editDamageEntry(partName) {
+            // Select the part and open damage form for editing
+            const event = { preventDefault: () => {} };
+            partClick(event, partName);
+        }
+
+        function deleteDamageEntry(partName) {
+            const translatedPartName = window.translate ? (window.translate(partName) || partName) : partName;
+            const confirmMessage = window.translate ? 
+                (window.translate('Are you sure you want to delete all damage records for') || 'Are you sure you want to delete all damage records for') + ` ${translatedPartName}?` :
+                `Are you sure you want to delete all damage records for ${translatedPartName}?`;
+                
+            if (confirm(confirmMessage)) {
+                // Remove the part from vehicleParts or clear its damages
+                if (inspectionData.vehicleParts[partName]) {
+                    delete inspectionData.vehicleParts[partName];
                 }
-                // If not inspected, keep selected state if it was previously selected
+                
+                // Update visual styling to remove damage highlighting
+                updatePartStyling(partName, false);
+                
+                // Refresh the damage table
+                updateDamageTable();
             }
         }
 
@@ -2113,6 +2536,12 @@
             if (bubbleConfig.isInitializedFromBubble) {
                 populateFormFromBubbleData();
             }
+
+            // Initialize damage table on page load
+            updateDamageTable();
+
+            // Start Bubble.io compatibility mode for persistent styling
+            startBubbleCompatibilityMode();
 
             inspection_isInitialized = true;
         };
@@ -2726,6 +3155,34 @@
                     selectedDamageList.innerHTML = '<p>No damages selected</p>';
                 }
 
+                // Reset fuel level indicator
+                const fuelFill = document.getElementById('fuel-fill');
+                const fuelDisplay = document.getElementById('fuel-level-display');
+                const fuelInput = document.getElementById('fuel-level');
+                
+                if (fuelFill) {
+                    fuelFill.style.height = '0%';
+                }
+                if (fuelDisplay) {
+                    const notSelectedText = window.translate ? (window.translate('Not selected') || 'Not selected') : 'Not selected';
+                    fuelDisplay.textContent = notSelectedText;
+                }
+                if (fuelInput) {
+                    fuelInput.value = '';
+                }
+
+                // Remove selected state from fuel buttons
+                document.querySelectorAll('.fuel-btn').forEach(button => {
+                    button.classList.remove('selected');
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                });
+
+                // Update damage table to show empty state
+                if (typeof updateDamageTable === 'function') {
+                    updateDamageTable();
+                }
+
                 // Reset Bubble configuration
                 bubbleConfig = {
                     isInitializedFromBubble: false,
@@ -2788,18 +3245,28 @@
 
         document.addEventListener('DOMContentLoaded', init);
 
-        window.initializeInspectionModule({
-            vehicleName: "Vehicle Name",
-            startingMileage: 12500,
-            userId: "user123",
-            inspectionId: "inspection456",
-            mode: "end-assignment",  // <- Use this mode
-            incomingDriverName: "John Doe",
-            // endMileage is not needed for new-assignment
-            submitCallback: function (data) {
-                console.log('New assignment inspection completed:', data);
+        const result =
+                window.clearInspectionForm();
+            if (result.success) {
+                console.log('Form cleared:',
+                    result.message);
+            } else {
+                console.error('Clear failed:',
+                    result.Error);
             }
-        });
+
+            window.initializeInspectionModule({
+                vehicleName: "vehicle test 1",
+                startingMileage: "14000",
+                userId: "1713795474128x214390577892173980",
+                inspectionId: "1757504616035x785473102478311400",
+                mode: "inspection",
+                submitCallback: function (inspectionData) {
+                    // Handle completed inspection
+                    console.log('Inspection completed:',
+                        inspectionData);
+                }
+            });
     </script>
 </body>
 

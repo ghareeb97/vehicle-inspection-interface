@@ -4693,3 +4693,328 @@ input[type="checkbox"]:hover {
         font-size: 1.2rem;
     }
 }
+
+/* ================================================== */
+/*        Damage Tracking Table & Part Highlighting  */
+/* ================================================== */
+
+/* Damage Summary Section */
+.damage-summary {
+    border-left: 4px solid #dc2626 !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+}
+
+.damage-summary h3 {
+    color: #dc2626 !important;
+}
+
+/* Damage Table Styles */
+.damage-table-container {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+#damage-table {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#damage-table th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+#damage-table tbody tr:hover {
+    background-color: #f8f9fa !important;
+    transform: scale(1.01);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#damage-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+/* Damage type badges in table */
+.damage-tag {
+    white-space: nowrap;
+}
+
+/* Action buttons in table */
+#damage-table button {
+    transition: all 0.2s ease;
+    min-height: auto !important;
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
+
+#damage-table button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced SVG Part Highlighting - Bubble.io Compatible */
+.maplink {
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.maplink:hover {
+    opacity: 0.8 !important;
+}
+
+/* Part status indicators with maximum specificity for Bubble.io */
+svg .maplink.part-selected,
+svg path.part-selected,
+svg g.part-selected,
+#vehicle-svg-container .part-selected,
+.part-selected {
+    fill: #E3F2FD !important;
+    stroke: #007bff !important;
+    stroke-width: 2px !important;
+}
+
+svg .maplink.part-damaged,
+svg path.part-damaged, 
+svg g.part-damaged,
+#vehicle-svg-container .part-damaged,
+.part-damaged {
+    fill: #FEE2E2 !important;
+    stroke: #dc2626 !important;
+    stroke-width: 2px !important;
+}
+
+svg .maplink.part-inspected,
+svg path.part-inspected,
+svg g.part-inspected, 
+#vehicle-svg-container .part-inspected,
+.part-inspected {
+    fill: #FEF3C7 !important;
+    stroke: #f59e0b !important;
+    stroke-width: 1px !important;
+}
+
+/* Override any potential Bubble.io interference */
+svg .maplink[data-status="selected"],
+svg path[data-status="selected"],
+svg g[data-status="selected"] {
+    fill: #E3F2FD !important;
+    stroke: #007bff !important;
+    stroke-width: 2px !important;
+}
+
+svg .maplink[data-status="damaged"],
+svg path[data-status="damaged"],
+svg g[data-status="damaged"] {
+    fill: #FEE2E2 !important;
+    stroke: #dc2626 !important;
+    stroke-width: 2px !important;
+}
+
+svg .maplink[data-status="inspected"],
+svg path[data-status="inspected"],
+svg g[data-status="inspected"] {
+    fill: #FEF3C7 !important;
+    stroke: #f59e0b !important;
+    stroke-width: 1px !important;
+}
+
+/* CRITICAL: Target original SVG classes directly for Bubble.io */
+/* Selected state - targeting original classes */
+.st8.maplink.part-selected,
+.st1.maplink.part-selected,
+.st2.maplink.part-selected,
+.st3.maplink.part-selected,
+.st4.maplink.part-selected,
+.st5.maplink.part-selected,
+.st6.maplink.part-selected,
+.st7.maplink.part-selected,
+.st8.maplink.part-selected,
+.st9.maplink.part-selected,
+.st10.maplink.part-selected,
+.st11.maplink.part-selected,
+path.st8.maplink.part-selected,
+g.st8.maplink.part-selected,
+svg .st8.maplink.part-selected,
+svg path.st8.maplink.part-selected {
+    fill: #E3F2FD !important;
+    stroke: #007bff !important;
+    stroke-width: 2px !important;
+}
+
+/* Damaged state - targeting original classes */
+.st8.maplink.part-damaged,
+.st1.maplink.part-damaged,
+.st2.maplink.part-damaged,
+.st3.maplink.part-damaged,
+.st4.maplink.part-damaged,
+.st5.maplink.part-damaged,
+.st6.maplink.part-damaged,
+.st7.maplink.part-damaged,
+.st8.maplink.part-damaged,
+.st9.maplink.part-damaged,
+.st10.maplink.part-damaged,
+.st11.maplink.part-damaged,
+path.st8.maplink.part-damaged,
+g.st8.maplink.part-damaged,
+svg .st8.maplink.part-damaged,
+svg path.st8.maplink.part-damaged {
+    fill: #FEE2E2 !important;
+    stroke: #dc2626 !important;
+    stroke-width: 2px !important;
+}
+
+/* Inspected state - targeting original classes */
+.st8.maplink.part-inspected,
+.st1.maplink.part-inspected,
+.st2.maplink.part-inspected,
+.st3.maplink.part-inspected,
+.st4.maplink.part-inspected,
+.st5.maplink.part-inspected,
+.st6.maplink.part-inspected,
+.st7.maplink.part-inspected,
+.st8.maplink.part-inspected,
+.st9.maplink.part-inspected,
+.st10.maplink.part-inspected,
+.st11.maplink.part-inspected,
+path.st8.maplink.part-inspected,
+g.st8.maplink.part-inspected,
+svg .st8.maplink.part-inspected,
+svg path.st8.maplink.part-inspected {
+    fill: #FEF3C7 !important;
+    stroke: #f59e0b !important;
+    stroke-width: 1px !important;
+}
+
+/* Data attribute targeting for original classes */
+.st8.maplink[data-status="selected"],
+.st1.maplink[data-status="selected"],
+.st2.maplink[data-status="selected"],
+.st3.maplink[data-status="selected"],
+.st4.maplink[data-status="selected"],
+.st5.maplink[data-status="selected"],
+.st6.maplink[data-status="selected"],
+.st7.maplink[data-status="selected"],
+.st8.maplink[data-status="selected"],
+.st9.maplink[data-status="selected"],
+.st10.maplink[data-status="selected"],
+.st11.maplink[data-status="selected"],
+path.st8.maplink[data-status="selected"],
+svg .st8.maplink[data-status="selected"] {
+    fill: #E3F2FD !important;
+    stroke: #007bff !important;
+    stroke-width: 2px !important;
+}
+
+.st8.maplink[data-status="damaged"],
+.st1.maplink[data-status="damaged"],
+.st2.maplink[data-status="damaged"],
+.st3.maplink[data-status="damaged"],
+.st4.maplink[data-status="damaged"],
+.st5.maplink[data-status="damaged"],
+.st6.maplink[data-status="damaged"],
+.st7.maplink[data-status="damaged"],
+.st8.maplink[data-status="damaged"],
+.st9.maplink[data-status="damaged"],
+.st10.maplink[data-status="damaged"],
+.st11.maplink[data-status="damaged"],
+path.st8.maplink[data-status="damaged"],
+svg .st8.maplink[data-status="damaged"] {
+    fill: #FEE2E2 !important;
+    stroke: #dc2626 !important;
+    stroke-width: 2px !important;
+}
+
+.st8.maplink[data-status="inspected"],
+.st1.maplink[data-status="inspected"],
+.st2.maplink[data-status="inspected"],
+.st3.maplink[data-status="inspected"],
+.st4.maplink[data-status="inspected"],
+.st5.maplink[data-status="inspected"],
+.st6.maplink[data-status="inspected"],
+.st7.maplink[data-status="inspected"],
+.st8.maplink[data-status="inspected"],
+.st9.maplink[data-status="inspected"],
+.st10.maplink[data-status="inspected"],
+.st11.maplink[data-status="inspected"],
+path.st8.maplink[data-status="inspected"],
+svg .st8.maplink[data-status="inspected"] {
+    fill: #FEF3C7 !important;
+    stroke: #f59e0b !important;
+    stroke-width: 1px !important;
+}
+
+/* Damage table toggle button */
+#damage-table-toggle {
+    transition: color 0.2s ease;
+}
+
+.damage-summary:hover #damage-table-toggle {
+    color: #dc2626;
+}
+
+/* Responsive enhancements for damage table */
+@media (max-width: 768px) {
+    .damage-table-container {
+        font-size: 12px;
+    }
+    
+    #damage-table th,
+    #damage-table td {
+        padding: 8px 6px !important;
+    }
+    
+    #damage-table button {
+        padding: 4px 6px !important;
+        font-size: 10px !important;
+        margin: 1px !important;
+    }
+    
+    .damage-summary {
+        padding: 15px !important;
+        margin-top: 15px !important;
+    }
+    
+    /* Stack damage badges vertically on small screens */
+    .damage-tag {
+        display: block !important;
+        margin: 2px 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Very small screens - make table scrollable horizontally */
+    .damage-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #damage-table {
+        min-width: 400px;
+    }
+    
+    /* Adjust damage count badge */
+    #damage-count {
+        font-size: 10px !important;
+        padding: 1px 6px !important;
+    }
+}
+
+/* Animation for damage table expand/collapse */
+#damage-table-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Enhanced tooltip for parts */
+#tooltip {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

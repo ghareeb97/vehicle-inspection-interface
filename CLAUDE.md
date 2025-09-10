@@ -19,15 +19,12 @@ This is a **Vehicle Walk-Around Inspection Form** - a digital inspection tool fe
 ### Main Application Files
 - `index.html` - Complete inspection interface with external CSS reference
 - `gem.css` - Unified stylesheet containing all application styling (consolidates previous styles.css)
-- `preview.html` - Preview interface for inspection results (uses legacy styles.css reference)
+- `preview.html` - Preview interface for inspection results
 - `vehicle.svg` - Interactive SVG vehicle diagram
 - `Vehicle_inspection_template.pdf` - Reference template document
-- `do not use.css` - Deprecated CSS file (kept for reference)
 
 ### Internationalization System
 - `translation_utils.js` - i18next-based translation system with English and Arabic support
-- `test_translations.html` - Test interface for translation functionality
-- `test_preview_translations.html` - Translation testing for preview interface
 
 ### Documentation Files
 - `BUBBLE_INTEGRATION.md` - Detailed API documentation for Bubble.io integration modes
@@ -70,10 +67,8 @@ This project uses no build system or package manager. Development is done by:
 2. **Live reload** - Use browser developer tools or live server extension (e.g., VS Code Live Server)
 3. **Testing** - Manual testing in browser, no automated test framework
 4. **File serving** - Any local HTTP server (Python: `python -m http.server`, Node: `npx serve`)
-5. **Translation testing** - Open `test_translations.html` to test translation functionality
-6. **Preview testing** - Open `test_preview_translations.html` to test preview translations
-7. **Browser testing** - Test in Chrome, Firefox, Safari for cross-browser compatibility
-8. **Mobile testing** - Test responsive design on mobile devices and tablets
+5. **Browser testing** - Test in Chrome, Firefox, Safari for cross-browser compatibility
+6. **Mobile testing** - Test responsive design on mobile devices and tablets
 
 ### Language Testing
 - Add `?lang=en_us` or `?lang=ar_ar` to URL for language testing
@@ -164,8 +159,7 @@ window.initializeInspectionModule(vehicleName, startingMileage, userId, inspecti
 
 ### CSS Architecture Evolution
 - **Current**: `gem.css` - Unified stylesheet containing all application styles (consolidated from previous separate files)
-- **Legacy**: `preview.html` still references legacy CSS (may need updating for full consistency)
-- **Deprecated**: Older CSS files consolidated into `gem.css` for unified styling across all Bubble.io HTML elements
+- **Unified Styling**: All styles consolidated into `gem.css` for consistent styling across all Bubble.io HTML elements
 
 ### Critical Implementation Notes
 - **No Build System**: Direct HTML/CSS/JS files, no package manager or build process
