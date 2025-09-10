@@ -1923,8 +1923,10 @@
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        const base64String = e.target.result;
-                        currentPartPhotos.push(base64String);
+                        let base64String = e.target.result;
+                        // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
+                        const base64Data = base64String.split(',')[1] || base64String;
+                        currentPartPhotos.push(base64Data);
                         updatePhotoPreview();
                         updatePhotoCount();
                     };
@@ -1955,7 +1957,8 @@
             thumbnail.className = 'photo-thumbnail';
 
             const img = document.createElement('img');
-            img.src = base64String;
+            // Add data URL prefix for display
+            img.src = base64String.startsWith('data:') ? base64String : `data:image/jpeg;base64,${base64String}`;
             img.alt = `Photo ${index + 1}`;
             img.addEventListener('click', () => showPhotoModal(base64String));
 
@@ -2031,7 +2034,8 @@
             }
 
             const img = document.getElementById('photo-modal-img');
-            img.src = base64String;
+            // Add data URL prefix for display
+            img.src = base64String.startsWith('data:') ? base64String : `data:image/jpeg;base64,${base64String}`;
             modal.classList.add('active');
         }
 
