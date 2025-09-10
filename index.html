@@ -191,6 +191,23 @@
                         </div>
                     </div>
 
+                    <!-- Photo Capture Section -->
+                    <div class="photo-capture-section" style="margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;" data-i18n="Add Photos:">Add Photos:</h4>
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                            <input type="file" id="photo-input" accept="image/*" capture="camera" multiple
+                                style="display: none;">
+                            <button id="add-photo-btn"
+                                style="background: #16a34a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <span data-i18n="📷 Take Photo">📷 Take Photo</span>
+                            </button>
+                            <span id="photo-count" style="color: #6b7280; font-size: 14px;" data-i18n="No photos added">No photos added</span>
+                        </div>
+                        <div id="photo-preview-container" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                            <!-- Photo thumbnails will be added here -->
+                        </div>
+                    </div>
+
                     <div class="damage-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
                         <button id="save-damage-btn"
                             style="background: #006ab4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;"
@@ -577,6 +594,7 @@
 
         let currentPart = null;
         let selectedDamages = [];
+        let currentPartPhotos = [];
 
         // Load the complete SVG content
         function loadVehicleSVG() {
@@ -1708,12 +1726,14 @@
             }, 100);
 
             selectedDamages = inspectionData.vehicleParts[partName]?.damages || [];
+            currentPartPhotos = inspectionData.vehicleParts[partName]?.photos || [];
 
             // Update inline form
             const translatedPartName = window.translate ? (window.translate(partName) || partName) : partName;
             const markDamageText = window.translate ? (window.translate('Mark Damage:') || 'Mark Damage:') : 'Mark Damage:';
             document.getElementById('damage-part-name').innerHTML = `${markDamageText} ${translatedPartName}`;
             updateSelectedDamagesList();
+            updatePhotoPreview();
 
             // Show inline damage form
             document.getElementById('damage-form').style.display = 'block';
@@ -1854,6 +1874,7 @@
                     inspectionData.vehicleParts[currentPart] = {
                         name: currentPart,
                         damages: [...selectedDamages],
+                        photos: [...currentPartPhotos],
                         inspected: true
                     };
 
@@ -1866,14 +1887,159 @@
 
             document.getElementById('clear-damage-btn').addEventListener('click', function () {
                 selectedDamages = [];
+                currentPartPhotos = [];
                 updateSelectedDamagesList();
+                updatePhotoPreview();
             });
 
             document.getElementById('cancel-damage-btn').addEventListener('click', function () {
                 hideDamageForm();
             });
 
+            // Setup photo capture functionality
+            setupPhotoCapture();
+
             modalActionsSetup = true;
+        }
+
+        // Photo capture functionality
+        function setupPhotoCapture() {
+            const photoInput = document.getElementById('photo-input');
+            const addPhotoBtn = document.getElementById('add-photo-btn');
+
+            if (addPhotoBtn && photoInput) {
+                addPhotoBtn.addEventListener('click', () => {
+                    photoInput.click();
+                });
+
+                photoInput.addEventListener('change', handlePhotoSelection);
+            }
+        }
+
+        function handlePhotoSelection(event) {
+            const files = Array.from(event.target.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const base64String = e.target.result;
+                        currentPartPhotos.push(base64String);
+                        updatePhotoPreview();
+                        updatePhotoCount();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Clear the input so the same file can be selected again if needed
+            event.target.value = '';
+        }
+
+        function updatePhotoPreview() {
+            const container = document.getElementById('photo-preview-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            currentPartPhotos.forEach((photo, index) => {
+                const thumbnail = createPhotoThumbnail(photo, index);
+                container.appendChild(thumbnail);
+            });
+
+            updatePhotoCount();
+        }
+
+        function createPhotoThumbnail(base64String, index) {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = 'photo-thumbnail';
+
+            const img = document.createElement('img');
+            img.src = base64String;
+            img.alt = `Photo ${index + 1}`;
+            img.addEventListener('click', () => showPhotoModal(base64String));
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'photo-delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete photo';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deletePhoto(index);
+            });
+
+            thumbnail.appendChild(img);
+            thumbnail.appendChild(deleteBtn);
+
+            return thumbnail;
+        }
+
+        function deletePhoto(index) {
+            currentPartPhotos.splice(index, 1);
+            updatePhotoPreview();
+        }
+
+        function updatePhotoCount() {
+            const photoCount = document.getElementById('photo-count');
+            if (photoCount) {
+                const count = currentPartPhotos.length;
+                if (count === 0) {
+                    const noPhotosText = window.translate ? (window.translate('No photos added') || 'No photos added') : 'No photos added';
+                    photoCount.textContent = noPhotosText;
+                } else {
+                    const photosText = window.translate ? 
+                        (window.translate(`${count} photo${count !== 1 ? 's' : ''} added`) || `${count} photo${count !== 1 ? 's' : ''} added`) :
+                        `${count} photo${count !== 1 ? 's' : ''} added`;
+                    photoCount.textContent = photosText;
+                }
+            }
+        }
+
+        function showPhotoModal(base64String) {
+            // Create modal if it doesn't exist
+            let modal = document.getElementById('photo-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'photo-modal';
+                modal.className = 'photo-modal';
+
+                const closeBtn = document.createElement('span');
+                closeBtn.className = 'photo-modal-close';
+                closeBtn.innerHTML = '×';
+                closeBtn.onclick = hidePhotoModal;
+
+                const img = document.createElement('img');
+                img.id = 'photo-modal-img';
+
+                modal.appendChild(closeBtn);
+                modal.appendChild(img);
+                document.body.appendChild(modal);
+
+                // Close modal when clicking outside the image
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        hidePhotoModal();
+                    }
+                });
+
+                // Close modal with Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.classList.contains('active')) {
+                        hidePhotoModal();
+                    }
+                });
+            }
+
+            const img = document.getElementById('photo-modal-img');
+            img.src = base64String;
+            modal.classList.add('active');
+        }
+
+        function hidePhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
         }
 
         function hideDamageForm() {
@@ -1883,6 +2049,7 @@
             // Only clear currentPart reference
             currentPart = null;
             selectedDamages = [];
+            currentPartPhotos = [];
         }
 
         function updatePartVisualState(partName) {
@@ -2844,6 +3011,7 @@
             const outputlist1 = [];  // Task/Item names from walk-around checklist
             const outputlist2 = [];  // Status/Results from walk-around checklist
             const outputlist3 = [];  // Remarks from walk-around checklist
+            const outputlist4 = [];  // Photos from damaged vehicle parts
 
             // For assignment-ending and new-assignment modes, create separate output1, output2, and output3 constants
             let output1 = '';
@@ -2895,6 +3063,15 @@
                             outputlist2.push("No damage");
                         }
 
+                        // Add photos to outputlist4 if they exist
+                        if (partData.photos && partData.photos.length > 0) {
+                            // Join all photos as base64 strings separated by semicolon
+                            outputlist4.push(partData.photos.join(';'));
+                        } else {
+                            // Add empty string if no photos to maintain alignment
+                            outputlist4.push("");
+                        }
+
                     }
                 });
             }
@@ -2926,6 +3103,7 @@
                 outputlist1,
                 outputlist2,
                 outputlist3,
+                outputlist4,
                 ...additionalData
             };
 
@@ -2942,11 +3120,13 @@
                 console.log('📤 output2 (vehicle):', output2);
                 console.log('📤 output3 (fuel level):', output3);
                 console.log('📤 outputlist3 (remarks):', outputlist3);
+                console.log('📤 outputlist4 (photos):', outputlist4);
                 console.log('📤 Full data being sent:', returnData);
             } else {
                 console.log('📤 Inspection mode data being sent:', returnData);
                 console.log('📤 output3 (fuel level):', output3);
                 console.log('📤 outputlist3 (remarks):', outputlist3);
+                console.log('📤 outputlist4 (photos):', outputlist4);
             }
 
             return returnData;

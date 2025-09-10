@@ -34,6 +34,12 @@
     /* Using black for now, review if should be variable */
     --vo-text-gray-600: #64748b;
     /* Previously used for loading spinner color */
+
+    /* Photo Capture Colors */
+    --photo-success: #16a34a;
+    --photo-danger: #dc2626;
+    --photo-border: #d1d5db;
+    --photo-hover: rgba(22, 163, 74, 0.1);
 }
 
 
@@ -5017,4 +5023,158 @@ svg .st8.maplink[data-status="inspected"] {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ================================================== */
+/*                Photo Capture Styles               */
+/* ================================================== */
+
+/* Photo capture section */
+.photo-capture-section {
+    background: #f8f9fa;
+    border: 1px solid var(--photo-border);
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.photo-capture-section h4 {
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Photo preview container */
+#photo-preview-container {
+    min-height: 60px;
+}
+
+/* Photo thumbnail styling */
+.photo-thumbnail {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid var(--photo-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.photo-thumbnail:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+}
+
+.photo-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Photo delete button */
+.photo-delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background: var(--photo-danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.photo-delete-btn:hover {
+    background: #b91c1c;
+    transform: scale(1.1);
+}
+
+/* Photo add button styling */
+#add-photo-btn {
+    background: var(--photo-success) !important;
+    transition: all 0.2s ease;
+}
+
+#add-photo-btn:hover {
+    background: #15803d !important;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+}
+
+/* Photo count text */
+#photo-count {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Mobile responsive adjustments for photo capture */
+@media (max-width: 768px) {
+    .photo-thumbnail {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .photo-capture-section {
+        padding: 12px;
+    }
+    
+    #add-photo-btn {
+        padding: 10px 14px !important;
+        font-size: 14px;
+    }
+    
+    #photo-preview-container {
+        gap: 8px !important;
+    }
+}
+
+/* Photo fullscreen modal */
+.photo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.photo-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.photo-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.photo-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10001;
+}
+
+.photo-modal-close:hover {
+    color: #ccc;
 }
